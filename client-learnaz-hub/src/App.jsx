@@ -1,11 +1,11 @@
-function App() {
+import LandingPage from "./Pages/LandingPage";
+
+const App = () => {
   return (
     <>
-      <h1 className="text-3xl font-bold underline text-center">
-        Hello, Welcome to Learnaz Hub!
-      </h1>
+    <LandingPage/>
     </>
-  );
-}
+  )
+};
 
 export default App;
