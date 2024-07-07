@@ -1,4 +1,3 @@
-import React from "react";
 import LandingPage from "./Pages/LandingPage";
 
 const App = () => {
@@ -10,4 +9,3 @@ const App = () => {
 };
 
 export default App;
-
