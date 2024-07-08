@@ -30,6 +30,15 @@ class DBClient {
         }
         return false;
     }
+    async nbUsers() {
+        const allUsers = await this.db.collection('users').countDocuments();
+        return allUsers;
+    }
+
+    async nbFiles() {
+        const allFiles = await this.db.collection('files').countDocuments();
+        return allFiles;
+    }
 }
 const dbClient = new DBClient();
 

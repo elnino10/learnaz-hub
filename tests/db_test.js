@@ -12,6 +12,13 @@ const testDBClient = async () => {
 
         if (isAlive) {
             console.log('Database connection test passed.');
+
+            // Test the new methods
+            const userCount = await dbClient.nbUsers();
+            console.log(`Number of users in the database: ${userCount}`);
+
+            const fileCount = await dbClient.nbFiles();
+            console.log(`Number of files in the database: ${fileCount}`);
         } else {
             console.log('Database connection test failed.');
         }
