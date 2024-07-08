@@ -1,5 +1,11 @@
 function LoginForm() {
-  return <div>LoginForm</div>;
+  return (
+    <>
+      <div className="h-screen pt-20">
+        signup
+      </div>
+    </>
+  );
 }
 
 export default LoginForm;
