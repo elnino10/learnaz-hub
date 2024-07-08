@@ -1,11 +1,28 @@
-function App() {
+import { Route, Routes } from "react-router-dom";
+
+import LandingPage from "./Pages/LandingPage";
+import {
+  Footer,
+  Header,
+  LoginForm,
+  PasswordRecoveryForm,
+  SignupForm,
+} from "./components";
+
+const App = () => {
   return (
     <>
-      <h1 className="text-3xl font-bold underline text-center">
-        Hello, Welcome to Learnaz Hub!
-      </h1>
+      <Header />
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/signup" element={<SignupForm />} />
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/password-recovery" element={<PasswordRecoveryForm />} />
+        <Route path="*" element={<h1>Not Found</h1>} />
+      </Routes>
+      <Footer />
     </>
   );
-}
+};
 
 export default App;
