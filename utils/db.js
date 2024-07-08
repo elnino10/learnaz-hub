@@ -1,10 +1,10 @@
 import { MongoClient } from 'mongodb';
 
-const host = process.env.DB_HOST ? process.env.DB_HOST : 'localhost';
-const port = process.env.DB_PORT ? process.env.DB_PORT : 27017;
-const database = process.env.APP_DATABASE ? process.env.APP_DATABASE : 'learnaz_hub';
+const host = process.env.DB_HOST || 'localhost';
+const port = process.env.DB_PORT || 27017;
+const database = process.env.APP_DATABASE || 'learnaz_hub';
 
-const url = 'mongodb://${host}:${port}';
+const url = `mongodb://${host}:${port}`;
 
 class DBClient {
     constructor() {
