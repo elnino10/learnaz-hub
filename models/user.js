@@ -27,7 +27,11 @@ const users = new mongoose.Schema({
     lastName: {
         type: String,
         required: true
-    }
+    },
+    date: {
+    type: Date,
+    default: Date.now,
+    },
 });
 
 module.exports = mongoose.model('user', users);
