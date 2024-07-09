@@ -11,7 +11,6 @@ import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
-import { SocialIcon } from "react-social-icons";
 const courses = {
   "Video Animation": [
     {
@@ -113,12 +112,12 @@ function LandingPage() {
             Learn a new skill in as little as 6 months. Select from over 100
             different courses, taught by industry experts.
           </p>
-          <div className="text-gray-700 text-xl flex flex-wrap gap-4 pt-6">
+          <div className="text-gray-700 text-xl flex flex-wrap gap-4 pt-6 ">
             {Object.keys(courses).map((category) => (
               <div key={category}>
                 <button
                   onClick={() => handleCategoryClick(category)}
-                  className="hover:underline"
+                  className="hover:underline hover:text-gray-900"
                 >
                   {category}
                 </button>
@@ -230,39 +229,6 @@ function LandingPage() {
           </div>
         </section>
       </main>
-      <footer className="text-white p-8 w-full bg-gray-900">
-        <div className="pb-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Link to="/signup">Teach On Learnaz-Hub</Link>
-          <Link to="/signup">About Learnaz-Hub</Link>
-          <Link to="/signup">Contact us</Link>
-          <Link to="/signup">Help</Link>
-          <Link to="/signup">Terms</Link>
-          <Link to="/signup">Privacy Policy</Link>
-        </div>
-        <div>
-          <p className="pb-6">Socials</p>
-          <div className="flex gap-6">
-            <SocialIcon bgColor="gray" url="https://linkedin.com/#" />
-            <SocialIcon
-              url="https://facebook.com/#"
-              network="facebook"
-              bgColor="gray"
-            />
-
-            <SocialIcon
-              url="https://twitter.com/in/#"
-              network="twitter"
-              bgColor="gray"
-            />
-          </div>
-        </div>
-        <div className="pt-12 flex justify-between">
-          <div className="text-bold text-2xl">Learnaz-Hub</div>
-          <div>
-            <p>© 2020 Learnaz-Hub</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
