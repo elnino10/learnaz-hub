@@ -1,14 +1,11 @@
 const express = require("express");
 const router = express.Router();
+const { getCourses, createCourse } = require("../controllers/courseController");
 
 // route to get all courses
-router.get("/", (req, res) => {
-  res.send("All courses route");
-});
+router.get("/", getCourses);
 
 // route to create a course
-router.post("/", (req, res) => {
-  res.send("Create course route");
-});
+router.post("/", createCourse);
 
 module.exports = router;
