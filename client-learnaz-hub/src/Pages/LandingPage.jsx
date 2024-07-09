@@ -112,12 +112,12 @@ function LandingPage() {
             Learn a new skill in as little as 6 months. Select from over 100
             different courses, taught by industry experts.
           </p>
-          <div className="text-gray-700 text-xl flex flex-wrap gap-4 pt-6">
+          <div className="text-gray-700 text-xl flex flex-wrap gap-4 pt-6 ">
             {Object.keys(courses).map((category) => (
               <div key={category}>
                 <button
                   onClick={() => handleCategoryClick(category)}
-                  className="hover:underline"
+                  className="hover:underline hover:text-gray-900"
                 >
                   {category}
                 </button>
