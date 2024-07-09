@@ -12,7 +12,7 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 const courses = {
-  "Video Animation": [
+  "Video Animationbb": [
     {
       title: "Introduction to Video Animation",
       image: "http://example.com/video-animation.jpg",
