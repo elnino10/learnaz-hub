@@ -53,7 +53,7 @@ function Header() {
               Log In
             </Link>
             <Link
-              to="/login"
+              to="/signup"
               className={`border p-2 text-lg transition ease-in-out delay-150 bg-gray-800 text-white hover:-translate-y-1 hover:scale-110 duration-300`}
             >
               Sign Up
