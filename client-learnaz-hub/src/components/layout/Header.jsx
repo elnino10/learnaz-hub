@@ -1,5 +1,47 @@
 import { Link } from "react-router-dom";
+import { FiSearch } from "react-icons/fi";
+import { useState, useEffect } from "react";
+
 function Header() {
+  const [drpdwn, setDrpdwn] = useState(false);
+  const [courseCategories, setCourseCategories] = useState([]);
+
+  // useEffect(() => {
+  //   const fetchCategories = async () => {
+  //     try {
+  //       const response = await fetch("your-backend-api-endpoint");
+  //       const data = await response.json();
+  //       setCourseCategories(data);
+  //     } catch (error) {
+  //       console.error("Error fetching course categories:", error);
+  //     }
+  //   };
+
+  //   fetchCategories();
+  // }, []);
+
+  useEffect(() => {
+    // Simulate fetching data from the backend
+    const fetchCategories = () => {
+      const dummyData = [
+        "Video Animation",
+        "Video Editing",
+        "Stop Motion",
+        "Photography",
+        "Graphics Design",
+        "Web Development",
+        "HTML",
+      ];
+      setCourseCategories(dummyData);
+    };
+
+    fetchCategories();
+  }, []);
+
+  const toggleDrpdwn = () => {
+    setDrpdwn(!drpdwn);
+  };
+
   return (
     <>
       <header className="h-20 bg-white p-6 shadow-md top-0 z-20 fixed w-full">
@@ -9,9 +51,30 @@ function Header() {
             <div className="text-xl font-bold">Learnaz-Hub</div>
           </Link>
           {/* course category */}
-          <div className="pl-6 text-lg text-gray-600 hover:text-gray-900">
-            Courses
+          <div>
+            <button
+              onClick={toggleDrpdwn}
+              className="pl-6 text-lg text-gray-600 hover:text-gray-900 focus:outline-none"
+            >
+              Courses
+            </button>
+            {drpdwn && (
+              <div className="absolute bg-white shadow-md w-80% mt-2">
+                <ul>
+                  {courseCategories.map((category, index) => (
+                    <Link
+                      to="/"
+                      key={index}
+                      className="block text-gray-900 p-2 hover:bg-gray-100"
+                    >
+                      {category}
+                    </Link>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
+
           {/* Search Box */}
           <div className="relative w-80%">
             <input
@@ -19,20 +82,7 @@ function Header() {
               className="bg-blue-100 border border-gray-300 rounded-full px-4 py-2 pl-10 focus:outline-none focus:border-blue-500"
               placeholder="Search courses"
             />
-            {/* <svg
-            className="w-5 h-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            // xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1117.5 10.5a7.5 7.5 0 010 10.5z"
-            ></path>
-          </svg> */}
+            <FiSearch className="w-5 h-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
           </div>
           {/* Navigation Links */}
           <ul className="flex space-x-4">
@@ -53,7 +103,7 @@ function Header() {
               Log In
             </Link>
             <Link
-              to="/login"
+              to="/signup"
               className={`border p-2 text-lg transition ease-in-out delay-150 bg-gray-800 text-white hover:-translate-y-1 hover:scale-110 duration-300`}
             >
               Sign Up
