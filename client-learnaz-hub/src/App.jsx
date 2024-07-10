@@ -3,6 +3,7 @@ import LandingPage from "./pages/LandingPage";
 import Sidebar from "./admin/SideBar";
 import {
   Footer,
+  ForgotPassword,
   Header,
   LoginForm,
   PasswordRecoveryForm,
