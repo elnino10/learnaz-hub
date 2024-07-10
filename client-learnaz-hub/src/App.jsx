@@ -17,7 +17,7 @@ const App = () => {
         <Route path="/admin/*" element={<AdminLayout />} />
 
         {/* Main routes */}
-        <Route path="*" element={<MainLayout />} />
+        <Route path="/" element={<MainLayout />} />
       </Routes>
   );
 };
