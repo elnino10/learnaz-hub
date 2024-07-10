@@ -1,22 +1,26 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const morgan = require("morgan");
+import express from "express";
+import cors from "cors";
+import morgan from "morgan";
 
-const routes = require("./routes");
+import courseRouter from "./routes/courseRoutes.js";
+import authRouter from "./routes/authRoutes.js";
+import userRouter from "./routes/userRoutes.js";
+// import lessonRouter from "./routes/lessonRoutes.js";
+// import adminRouter from "./routes/adminRoutes.js";
+// import tutorRouter from "./routes/tutorRoutes.js";
 
 const app = express();
 
 // third-party middlewares
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(morgan("dev"));
 app.use(cors());
 
-app.get("/", (req, res) => {
-  res.send("Hello! From Learnaz Hub Server\n");
-});
+app.use("/api/v1", authRouter);
+app.use("/api/v1", userRouter);
+app.use("/api/v1", courseRouter);
+// app.use("/api/v1", lessonRouter);
+// app.use("/api/v1", adminRouter);
+// app.use("/api/v1", tutorRouter);
 
-// Use routes
-app.use("/api/v1", routes);
-
-module.exports = app;
+export default app;
