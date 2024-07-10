@@ -5,6 +5,7 @@ import {
   FaBox,
   FaCog,
 } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Sidebar = () => {
   return (
@@ -13,20 +14,20 @@ const Sidebar = () => {
         Learnaz-Hub
       </h1>
       <ul className="flex flex-col mt-5 text-xl">
-        <li
+        <Link to="admin/dashboard"
           className="flex items-center py-3 px-2 space-x-4 hover:rounded hover:cursor-pointer 
         hover:bg-blue-600 hover:text-white"
         >
           <FaTachometerAlt />
           <span className="hidden md:inline">Dashboard</span>
-        </li>
-        <li
+        </Link>
+        <Link to="admin/manage-users"
           className="flex items-center py-3 px-2 space-x-4 hover:rounded hover:cursor-pointer 
         hover:text-white hover:bg-blue-600"
         >
           <FaUsers />
           <span className="hidden md:inline ">Manage Users</span>
-        </li>
+        </Link>
         <li
           className="flex items-center py-3 px-2 space-x-4 hover:rounded hover:cursor-pointer 
         hover:text-white hover:bg-blue-600"
