@@ -1,46 +1,26 @@
-import { MongoClient } from 'mongodb';
+import mongoose from 'mongoose';
 
 const host = process.env.DB_HOST || 'localhost';
 const port = process.env.DB_PORT || 27017;
 const database = process.env.APP_DATABASE || 'learnaz_hub';
 
-const url = `mongodb://${host}:${port}`;
+const url = `mongodb://${host}:${port}/${database}`;
 
 class DBClient {
     constructor() {
-        this.client = new MongoClient(url, { useUnifiedTopology: true });
-        this.url = url;
         this.connectDB();
     }
 
-
     async connectDB() {
         try {
-            await this.client.connect();
-            console.log('Database connected successfully');
-            this.db = this.client.db(database);
+        await mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
+        console.log('Database connected successfully');
         } catch (error) {
-            console.error('Error connecting to the database:', error);
+        console.error('Error connecting to the database:', error);
         }
-    }
-
-
-    isAlive() {
-        if (this.client.topology.isConnected()) {
-            return true
-        }
-        return false;
-    }
-    async nbUsers() {
-        const allUsers = await this.db.collection('users').countDocuments();
-        return allUsers;
-    }
-
-    async nbFiles() {
-        const allFiles = await this.db.collection('files').countDocuments();
-        return allFiles;
     }
 }
+
 const dbClient = new DBClient();
 
 export default dbClient;

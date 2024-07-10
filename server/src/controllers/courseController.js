@@ -3,11 +3,13 @@ import Course from '../models/course.js';
 // create a new course
 export const createCourse = async (req, res) => {
     try {
+        console.log(req.headers);
+        console.log(req.body);
         const newCourse = new Course(req.body);
         const course = await newCourse.save();
         res.status(201).json(course);
     } catch (error) {
-        res.status(500).jon({ message: error });
+        res.status(500).json({ message: 'Internal Server Error' });
     }
 };
 
@@ -35,7 +37,7 @@ export const getCourseByID = async (req, res) => {
 //Update course by ID
 export const updateCourse = async (req, res) => {
     try {
-        const updatedCourse = await Course.findByIdAndUpdate(req.param.id, req.body, { new: true, });
+        const updatedCourse = await Course.findByIdAndUpdate(req.params.id, req.body, { new: true, });
         if (updatedCourse) return res.status(200).json(updatedCourse);
         else {
             res.status(404).json({ message: 'Course not found' });
@@ -48,7 +50,7 @@ export const updateCourse = async (req, res) => {
 //Delete a course by ID
 export const deleteCourse = async (req, res) => {
     try {
-        const course = await Course.findByIdAndDelete(req.param.id);
+        const course = await Course.findByIdAndDelete(req.params.id);
         if (course) return res.status(200).json({ message: 'Course deleted successfully' });
         else {
             res.status(404).json({ message: 'Course not found'});

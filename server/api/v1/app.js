@@ -8,16 +8,11 @@ import courseRoutes from '../../src/routes/courseRoutes.js';
 
 const app = express();
 
-mongoose.connect(dbClient.url, {
-})
-.then(() => console.log('Mongoose connected successfully'))
-  .catch((error) => console.error('Error connecting to Mongoose:', error));
-
 // third-party middlewares
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(morgan("dev"));
 app.use(cors());
-app.use('/api/v1', courseRoutes);
+app.use('/api/v1/courses', courseRoutes);
 
 
 app.get("/", (req, res) => {
