@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
-import LandingPage from "./pages/LandingPage";
 import Sidebar from "./admin/SideBar";
+import { LandingPage } from "./pages";
 import {
   Footer,
   ForgotPassword,
@@ -12,13 +12,13 @@ import {
 
 const App = () => {
   return (
-      <Routes>
-        {/* Admin Route */}
-        <Route path="/admin/*" element={<AdminLayout />} />
+    <Routes>
+      {/* Admin Route */}
+      <Route path="/admin/*" element={<AdminLayout />} />
 
-        {/* Main routes */}
-        <Route path="/" element={<MainLayout />} />
-      </Routes>
+      {/* Main routes */}
+      <Route path="/" element={<MainLayout />} />
+    </Routes>
   );
 };
 
