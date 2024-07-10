@@ -1,5 +1,4 @@
-
-import Card from "./Card";
+import Card from "../Card";
 import { FaBox, FaCog, FaUsers, FaChartBar } from "react-icons/fa";
 
 const Dashboard = () => {
