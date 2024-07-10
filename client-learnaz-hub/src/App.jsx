@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import Sidebar from "./admin/SideBar";
+import { Sidebar, Navbar, Dashboard } from "./admin";
 import { LandingPage } from "./pages";
 import {
   Footer,
@@ -17,7 +17,7 @@ const App = () => {
       <Route path="/admin/*" element={<AdminLayout />} />
 
       {/* Main routes */}
-      <Route path="/" element={<MainLayout />} />
+      <Route path="/*" element={<MainLayout />} />
     </Routes>
   );
 };
@@ -25,6 +25,15 @@ const App = () => {
 const AdminLayout = () => (
   <div className="flex h-screen bg-gray-100">
     <Sidebar />
+    <div
+      className="grow ml-16 md:ml-64 h-full lg:h-screen bg-gray-100 text-gray-900
+      dark:bg-gray-900 dark:text-white"
+    >
+      <Navbar />
+      <div>
+        <Dashboard />
+      </div>
+    </div>
   </div>
 );
 
