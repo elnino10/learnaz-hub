@@ -17,7 +17,7 @@ const users = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['student', 'teacher'], // Allowed roles
+        enum: ['student', 'tutor'], // Allowed roles
         default: 'student' // Default role for new users
     },
     firstName: {
