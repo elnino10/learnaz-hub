@@ -35,6 +35,7 @@ const MainLayout = () => (
       <Route path="/" element={<LandingPage />} />
       <Route path="/signup" element={<SignupForm />} />
       <Route path="/login" element={<LoginForm />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/password-recovery" element={<PasswordRecoveryForm />} />
       <Route path="*" element={<h1>Not Found</h1>} />
     </Routes>
