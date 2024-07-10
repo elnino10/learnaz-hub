@@ -1,10 +1,13 @@
-import express from 'express';
-import bodyParser from "body-parser";
-import cors from 'cors';
-import morgan from 'morgan';
-import dbClient from '../../src/utils/db.js';
-import mongoose from 'mongoose';
-import courseRoutes from '../../src/routes/courseRoutes.js';
+import express from "express";
+import cors from "cors";
+import morgan from "morgan";
+
+import courseRouter from "./routes/courseRoutes.js";
+import authRouter from "./routes/authRoutes.js";
+import userRouter from "./routes/userRoutes.js";
+// import lessonRouter from "./routes/lessonRoutes.js";
+// import adminRouter from "./routes/adminRoutes.js";
+// import tutorRouter from "./routes/tutorRoutes.js";
 
 const app = express();
 
@@ -12,12 +15,12 @@ const app = express();
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cors());
-app.use('/api/v1/courses', courseRoutes);
 
-
-app.get("/", (req, res) => {
-  res.send("Hello! From Learnaz Hub Server\n");
-});
-
+app.use("/api/v1", authRouter);
+app.use("/api/v1", userRouter);
+app.use("/api/v1", courseRouter);
+// app.use("/api/v1", lessonRouter);
+// app.use("/api/v1", adminRouter);
+// app.use("/api/v1", tutorRouter);
 
 export default app;
