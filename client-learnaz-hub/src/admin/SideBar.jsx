@@ -28,13 +28,13 @@ const Sidebar = () => {
           <FaUsers />
           <span className="hidden md:inline ">Manage Users</span>
         </Link>
-        <li
+        <Link to="admin/manage-courses"
           className="flex items-center py-3 px-2 space-x-4 hover:rounded hover:cursor-pointer 
         hover:text-white hover:bg-blue-600"
         >
           <FaBox />
           <span className="hidden md:inline ">Manage Courses</span>
-        </li>
+        </Link>
         <li
           className="flex items-center py-3 px-2 space-x-4 hover:rounded hover:cursor-pointer 
         hover:text-white hover:bg-blue-600"

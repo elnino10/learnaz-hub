@@ -21,9 +21,9 @@ const ManageUsers = () => {
     const dummyUsers = [
       { id: 1, name: "John Doe", role: "Admin" },
       { id: 2, name: "Jane Smith", role: "User" },
-      { id: 3, name: "Michael Johnson", role: "User" },
-      { id: 4, name: "Emily Davis", role: "Admin" },
-      { id: 5, name: "David Brown", role: "User" },
+      { id: 3, name: "Chidi", role: "User" },
+      { id: 4, name: "Lerato", role: "Admin" },
+      { id: 5, name: "Lamber", role: "User" },
     ];
     setUsers(dummyUsers);
   }, []);
