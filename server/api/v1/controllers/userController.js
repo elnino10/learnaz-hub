@@ -1,5 +1,5 @@
 // server/src/api/v1/controllers/userController.js
-import User from '../models/User.js';
+import User from '../models/user.js';
 import { validationResult } from 'express-validator';
 import jwt from 'jsonwebtoken';
 

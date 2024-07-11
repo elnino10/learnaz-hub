@@ -1,6 +1,6 @@
 // server/src/api/v1/routes/userRoutes.js
 import express from 'express';
-import { check } from 'express-validator';
+import { check, validationResult } from 'express-validator';
 import {
   registerUser,
   authUser,
