@@ -2,36 +2,29 @@ import mongoose from "mongoose";
 import bcrypt from 'bcryptjs';
 
 const userSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true, // Removes whitespace from both ends of the string
-  },
   email: {
     type: String,
-    required: true,
+    required: [true, "Email is required"],
     unique: true,
     trim: true,
   },
   password: {
     type: String,
-    required: true,
+    required: [true, "Password is required"],
     trim: true,
   },
   role: {
     type: String,
-    enum: ["student", "instructor"], // Allowed roles
+    enum: ["student", "instructor", "admin"], // Allowed roles
     default: "student", // Default role for new users
   },
   firstName: {
     type: String,
-    required: true,
+    required: [true, "First name is required"],
     trim: true,
   },
   lastName: {
     type: String,
-    required: true,
     trim: true,
   },
   coursesEnrolled: [
