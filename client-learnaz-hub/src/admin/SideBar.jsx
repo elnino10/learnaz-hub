@@ -5,6 +5,7 @@ import {
   FaBox,
   FaCog,
 } from "react-icons/fa";
+import { CiLogout } from "react-icons/ci";
 import { Link } from "react-router-dom";
 
 const Sidebar = () => {
@@ -14,21 +15,24 @@ const Sidebar = () => {
         Learnaz-Hub
       </h1>
       <ul className="flex flex-col mt-5 text-xl">
-        <Link to="admin/dashboard"
+        <Link
+          to="admin/dashboard"
           className="flex items-center py-3 px-2 space-x-4 hover:rounded hover:cursor-pointer 
         hover:bg-blue-600 hover:text-white"
         >
           <FaTachometerAlt />
           <span className="hidden md:inline">Dashboard</span>
         </Link>
-        <Link to="admin/manage-users"
+        <Link
+          to="admin/manage-users"
           className="flex items-center py-3 px-2 space-x-4 hover:rounded hover:cursor-pointer 
         hover:text-white hover:bg-blue-600"
         >
           <FaUsers />
           <span className="hidden md:inline ">Manage Users</span>
         </Link>
-        <Link to="admin/manage-courses"
+        <Link
+          to="admin/manage-courses"
           className="flex items-center py-3 px-2 space-x-4 hover:rounded hover:cursor-pointer 
         hover:text-white hover:bg-blue-600"
         >
@@ -50,6 +54,12 @@ const Sidebar = () => {
           <span className="hidden md:inline ">Settings</span>
         </li>
       </ul>
+      <div
+        className="pt-80 flex items-center py-3 px-2 space-x-4 hover:rounded hover:cursor-pointer"
+      >
+        <CiLogout />
+        <span className="hidden md:inline">Logout</span>
+      </div>
     </div>
   );
 };
