@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
+import dbClient from "./utils/db.js";
 
 import courseRouter from "./routes/courseRoutes.js";
 import authRouter from "./routes/authRoutes.js";
