@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import { Sidebar, Navbar, Dashboard, ManageUsers } from "./admin";
+import { Sidebar, Navbar, Dashboard, ManageUsers, ManageCourses } from "./admin";
 import { LandingPage } from "./pages";
 import {
   Footer,
@@ -27,8 +27,9 @@ const AdminLayout = () => (
     <div className="grow ml-16 md:ml-64 h-full lg:h-screen bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white">
       <Navbar />
       <Routes>
-        <Route path="/admin/dashboard" element={<Dashboard />} />
-        <Route path="/admin/manage-users" element={<ManageUsers />} />
+        <Route path="admin/dashboard" element={<Dashboard />} />
+        <Route path="admin/manage-users" element={<ManageUsers />} />
+        <Route path="admin/manage-courses" element={<ManageCourses />} />
       </Routes>
     </div>
   </div>
