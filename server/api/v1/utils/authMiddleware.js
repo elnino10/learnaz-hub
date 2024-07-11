@@ -20,4 +20,19 @@ const authMiddleware = (req, res, next) => {
     }
 };
 
+const isAdmin = async (req, res, next) => {
+    try {
+        if (!req.user || !req.user.isAdmin) {
+        return res.status(403).json({ message: 'Forbidden: Access restricted to admins' });
+        }
+
+        next();
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+
+export { isAdmin };
 export default authMiddleware;
