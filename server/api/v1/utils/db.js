@@ -1,11 +1,8 @@
 import mongoose from "mongoose";
-import "dotenv/config";
+import dotenv from "dotenv";
 
-const host = process.env.DB_HOST || "127.0.0.1";
-const port = process.env.DB_PORT || 27017;
-const database = process.env.APP_DATABASE || "learnaz_hub";
-
-const url = `mongodb://${host}:${port}/${database}`;
+dotenv.config();
+const DB = process.env.DB_URI.replace("<PASSWORD>", process.env.DB_PASSWORD);
 
 class DBClient {
   constructor() {
@@ -14,11 +11,8 @@ class DBClient {
 
   async connectDB() {
     try {
-      await mongoose.connect(url, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      });
-      console.log("Database connected successfully");
+      await mongoose.connect(DB);
+      console.log("Database connected successfully!!!");
     } catch (error) {
       console.error("Error connecting to the database:", error);
     }

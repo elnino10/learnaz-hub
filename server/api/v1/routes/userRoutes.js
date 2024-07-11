@@ -1,10 +1,42 @@
-import { Router } from "express";
+// // server/src/api/v1/routes/userRoutes.js
+// import express from "express";
+// import { check } from "express-validator";
+// import {
+//   registerUser,
+//   authUser,
+//   getUsers,
+//   getUserById,
+//   updateUser,
+//   deleteUser,
+// } from "../controllers/userController.js";
 
-const router = Router();
+// const router = express.Router();
 
-// import { getUserProfile } from "../controllers/userController.js";
+// router.post(
+//   "/register",
+//     [
+//       check('name', 'Name is required').not().isEmpty(),
+//       check('email', 'Please include a valid email').isEmail(),
+//       check('password', 'Password is required').isLength({ min: 6 }),
+//     ],
+//   registerUser
+// );
 
-// route to get user profile
-// router.get("/profile", getUserProfile);
+// router.post(
+//   "/login",
+//     [
+//       check('email', 'Please include a valid email').isEmail(),
+//       check('password', 'Password is required').exists(),
+//     ],
+//   authUser
+// );
 
-export default router;
+// router.get("/", getUsers);
+
+// router.get("/:id", getUserById);
+
+// router.put("/:id", updateUser);
+
+// router.delete("/:id", deleteUser);
+
+// export default router;
