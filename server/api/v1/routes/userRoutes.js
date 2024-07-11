@@ -1,4 +1,4 @@
-// server/src/routes/userRoutes.js
+// server/src/api/v1/routes/userRoutes.js
 import express from 'express';
 import {
   registerUser,
