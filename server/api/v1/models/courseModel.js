@@ -33,12 +33,11 @@ const courseSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
-  courseModules: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Module",
-    },
-  ],
+  videoUrl: {
+    type: String,
+    required: true,
+    trim: true,
+  },
   averageRating: {
     type: Number,
     default: 0,
