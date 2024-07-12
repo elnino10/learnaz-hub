@@ -3,7 +3,9 @@ import { SocialIcon } from "react-social-icons";
 function Footer() {
   const currentYear = new Date().getFullYear();
   return (
-    <footer className="text-white p-8 w-full bg-gray-900">
+    <footer
+      className="text-white p-8 w-full bg-gray-900"
+    >
       {/* correct routing */}
       <div className="pb-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Link to="/signup">Teach On Learnaz-Hub</Link>

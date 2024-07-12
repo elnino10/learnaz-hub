@@ -6,7 +6,7 @@ import {
   ManageUsers,
   ManageCourses,
 } from "./admin";
-import { EnrolledCoursesPage, LandingPage } from "./pages";
+import { EnrolledCoursesPage, LandingPage, UserDashboard } from "./pages";
 import {
   Footer,
   ForgotPassword,
@@ -51,6 +51,7 @@ const MainLayout = () => (
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/password-recovery" element={<PasswordRecoveryForm />} />
       <Route path="/my-learning" element={<EnrolledCoursesPage />} />
+      <Route path="/user-dashboard" element={<UserDashboard />} />
       <Route path="*" element={<h1>Not Found</h1>} />
     </Routes>
     <Footer />
