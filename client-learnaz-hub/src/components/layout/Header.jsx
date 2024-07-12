@@ -44,7 +44,7 @@ function Header() {
 
   return (
     <>
-      <header className="h-20 bg-white p-6 shadow-md top-0 z-20 fixed w-full">
+      <header className="h-20 bg-white p-6 shadow-md top-0 z-20 fixed w-full mb-20">
         <nav className="flex justify-between fixed w-full pr-8">
           {/* Logo */}
           <Link to="/">
