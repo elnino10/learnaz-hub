@@ -1,5 +1,6 @@
 import User from "../../models/userModel";
 
+
 const getAdminDashboard = async (req, res) => {
     try {
         // logic to retrieve data for the admin dashboard

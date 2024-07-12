@@ -4,6 +4,7 @@ import { grantPrivileges, revokePrivileges } from '../controllers/admin/privileg
 import { manageUsers, addUser } from '../controllers/admin/manageUsers.js';
 import { manageCourses } from '../controllers/admin/manageCourses.js';
 import { getSettings } from '../controllers/admin/settings.js';
+
 import authMiddleware, { isAdmin } from '../utils/authMiddleware.js';
 import {
     getTotalUsers,

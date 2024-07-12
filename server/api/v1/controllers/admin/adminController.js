@@ -10,6 +10,7 @@ const registerAdmin = async (req, res) => {
             return res
                 .status(400)
                 .json({ message: "Missing required fields: email and password" });
+
         }
         // ensure that only admins can register new admin
         if (!req.user.isAdmin) {
@@ -20,6 +21,9 @@ const registerAdmin = async (req, res) => {
         // Check for existing user (using optimized query)
         const existingAdmin = await Admin.exists({ email });
         if (existingAdmin) {
+        // const existingUser = await User.findOne({ email }).select("-password"); // Exclude password
+        const existingUser = await Admin.exists({ email });
+        if (existingUser) {
             return res.status(400).json({ message: "User already exists" });
         }
         const salt = await bcrypt.genSalt();
@@ -42,7 +46,6 @@ const registerAdmin = async (req, res) => {
             message: "Admin user registered successfully",
             token,
         });
-
     } catch (error) {
         res.status(500).json({ message: error });
     }
