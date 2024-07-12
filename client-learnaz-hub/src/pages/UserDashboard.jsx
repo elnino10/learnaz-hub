@@ -1,4 +1,4 @@
-import {Link} from 'react-router-dom'
+// import {Link} from 'react-router-dom'
 import student from "../assets/student5ani.gif";
 import image from "../assets/teacher.png";
 
@@ -59,7 +59,7 @@ function UserDashboard() {
       <div className="text-gray-700 bg-gray-100 flex w-full justify-between p-16 pl-4">
         <div className="text center pl-28 pt-20 w-50 text-center">
           <h2 className="text-4xl font-bold">Learning that gets you</h2>
-          <p className="mt-2 text-2xl text-lg">
+          <p className="mt-2 text-2xl">
             Skills for your present and your future.
             <p>Keep Learning</p>.
           </p>
