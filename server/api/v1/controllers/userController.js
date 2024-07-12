@@ -1,5 +1,5 @@
 // server/src/api/v1/controllers/userController.js
-import User from '../models/userModel.js';
+import User from '../models/userModel.jsgit ';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
