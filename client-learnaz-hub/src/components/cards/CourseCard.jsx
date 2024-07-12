@@ -1,10 +1,9 @@
-import { courses } from "../../data/courseData";
-
+/* eslint-disable react/prop-types */
 function CourseCard(props) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {courses &&
-        courses
+      {props.courses &&
+        props.courses
           // eslint-disable-next-line react/prop-types
           .filter((course) => course.category === props.selectedCategory)
           .map((course, index) => (

@@ -1,6 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useEffect } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Learn from "../assets/study.png";
 import Teacher from "../assets/teacher.png";
 import { Link } from "react-router-dom";
@@ -14,27 +13,41 @@ import {
 
 // data for courses
 import { courses, reviews } from "../data/courseData";
-import CourseCard from "../components/cards/CourseCard";
+import { CourseCard } from "../components";
 
 function LandingPage() {
+  const [allCourses, setAllCourses] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [categories, setCategories] = useState([]);
-  const [activeCategory, setActiveCategory] = useState("")
+  const [activeCategory, setActiveCategory] = useState("");
+
+  // fetch all courses from database
+  useEffect(() => {
+    const fetchAllCourses = async () => {
+      try {
+        // fetch courses from database
+        setAllCourses(courses);
+      } catch (error) {
+        console.log("Error fetching courses: ", error);
+      }
+    };
+    fetchAllCourses();
+  }, []);
 
   // create an array of all the categories in dataset
   useEffect(() => {
     let courseCategories = [];
     setSelectedCategory(courses[0].category);
-    setActiveCategory(courses[0].category)
+    setActiveCategory(courses[0].category);
     courses &&
       courses.map((course) => {
         if (!courseCategories.includes(course.category)) {
           courseCategories.push(course.category);
         }
       });
-      setCategories(courseCategories)
+    setCategories(courseCategories);
   }, []);
-  
+
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
   };
@@ -78,10 +91,12 @@ function LandingPage() {
               <div key={index}>
                 <button
                   onClick={() => {
-                    handleCategoryClick(category)
-                    setActiveCategory(category)
+                    handleCategoryClick(category);
+                    setActiveCategory(category);
                   }}
-                  className={`${activeCategory === category && "underline"} hover:underline hover:text-gray-900`}
+                  className={`${
+                    activeCategory === category && "underline"
+                  } hover:underline hover:text-gray-900`}
                 >
                   {category}
                 </button>
@@ -94,7 +109,10 @@ function LandingPage() {
               <h2 className="text-3xl text-gray-900 font-bold mb-4">
                 {selectedCategory} Courses
               </h2>
-              <CourseCard selectedCategory={selectedCategory} />
+              <CourseCard
+                selectedCategory={selectedCategory}
+                courses={allCourses}
+              />
             </div>
           )}
         </section>
