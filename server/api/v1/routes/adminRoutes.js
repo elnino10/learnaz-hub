@@ -1,10 +1,10 @@
-// import { Router } from "express";
+import { Router } from 'express';
+import { registerAdmin, loginAdmin } from '../controllers/adminController.js';
+import authMiddleware, { isAdmin } from '../utils/authMiddleware.js';
 
-// import { getAdminDashboard } from "../controllers/adminController";
+const router = Router();
 
-// const router = Router();
+router.post('/register_admin', registerAdmin);
+router.post('/admin_login', authMiddleware, isAdmin, loginAdmin);
 
-// // route for admin dashboard
-// router.get("/dashboard", getAdminDashboard);
-
-// export default router;
+export default router;
