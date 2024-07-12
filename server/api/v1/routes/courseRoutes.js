@@ -4,15 +4,24 @@ import {
     getCourses,
     getCourseByID,
     updateCourse,
-    deleteCourse
-} from '../controllers/courseController.js'
+    deleteCourse,
+} from '../controllers/courseController.js';
+import { authMiddleware, checkRole, mockAuth } from '../utils/authMiddleware.js';
 
-export const router = express.Router();
+const router = express.Router();
 
-router.post('/', createCourse);
-router.get('/', getCourses);
-router.get('/:id', getCourseByID);
-router.put('/:id', updateCourse);
-router.delete('/:id', deleteCourse);
+// Use mockAuth middleware for testing or authMiddleware for production
+// Uncomment the following line for production
+// router.use(authMiddleware);
+router.use(mockAuth);
+
+//Available to admin and instructor
+const roles = ['admin', 'instructor'];
+
+router.post('/courses', checkRole(roles), createCourse);
+router.get('/courses', checkRole(roles), getCourses);
+router.get('/courses/:id', checkRole(roles), getCourseByID);
+router.put('/courses/:id', checkRole(roles), updateCourse);
+router.delete('/courses/:id', checkRole(roles), deleteCourse);
 
 export default router;

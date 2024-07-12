@@ -1,15 +1,15 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-// Function to register a new admin user
+
 const registerAdmin = async (req, res) => {
     try {
         const { email, password } = req.body;
 
         if (!req.body || !req.body.email || !req.body.password) {
-        return res
-            .status(400)
-            .json({ message: "Missing required fields: email and password" });
+            return res
+                .status(400)
+                .json({ message: "Missing required fields: email and password" });
         }
         // ensure that only admins can register new admin
         if (!req.user.isAdmin) {
@@ -18,9 +18,8 @@ const registerAdmin = async (req, res) => {
                 .json({ message: "Forbidden: Only admins can register admins" });
         }
         // Check for existing user (using optimized query)
-        // const existingUser = await User.findOne({ email }).select("-password"); // Exclude password
-        const existingUser = await Admin.exists({ email });
-        if (existingUser) {
+        const existingAdmin = await Admin.exists({ email });
+        if (existingAdmin) {
             return res.status(400).json({ message: "User already exists" });
         }
         const salt = await bcrypt.genSalt();
@@ -29,11 +28,20 @@ const registerAdmin = async (req, res) => {
         const newAdmin = new Admin({
             email,
             password: hashedPassword,
-            first_name,
-            last_name,
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
         });
         await newAdmin.save();
-        res.status(201).json({ message: "Admin user registered successfully" });
+
+        // Generate JWT token
+        const token = jwt.sign({ userId: newAdmin._id }, process.env.JWT_SECRET, {
+            expiresIn: "1h",
+        });
+
+        res.status(201).json({
+            message: "Admin user registered successfully",
+            token,
+        });
 
     } catch (error) {
         res.status(500).json({ message: error });
