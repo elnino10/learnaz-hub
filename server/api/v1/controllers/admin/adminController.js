@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import User from "../../models/userModel.js"; // Import User model (adjust path as needed)
+import User from "../../models/userModel.js";
 
 const registerAdmin = async (req, res) => {
     try {
@@ -39,7 +39,7 @@ const registerAdmin = async (req, res) => {
 
         // Generate JWT token
         const token = jwt.sign({ userId: newAdmin._id, role: "admin" }, process.env.JWT_SECRET, {
-            expiresIn: "1h",
+            expiresIn: "30d",
         });
 
         res.status(201).json({
