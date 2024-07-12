@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import Learn from "../assets/study.png";
 import Teacher from "../assets/teacher.png";
@@ -11,73 +11,34 @@ import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
-const courses = {
-  "Video Animation": [
-    {
-      title: "Introduction to Video Animation",
-      image: "http://example.com/video-animation.jpg",
-      author: "John Doe",
-      numberEnrolled: 30,
-      price: "$50",
-    },
-    {
-      title: "Introduction to Video Animation",
-      image: "http://example.com/video-animation.jpg",
-      author: "John Doe",
-      numberEnrolled: 30,
-      price: "$50",
-    },
-  ],
-  "Video Editing": [
-    {
-      title: "Introduction to Video Editing",
-      image: "http://example.com/video-editing.jpg",
-      author: "Jane Smith",
-      numberEnrolled: 25,
-      price: "$45",
-    },
-  ],
-  "Stop Motion": [
-    {
-      title: "Introduction to Stop Motion",
-      image: "http://example.com/stop-motion.jpg",
-      author: "Alice Brown",
-      numberEnrolled: 20,
-      price: "$55",
-    },
-  ],
-  Photography: [
-    {
-      title: "Introduction to Photography",
-      image: "http://example.com/photography.jpg",
-      author: "John Doe",
-      numberEnrolled: 30,
-      price: "$50",
-    },
-  ],
-};
 
-const reviews = [
-  {
-    username: "Jane Doe",
-    review: "Learnerz Hub shaped my career greatly",
-  },
-  {
-    username: "John Smith",
-    review: "Fantastic platform with excellent courses",
-  },
-  {
-    username: "Alice Johnson",
-    review: "I learned so much in such a short time!",
-  },
-];
+// data for courses
+import { courses, reviews } from "../data/courseData";
+import CourseCard from "../components/cards/CourseCard";
 
 function LandingPage() {
-  const [selectedCategory, setSelectedCategory] = useState("Video Animation");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [activeCategory, setActiveCategory] = useState("")
 
+  // create an array of all the categories in dataset
+  useEffect(() => {
+    let courseCategories = [];
+    setSelectedCategory(courses[0].category);
+    setActiveCategory(courses[0].category)
+    courses &&
+      courses.map((course) => {
+        if (!courseCategories.includes(course.category)) {
+          courseCategories.push(course.category);
+        }
+      });
+      setCategories(courseCategories)
+  }, []);
+  
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
   };
+
   return (
     <div className="m-0 p-0 min-h-screen scroll">
       {/* Main Content */}
@@ -113,11 +74,14 @@ function LandingPage() {
             different courses, taught by industry experts.
           </p>
           <div className="text-gray-700 text-xl flex flex-wrap gap-4 pt-6 ">
-            {Object.keys(courses).map((category) => (
-              <div key={category}>
+            {categories.map((category, index) => (
+              <div key={index}>
                 <button
-                  onClick={() => handleCategoryClick(category)}
-                  className="hover:underline hover:text-gray-900"
+                  onClick={() => {
+                    handleCategoryClick(category)
+                    setActiveCategory(category)
+                  }}
+                  className={`${activeCategory === category && "underline"} hover:underline hover:text-gray-900`}
                 >
                   {category}
                 </button>
@@ -130,27 +94,7 @@ function LandingPage() {
               <h2 className="text-3xl text-gray-900 font-bold mb-4">
                 {selectedCategory} Courses
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {courses[selectedCategory].map((course, index) => (
-                  <div key={index} className="p-4 border rounded-lg">
-                    <img
-                      src={course.image}
-                      alt={course.title}
-                      className="w-full h-48 object-cover mb-4"
-                    />
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                      {course.title}
-                    </h3>
-                    <p className="text-gray-700 mb-2">
-                      Author: {course.author}
-                    </p>
-                    <p className="text-gray-700 mb-2">
-                      Number Enrolled: {course.numberEnrolled}
-                    </p>
-                    <p className="text-gray-700 font-bold">{course.price}</p>
-                  </div>
-                ))}
-              </div>
+              <CourseCard selectedCategory={selectedCategory} />
             </div>
           )}
         </section>

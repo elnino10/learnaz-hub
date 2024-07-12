@@ -1,6 +1,12 @@
 import { Route, Routes } from "react-router-dom";
-import { Sidebar, Navbar, Dashboard, ManageUsers, ManageCourses } from "./admin";
-import { LandingPage } from "./pages";
+import {
+  Sidebar,
+  Navbar,
+  Dashboard,
+  ManageUsers,
+  ManageCourses,
+} from "./admin";
+import { EnrolledCoursesPage, LandingPage } from "./pages";
 import {
   Footer,
   ForgotPassword,
@@ -44,6 +50,7 @@ const MainLayout = () => (
       <Route path="/login" element={<LoginForm />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/password-recovery" element={<PasswordRecoveryForm />} />
+      <Route path="/my-learning" element={<EnrolledCoursesPage />} />
       <Route path="*" element={<h1>Not Found</h1>} />
     </Routes>
     <Footer />
