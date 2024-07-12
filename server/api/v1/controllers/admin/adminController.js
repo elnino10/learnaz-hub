@@ -1,57 +1,68 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import User from "../../models/userModel.js";
 
-// Function to register a new admin user
 const registerAdmin = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { email, password, firstName, lastName } = req.body;
 
-        if (!req.body || !req.body.email || !req.body.password) {
-        return res
-            .status(400)
-            .json({ message: "Missing required fields: email and password" });
+        if (!email || !password) {
+            return res
+                .status(400)
+                .json({ message: "Missing required fields: email and password" });
         }
-        // ensure that only admins can register new admin
-        if (!req.user.isAdmin) {
+
+        // Ensure that only admins can register new admin
+        if (!req.user || req.user.role !== "admin") {
             return res
                 .status(403)
                 .json({ message: "Forbidden: Only admins can register admins" });
         }
-        // Check for existing user (using optimized query)
-        // const existingUser = await User.findOne({ email }).select("-password"); // Exclude password
-        const existingUser = await Admin.exists({ email });
+
+        // Check for existing user
+        const existingUser = await User.exists({ email });
         if (existingUser) {
             return res.status(400).json({ message: "User already exists" });
         }
+
         const salt = await bcrypt.genSalt();
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        const newAdmin = new Admin({
+        const newAdmin = new User({
             email,
             password: hashedPassword,
-            first_name,
-            last_name,
+            firstName,
+            lastName,
+            role: "admin",
         });
         await newAdmin.save();
-        res.status(201).json({ message: "Admin user registered successfully" });
 
+        // Generate JWT token
+        const token = jwt.sign({ userId: newAdmin._id, role: "admin" }, process.env.JWT_SECRET, {
+            expiresIn: "30d",
+        });
+
+        res.status(201).json({
+            message: "Admin user registered successfully",
+            token,
+        });
     } catch (error) {
-        res.status(500).json({ message: error });
+        res.status(500).json({ message: error.message });
     }
 };
 
 const loginAdmin = async (req, res) => {
     try {
-        if (!req.body || !req.body.email || !req.body.password) {
-        return res
-            .status(400)
-            .json({ message: "Missing required fields: email and password" });
-        }
-
         const { email, password } = req.body;
 
+        if (!email || !password) {
+            return res
+                .status(400)
+                .json({ message: "Missing required fields: email and password" });
+        }
+
         // Find user by email
-        const user = await user.findOne({ email });
+        const user = await User.findOne({ email });
 
         if (!user) {
             return res.status(401).json({ message: "Invalid email or password" });
@@ -64,14 +75,15 @@ const loginAdmin = async (req, res) => {
             return res.status(401).json({ message: "Invalid email or password" });
         }
 
-        // Check if user is an admin (using middleware is recommended)
-        if (!user.isAdmin) {
+        // Check if user is an admin
+        if (user.role !== "admin") {
             return res
                 .status(403)
                 .json({ message: "Forbidden: Only admins can log in" });
         }
-        // Generate JWT token (consider adding expiry time and other security measures)
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+
+        // Generate JWT token
+        const token = jwt.sign({ userId: user._id, role: "admin" }, process.env.JWT_SECRET, {
             expiresIn: "1h",
         });
 

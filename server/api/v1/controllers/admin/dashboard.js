@@ -1,4 +1,5 @@
-import User from "../../models/User";
+import User from "../../models/userModel";
+
 
 const getAdminDashboard = async (req, res) => {
     try {
