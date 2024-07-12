@@ -1,3 +1,5 @@
 import LandingPage from "./LandingPage";
+import EnrolledCoursesPage from "./EnrolledCoursesPage";
+import UserDashboard from "./UserDashboard"
 
-export { LandingPage };
+export { LandingPage, EnrolledCoursesPage, UserDashboard };

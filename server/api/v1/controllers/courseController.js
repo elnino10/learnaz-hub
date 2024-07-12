@@ -3,12 +3,12 @@ import Course from "../models/courseModel.js";
 // create a new course
 export const createCourse = async (req, res) => {
   try {
-    console.log(req.headers);
-    console.log(req.body);
-    console.log("Hola desde el controlador");
-    // const newCourse = new Course(req.body);
-    // const course = await newCourse.save();
-    // res.status(201).json(course);
+    // console.log(req.headers);
+    // console.log(req.body);
+    // console.log("Hola desde el controlador");
+    const newCourse = new Course(req.body);
+    const course = await newCourse.save();
+    res.status(201).json(course);
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });
   }
