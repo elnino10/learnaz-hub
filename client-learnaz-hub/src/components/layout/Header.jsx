@@ -86,11 +86,14 @@ function Header() {
           </div>
           {/* Navigation Links */}
           <ul className="flex space-x-4">
-            <li>
+            <Link className="" to="/user-dashboard">
+              Learning
+            </Link>
+            {/* <li>
               <a href="#" className="text-lg text-gray-600 hover:text-gray-900">
                 Learn more
               </a>
-            </li>
+            </li> */}
             <li>
               <a href="#" className="text-lg text-gray-600 hover:text-gray-900">
                 Become a Creator
