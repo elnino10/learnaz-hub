@@ -4,7 +4,7 @@
 //   createTutorProfile,
 //   updateTutorProfile,
 //   deleteTutorProfile,
-// } from "../controllers/tutorController.js";
+// } from "../controllers/instructorController.js";
 
 // const router = Router();
 
