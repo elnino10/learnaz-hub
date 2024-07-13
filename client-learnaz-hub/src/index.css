@@ -1,3 +1,42 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.slick-slide > div {
+  margin: 0 10px;
+}
+
+.slick-dots li.slick-active button:before {
+  color:orange !important;
+}
+ /* Custom styles for slick slider arrows */
+.slick-prev,
+.slick-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  width: 40px; 
+  height: 40px; 
+  background-color: rgba(0, 0, 0, 0.5); 
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.slick-prev {
+  left: 10px; 
+}
+
+.slick-next {
+  right: 10px;
+}
+
+/* Custom styles for arrow icons (Font Awesome icons used here) */
+.slick-prev:before,
+.slick-next:before {
+  color: rgb(19, 4, 4); 
+  font-size: 20px; /* Adjust size as needed */
+}
