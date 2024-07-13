@@ -7,9 +7,7 @@ const registerAdmin = async (req, res) => {
         const { email, password, firstName, lastName } = req.body;
 
         if (!email || !password) {
-            return res
-                .status(400)
-                .json({ message: "Missing required fields: email and password" });
+            return res.status(400).json({ message: "Missing required fields: email and password" });
         }
 
         // Check for existing user
@@ -18,19 +16,24 @@ const registerAdmin = async (req, res) => {
             return res.status(400).json({ message: "User already exists" });
         }
 
+        // Create new admin user
         const newAdmin = new User({
             email,
-            password,
+            password: hashedPassword,
             firstName,
             lastName,
             role: "admin",
         });
+
+        // Save the new admin user
         await newAdmin.save();
 
         // Generate JWT token
-        const token = jwt.sign({ userId: newAdmin._id, role: "admin" }, process.env.JWT_SECRET, {
-            expiresIn: "30d",
-        });
+        const token = jwt.sign(
+            { userId: newAdmin._id, role: "admin" },
+            process.env.JWT_SECRET,
+            { expiresIn: "30d" }
+        );
 
         res.status(201).json({
             status: "success",
@@ -54,8 +57,9 @@ const loginAdmin = async (req, res) => {
         // Find user by email
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(401).json({ message: "User does not exists" });
+            return res.status(401).json({ message: "User does not exist" });
         }
+
         // Validate password using bcrypt
         const validPassword = user.matchPassword(password);
 
@@ -63,6 +67,7 @@ const loginAdmin = async (req, res) => {
           return res
             .status(401)
             .json({ message: "Invalid email and password" });
+
         }
 
         // Check if user is an admin
@@ -71,9 +76,11 @@ const loginAdmin = async (req, res) => {
         // }
 
         // Generate JWT token
-        const token = jwt.sign({ userId: user._id, role: "admin" }, process.env.JWT_SECRET, {
-            expiresIn: "1h",
-        });
+        const token = jwt.sign(
+            { userId: user._id, role: "admin" },
+            process.env.JWT_SECRET,
+            { expiresIn: "1h" }
+        );
 
         res.status(200).json({
             status: "success",
