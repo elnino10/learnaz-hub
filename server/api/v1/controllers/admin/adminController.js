@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 import User from "../../models/userModel.js";
-import { comparePassword, hashPassword } from "../../utils/helperFunctions.js";
 
 const registerAdmin = async (req, res) => {
     try {
@@ -19,7 +18,7 @@ const registerAdmin = async (req, res) => {
         // Create new admin user
         const newAdmin = new User({
             email,
-            password: hashedPassword,
+            password,
             firstName,
             lastName,
             role: "admin",
