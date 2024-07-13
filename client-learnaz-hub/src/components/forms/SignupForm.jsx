@@ -11,16 +11,24 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useState } from "react";
 
 const defaultTheme = createTheme();
 
 function SignupForm() {
+  const [role, setRole] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
+      firstName: data.get("firstName"),
+      lastName: data.get("lastName"),
       email: data.get("email"),
       password: data.get("password"),
+      role,
     });
   };
 
@@ -50,15 +58,35 @@ function SignupForm() {
               sx={{ mt: 3 }}
             >
               <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Button
+                    variant={role === "learner" ? "contained" : "outlined"}
+                    fullWidth
+                    onClick={() => setRole("learner")}
+                  >
+                    Student
+                  </Button>
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    variant={role === "instructor" ? "contained" : "outlined"}
+                    fullWidth
+                    onClick={() => setRole("instructor")}
+                  >
+                    Instructor
+                  </Button>
+                </Grid>
                 <Grid item xs={12} sm={6}>
                   <TextField
-                    autoComplete="given-name"
+                    autoComplete="fname"
                     name="firstName"
                     required
                     fullWidth
                     id="firstName"
                     label="First Name"
                     autoFocus
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -68,7 +96,9 @@ function SignupForm() {
                     id="lastName"
                     label="Last Name"
                     name="lastName"
-                    autoComplete="family-name"
+                    autoComplete="lname"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -106,6 +136,7 @@ function SignupForm() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                disabled={!role}
               >
                 Sign Up
               </Button>
