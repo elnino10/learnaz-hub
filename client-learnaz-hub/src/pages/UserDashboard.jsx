@@ -118,7 +118,7 @@ const UserDashboard = () => {
           </p>
         </div>
         <div className="mb-8 w-50">
-          <img src={student} className="w-full h-64 object-cover rounded-md" />
+          <img src={student} className="w-full h-64 object-cover" />
         </div>
       </div>
       {enrolledCourse.length > 0 ? (

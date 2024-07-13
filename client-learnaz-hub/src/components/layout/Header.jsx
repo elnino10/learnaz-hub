@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import { courses } from "../../data/courseData";
 
 function Header() {
   const [drpdwn, setDrpdwn] = useState(false);
   const [courseCategories, setCourseCategories] = useState([]);
-
+  const dropdownRef = useRef(null);
+  
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -29,6 +30,17 @@ function Header() {
     setDrpdwn(!drpdwn);
   };
 
+  useEffect(() => {
+    const clickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDrpdwn(false);
+      }
+    };
+    document.addEventListener("mousedown", clickOutside);
+    // return () => document.removeEventListener("mousedown", clickOutside);
+    
+  }, [dropdownRef]);
+
   return (
     <>
       <header className="h-20 bg-white p-6 shadow-md top-0 z-20 fixed w-full mb-20">
@@ -38,12 +50,12 @@ function Header() {
             <div className="text-xl font-bold">Learnaz-Hub</div>
           </Link>
           {/* course category */}
-          <div>
+          <div ref={dropdownRef}>
             <button
               onClick={toggleDrpdwn}
               className="pl-6 text-lg text-gray-600 hover:text-gray-900 focus:outline-none"
             >
-              Courses
+              Course Category
             </button>
             {drpdwn && (
               <div className="absolute bg-white shadow-md w-80% mt-2">
