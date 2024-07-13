@@ -16,10 +16,6 @@ const registerAdmin = async (req, res) => {
             return res.status(400).json({ message: "User already exists" });
         }
 
-        // Hash the password
-        const hashedPassword = await hashPassword(password);
-        // console.log(email, password);
-
         // Create new admin user
         const newAdmin = new User({
             email,
@@ -28,9 +24,6 @@ const registerAdmin = async (req, res) => {
             lastName,
             role: "admin",
         });
-
-        // const hashedPassword = await bcrypt.hash(password, 10);
-        // console.log('Hashed Password:', hashedPassword);
 
         // Save the new admin user
         await newAdmin.save();
@@ -51,13 +44,11 @@ const registerAdmin = async (req, res) => {
         console.error("Error in registerAdmin:", error);
         res.status(500).json({ message: error.message });
     }
-};
+}
 
 const loginAdmin = async (req, res) => {
     try {
         const { email, password } = req.body;
-
-        console.log('Login request received with:', { email, password });
 
         if (!email || !password) {
             return res.status(400).json({ message: "Missing required fields: email and password" });
@@ -65,26 +56,24 @@ const loginAdmin = async (req, res) => {
 
         // Find user by email
         const user = await User.findOne({ email });
-        console.log('User found:', user);
         if (!user) {
             return res.status(401).json({ message: "User does not exist" });
         }
 
         // Validate password using bcrypt
-        const validPassword = await comparePassword(password, user.password);
-
-        // Compare the input password with the stored hashed password
-        const passwordsMatch = await bcrypt.compare(password, user.password);
-        // console.log('Passwords Match:', passwordsMatch);
+        const validPassword = user.matchPassword(password);
 
         if (!validPassword) {
-            return res.status(401).json({ message: "Password does not match! Try again" });
+          return res
+            .status(401)
+            .json({ message: "Invalid email and password" });
+
         }
 
         // Check if user is an admin
-        if (user.role !== "admin") {
-            return res.status(403).json({ message: "Forbidden: Only admins can log in" });
-        }
+        // if (user.role !== "admin") {
+        //     return res.status(403).json({ message: "Forbidden: Only admins can log in" });
+        // }
 
         // Generate JWT token
         const token = jwt.sign(
