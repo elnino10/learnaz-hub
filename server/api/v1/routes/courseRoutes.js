@@ -5,7 +5,7 @@ import {
     getCourseByID,
     updateCourse,
     deleteCourse,
-} from '../controllers/courseController.js';
+} from '../controllers/instructor/courseController.js';
 import { authMiddleware, checkRole, mockAuth } from '../utils/authMiddleware.js';
 
 const router = express.Router();

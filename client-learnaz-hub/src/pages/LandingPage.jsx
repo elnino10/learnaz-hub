@@ -1,7 +1,6 @@
-// eslint-disable-next-line no-unused-vars
 import { useState, useEffect } from "react";
-import Learn from "../assets/study.png";
-import Teacher from "../assets/teacher.png";
+import Learn from "../assets/images/study.png";
+import Teacher from "../assets/images/teacher.png";
 import { Link } from "react-router-dom";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // Import carousel styles
 import { Carousel } from "react-responsive-carousel";
@@ -57,36 +56,38 @@ function LandingPage() {
       {/* Main Content */}
       <main className="w-full">
         {/* Text Content */}
-        <section className="pt-32 w-full flex">
-          {/* <div className="pt-10 flex w-full items-center"> */}
-          <img src={Learn} className="w-1/2 p-4 mr-12" alt="Learning Online" />
-          <div className="w-1/2">
-            <h1 className="text-4xl font-bold text-gray-600 mb-4 mt-20">
-              One Skill At time
+        <section className="pt-32 w-full flex flex-col md:flex-row">
+          <img
+            src={Learn}
+            className="w-full md:w-1/2 p-4 mb-8 md:mb-0 md:mr-12"
+            alt="Learning Online"
+          />
+          <div className="w-full md:w-1/2 text-center md:text-left">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-600 mb-4 mt-20 md:mt-0">
+              One Skill At a Time
             </h1>
-            <p className="text-2xl text-gray-700 mb-6">
+            <p className="text-xl md:text-2xl text-gray-700 mb-6">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua.
             </p>
             <Link
               to="/signup"
-              className="bg-gray-900 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded"
+              className="bg-gray-900 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded"
             >
               Join for Free
             </Link>
           </div>
-          {/* </div> */}
         </section>
         {/* Courses Section */}
         <section className="p-8 w-full bg-white">
-          <p className="pb-4 text-4xl text-gray-900 font-bold">
+          <p className="pb-4 text-3xl md:text-4xl text-gray-900 font-bold">
             A Broad Range of Courses You Can Take
           </p>
-          <p className="text-2xl text-gray-900">
+          <p className="text-xl md:text-2xl text-gray-900">
             Learn a new skill in as little as 6 months. Select from over 100
             different courses, taught by industry experts.
           </p>
-          <div className="text-gray-700 text-xl flex flex-wrap gap-4 pt-6 ">
+          <div className="text-gray-700 text-lg md:text-xl flex flex-wrap gap-4 pt-6 ">
             {categories.map((category, index) => (
               <div key={index}>
                 <button
@@ -106,7 +107,7 @@ function LandingPage() {
 
           {selectedCategory && (
             <div className="pt-6">
-              <h2 className="text-3xl text-gray-900 font-bold mb-4">
+              <h2 className="text-2xl md:text-3xl text-gray-900 font-bold mb-4">
                 {selectedCategory} Courses
               </h2>
               <CourseCard
@@ -118,7 +119,7 @@ function LandingPage() {
         </section>
         {/* review */}
         <section className="p-8 w-full bg-white">
-          <p className="mb-6 text-gray-900 text-4xl font-bold">
+          <p className="mb-6 text-gray-900 text-3xl md:text-4xl font-bold">
             What Our Learners are saying
           </p>
           <div className="max-w-4xl mx-auto border">
@@ -156,7 +157,7 @@ function LandingPage() {
             >
               {reviews.map((review, index) => (
                 <div key={index} className="p-4">
-                  <blockquote className="text-xl italic text-gray-700">
+                  <blockquote className="text-lg md:text-xl italic text-gray-700">
                     {review.review}
                   </blockquote>
                   <p className="mt-4 text-lg font-bold text-gray-900">
@@ -172,18 +173,18 @@ function LandingPage() {
             <img
               src={Teacher}
               alt="A woman"
-              className="w-1/2 mr-0 mb-8 md:mb-0 md:mr-12"
+              className="w-full md:w-1/2 mb-8 md:mb-0 md:mr-12"
             />
             <div className="w-full md:w-1/2 text-center md:text-left">
-              <h1 className="text-4xl font-bold text-gray-600 mb-4 mt-12 md:mt-0">
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-600 mb-4 mt-12 md:mt-0">
                 Become A Course Creator
               </h1>
-              <p className="text-2xl text-gray-700 mb-6">
+              <p className="text-xl md:text-2xl text-gray-700 mb-6">
                 Course creators from around the world can share their expertise.
               </p>
               <Link
-                to="/signp"
-                className="bg-gray-900 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded"
+                to="/signup"
+                className="bg-gray-900 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded"
               >
                 Start Creating
               </Link>
