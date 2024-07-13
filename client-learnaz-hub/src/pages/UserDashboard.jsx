@@ -1,23 +1,17 @@
 import { Link } from "react-router-dom";
-import student from "../assets/student5ani.gif";
+import student from "../assets/images/student5ani.gif";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { enrolledCourses } from "../data/courseData";
-import { allUsers } from "../data/courseData";
-import { suggestedCourses } from "../data/courseData";
+import { enrolledCourses, allUsers, suggestedCourses } from "../data/courseData";
 import { useEffect, useState } from "react";
 
-
-
-
 const UserDashboard = () => {
-
   const [enrolledCourse, setEnrolledCourse] = useState([]);
   const [users, setUsers] = useState([]);
-  const [suggestedCourse, setSuggestedCourse] = useState([])
-  
+  const [suggestedCourse, setSuggestedCourse] = useState([]);
+
   useEffect(() => {
     const fetchAllCourses = async () => {
       try {
@@ -54,41 +48,40 @@ const UserDashboard = () => {
     fetchUser();
   }, []);
 
-
   const getInitials = (firstName, lastName) => {
     return `${firstName[0]}${lastName[0]}`;
   };
 
-   const settings = {
-     speed: 500,
-     slidesToShow: 3,
-     slidesToScroll: 1,
-     responsive: [
-       {
-         breakpoint: 1024,
-         settings: {
-           slidesToShow: 3,
-           slidesToScroll: 3,
-           infinite: true,
-         },
-       },
-       {
-         breakpoint: 600,
-         settings: {
-           slidesToShow: 2,
-           slidesToScroll: 2,
-           initialSlide: 2,
-         },
-       },
-       {
-         breakpoint: 480,
-         settings: {
-           slidesToShow: 1,
-           slidesToScroll: 1,
-         },
-       },
-     ],
-   };
+  const settings = {
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
   return (
     <div className="m-0 p-0 pt-16 min-h-screen scroll">
       {users.map((user) => (
@@ -141,7 +134,11 @@ const UserDashboard = () => {
               {enrolledCourses.map((course) => (
                 <div key={course.id} className="p-4">
                   <div className="flex bg-white p-8 pr-8 border-2 h-40 w-100 overflow-hidden">
-                    <img src={course.imageurl} alt="course-img" className="w-32" />
+                    <img
+                      src={course.imageurl}
+                      alt="course-img"
+                      className="w-32"
+                    />
                     <div className="">
                       <h3 className="text-xl font-semibold">{course.title}</h3>
                       <p className="text-lg">{course.duration}</p>
