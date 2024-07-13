@@ -20,7 +20,7 @@ const courseSchema = new mongoose.Schema({
   },
   instructorId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Instructor",
+    ref: "User",
   },
   studentsEnrolled: [
     {
@@ -45,7 +45,8 @@ const courseSchema = new mongoose.Schema({
   category: {
     type: String,
     required: [true, "Please provide a category"],
-  }
+  },
+  review: String,
 });
 
 const Course = mongoose.model("Course", courseSchema);
