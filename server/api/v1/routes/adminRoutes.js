@@ -28,4 +28,5 @@ router.get('/analytics/totalCourses', getTotalCourses);
 router.get('/analytics/activeUsers', getActiveUsers);
 router.get('/analytics/newSignups', getNewSignups);
 
+
 export default router;
