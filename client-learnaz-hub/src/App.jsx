@@ -51,6 +51,7 @@ const MainLayout = () => (
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/password-recovery" element={<PasswordRecoveryForm />} />
       <Route path="/user-dashboard" element={<UserDashboard />} />
+      {/* <Route path="/user-courses" element={<UserDashboard />} /> */}
       <Route path="*" element={<h1>Not Found</h1>} />
     </Routes>
     <Footer />
