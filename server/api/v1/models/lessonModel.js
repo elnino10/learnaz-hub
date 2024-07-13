@@ -3,15 +3,15 @@ import mongoose from "mongoose";
 const lessonSchema = new mongoose.Schema({
     title: {
         type: String,
-        required: true,
+        required: [true, "Lesson title is required"],
     },
-    content: {
+    contentUrl: {
         type: String,
-        required: true,
+        required: [true, "Lesson content URL is required"],
     },
     courseId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Course", // Reference to the Course model
+        ref: "Course",
         required: true,
     },
     createdAt: {
