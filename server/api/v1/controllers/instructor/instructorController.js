@@ -1,12 +1,14 @@
 import jwt from "jsonwebtoken";
 import User from "../../models/userModel.js";
 
-const registerAdmin = async (req, res) => {
+const registerInstructor = async (req, res) => {
     try {
         const { email, password, firstName, lastName } = req.body;
 
         if (!email || !password) {
-            return res.status(400).json({ message: "Missing required fields: email and password" });
+            return res
+                .status(400)
+                .json({ message: "Missing required fields: email and password" });
         }
 
         // Check for existing user
@@ -15,39 +17,36 @@ const registerAdmin = async (req, res) => {
             return res.status(400).json({ message: "User already exists" });
         }
 
-        // Create new admin user
-        const newAdmin = new User({
+        const newInstructor = new User({
             email,
             password,
             firstName,
             lastName,
-            role: "admin",
+            role: "instructor",
         });
-
-        // Save the new admin user
-        await newAdmin.save();
+        await newInstructor.save();
 
         // Generate JWT token
-        const token = jwt.sign(
-            { userId: newAdmin._id, role: "admin" },
-            process.env.JWT_SECRET,
-            { expiresIn: "30d" }
-        );
+        const token = jwt.sign({ userId: newInstructor._id, role: "instructor" }, process.env.JWT_SECRET, {
+            expiresIn: "30d",
+        });
 
         res.status(201).json({
             status: "success",
-            message: "Admin user registered successfully",
+            message: "Instructor registered successfully",
             token,
         });
     } catch (error) {
-        console.error("Error in registerAdmin:", error);
+        console.error("Error in registerInstructor:", error);
         res.status(500).json({ message: error.message });
     }
-}
+};
 
-const loginAdmin = async (req, res) => {
+const loginInstructor = async (req, res) => {
     try {
         const { email, password } = req.body;
+
+        console.log('Login request received with:', { email, password });
 
         if (!email || !password) {
             return res.status(400).json({ message: "Missing required fields: email and password" });
@@ -55,41 +54,36 @@ const loginAdmin = async (req, res) => {
 
         // Find user by email
         const user = await User.findOne({ email });
+        console.log('User found:', user);
         if (!user) {
             return res.status(401).json({ message: "User does not exist" });
         }
 
         // Validate password using bcrypt
-        const validPassword = user.matchPassword(password);
-
+        const validPassword = await user.matchPassword(password);
         if (!validPassword) {
-            return res
-                .status(401)
-                .json({ message: "Invalid email and password" });
-
+            return res.status(401).json({ message: "Invalid password" });
         }
 
-        // Check if user is an admin
-        // if (user.role !== "admin") {
-        //     return res.status(403).json({ message: "Forbidden: Only admins can log in" });
-        // }
+        // Check if user is an instructor
+        if (user.role !== "instructor") {
+            return res.status(403).json({ message: "Forbidden: Only instructors can log in" });
+        }
 
         // Generate JWT token
-        const token = jwt.sign(
-            { userId: user._id, role: "admin" },
-            process.env.JWT_SECRET,
-            { expiresIn: "1h" }
-        );
+        const token = jwt.sign({ userId: user._id, role: "instructor" }, process.env.JWT_SECRET, {
+            expiresIn: "1h",
+        });
 
         res.status(200).json({
             status: "success",
-            message: "Admin logged in successfully",
+            message: "Instructor logged in successfully",
             token,
         });
     } catch (error) {
-        console.error("Error in loginAdmin:", error);
+        console.error("Error in loginInstructor:", error);
         res.status(500).json({ message: "Server error", error: error.message });
     }
 };
 
-export { registerAdmin, loginAdmin };
+export { registerInstructor, loginInstructor };

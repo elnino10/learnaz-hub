@@ -1,8 +1,18 @@
-const express = require("express");
+import express from "express";
+import {
+    createLesson,
+    getAllLessonsByCourse,
+    getLessonById,
+    updateLessonById,
+    deleteLessonById,
+} from "../controllers/lessonController.js";
+
 const router = express.Router();
-const { getLessons } = require("../controllers/lessonController");
 
-// route to get lessons for a course
-router.get("/:courseId/lessons", getLessons);
+router.post("/lessons", createLesson);
+router.get("/courses/:courseId/lessons", getAllLessonsByCourse); // Get lessons for a specific course
+router.get("/lessons/:id", getLessonById);
+router.put("/lessons/:id", updateLessonById);
+router.delete("/lessons/:id", deleteLessonById);
 
-module.exports = router;
+export default router;
