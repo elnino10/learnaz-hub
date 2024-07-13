@@ -1,6 +1,6 @@
 function CourseContentPage() {
   return (
-    <div>CourseContentPage</div>
+    <div className="mt-20">CourseContentPage</div>
   )
 }
 
