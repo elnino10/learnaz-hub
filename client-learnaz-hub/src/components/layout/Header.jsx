@@ -44,7 +44,7 @@ function Header() {
 
   return (
     <>
-      <header className="h-20 bg-white p-6 shadow-md top-0 z-20 fixed w-full">
+      <header className="h-20 bg-white p-6 shadow-md top-0 z-20 fixed w-full mb-20">
         <nav className="flex justify-between fixed w-full pr-8">
           {/* Logo */}
           <Link to="/">
@@ -86,11 +86,14 @@ function Header() {
           </div>
           {/* Navigation Links */}
           <ul className="flex space-x-4">
-            <li>
+            <Link className="" to="/user-dashboard">
+              Learning
+            </Link>
+            {/* <li>
               <a href="#" className="text-lg text-gray-600 hover:text-gray-900">
                 Learn more
               </a>
-            </li>
+            </li> */}
             <li>
               <a href="#" className="text-lg text-gray-600 hover:text-gray-900">
                 Become a Creator
