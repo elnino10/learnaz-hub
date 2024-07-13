@@ -15,17 +15,18 @@ import {
 
 const router = Router();
 
-router.post('/admin-register', authMiddleware, isAdmin, registerAdmin);
-router.post('/admin-login', authMiddleware, isAdmin, loginAdmin);
-router.post("/grant-privileges", authMiddleware, isAdmin, grantPrivileges);
-router.post("/revoke-privileges", authMiddleware, isAdmin, revokePrivileges);
-router.get('/manage-users', authMiddleware, isAdmin, manageUsers);
-router.post('/add-user', authMiddleware, isAdmin, addUser);
-router.get('/manage-courses', authMiddleware, isAdmin, manageCourses);
-router.get('/settings', authMiddleware, isAdmin, getSettings);
-router.get('/analytics/totalUsers', authMiddleware, isAdmin, getTotalUsers);
-router.get('/analytics/totalCourses', authMiddleware, isAdmin, getTotalCourses);
-router.get('/analytics/activeUsers', authMiddleware, isAdmin, getActiveUsers);
-router.get('/analytics/newSignups', authMiddleware, isAdmin, getNewSignups);
+router.post('/register-admin', /*authMiddleware, isAdmin,*/ registerAdmin);
+router.post('/admin-login', /*authMiddleware, isAdmin,*/ loginAdmin);
+router.post("/grant-privileges", grantPrivileges);
+router.post("/revoke-privileges", revokePrivileges);
+router.get('/manage-users', manageUsers);
+router.post('/add-user', addUser);
+router.get('/manage-courses', manageCourses);
+router.get('/settings', getSettings);
+router.get('/analytics/totalUsers', getTotalUsers);
+router.get('/analytics/totalCourses', getTotalCourses);
+router.get('/analytics/activeUsers', getActiveUsers);
+router.get('/analytics/newSignups', getNewSignups);
+
 
 export default router;

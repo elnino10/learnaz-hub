@@ -1,6 +1,6 @@
-// import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../../models/userModel.js";
+import { comparePassword, hashPassword } from "../../utils/helperFunctions.js";
 
 const registerAdmin = async (req, res) => {
     try {
@@ -17,6 +17,13 @@ const registerAdmin = async (req, res) => {
         if (existingUser) {
             return res.status(400).json({ message: "User already exists" });
         }
+
+        // const hashedPassword = await hashPassword(password);
+        // console.log(email, password);
+
+        const newAdmin = new User({
+            email,
+            password,
 
         // const hashedPassword = await bcrypt.hash(password, 10);
         // console.log('Hashed Password:', hashedPassword);
@@ -36,6 +43,7 @@ const registerAdmin = async (req, res) => {
         });
 
         res.status(201).json({
+            status: "success",
             message: "Admin user registered successfully",
             token,
         });
@@ -59,9 +67,11 @@ const loginAdmin = async (req, res) => {
         const user = await User.findOne({ email });
         console.log('User found:', user);
         if (!user) {
-            return res.status(401).json({ message: "Invalid email or password" });
+            return res.status(401).json({ message: "User does not exists" });
         }
-
+        // Validate password using bcrypt
+        const validPassword = user.matchPassword(password);
+      
         // Compare the input password with the stored hashed password
         const passwordsMatch = user.password;
             // await bcrypt.compare(password, user.password);
@@ -83,6 +93,7 @@ const loginAdmin = async (req, res) => {
         });
 
         res.status(200).json({
+            status: "success",
             message: "Admin logged in successfully",
             token,
         });
