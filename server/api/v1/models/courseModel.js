@@ -20,7 +20,7 @@ const courseSchema = new mongoose.Schema({
   },
   instructorId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Instructor",
+    ref: "User",
   },
   studentsEnrolled: [
     {
@@ -33,21 +33,22 @@ const courseSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
-  videoUrl: {
-    type: String,
-    required: true,
-    trim: true,
-  },
+  lessons: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Lesson",
+      default: [],
+    },
+  ],
   averageRating: {
     type: Number,
     default: 0,
   },
-  // //Allow courses from external sources like a third party api
-  // externalId: {
-  //   type: String,
-  //   unique: true,
-  //   sparse: true, // Allows for both unique and null values
-  // },
+  category: {
+    type: String,
+    required: [true, "Please provide a category"],
+  },
+  review: String,
 });
 
 const Course = mongoose.model("Course", courseSchema);

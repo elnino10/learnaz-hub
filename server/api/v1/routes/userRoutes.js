@@ -15,7 +15,7 @@ const router = express.Router();
 router.post('/register', registerUser);
 
 // Route to authenticate a user (login)
-router.post('/login', authUser);
+router.post('/login-user', authUser);
 
 // Route to get all users
 router.get('/', getUsers);
