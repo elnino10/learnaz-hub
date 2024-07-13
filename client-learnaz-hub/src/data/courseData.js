@@ -1,4 +1,4 @@
-import image from "../assets/teacher.png";
+import image from "../assets/images/teacher.png";
 
 export const courses = [
   {
@@ -63,25 +63,25 @@ export const enrolledCourses = [
   {
     id: 1,
     title: "Introduction to Python Programming",
-    imageurl: "https://www.youtube.com/watch?v=NQP89ish9t8&t=1870s",
+    imageurl: image,
     duration: "2 hours",
   },
   {
     id: 2,
     title: "Advanced JavaScript",
-    imageurl: "https://www.youtube.com/watch?v=NQP89ish9t8&t=1870s",
+    imageurl: image,
     duration: "3 hours",
   },
   {
     id: 6,
     title: "css for beginners",
-    imageurl: "https://www.youtube.com/watch?v=NQP89ish9t8&t=1870s",
+    imageurl: image,
     duration: "3 hours",
   },
   {
     id: 3,
     title: "Computer Science",
-    imageurl: "https://www.youtube.com/watch?v=NQP89ish9t8&t=1870s",
+    imageurl: image,
     duration: "3 hours",
   },
 ];
@@ -110,5 +110,4 @@ export const suggestedCourses = [
     imageurl: "https://www.youtube.com/watch?v=NQP89ish9t8&t=1870s",
     duration: "1.5 hours",
   },
-
 ];
