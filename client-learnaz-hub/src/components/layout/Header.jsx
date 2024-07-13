@@ -2,39 +2,26 @@ import { Link } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
 import { useState, useEffect } from "react";
 
+import { courses } from "../../data/courseData";
+
 function Header() {
   const [drpdwn, setDrpdwn] = useState(false);
   const [courseCategories, setCourseCategories] = useState([]);
 
-  // useEffect(() => {
-  //   const fetchCategories = async () => {
-  //     try {
-  //       const response = await fetch("your-backend-api-endpoint");
-  //       const data = await response.json();
-  //       setCourseCategories(data);
-  //     } catch (error) {
-  //       console.error("Error fetching course categories:", error);
-  //     }
-  //   };
-
-  //   fetchCategories();
-  // }, []);
-
   useEffect(() => {
-    // Simulate fetching data from the backend
-    const fetchCategories = () => {
-      const dummyData = [
-        "Video Animation",
-        "Video Editing",
-        "Stop Motion",
-        "Photography",
-        "Graphics Design",
-        "Web Development",
-        "HTML",
-      ];
-      setCourseCategories(dummyData);
-    };
+    const fetchCategories = async () => {
+      try {
+        // fetch data from the backend
 
+        const categories = []
+        courses.map((course) => {
+          categories.push(course.category);
+        })
+        setCourseCategories(categories);
+      } catch (error) {
+        console.log("Error fetching course categories: ", error);
+      }
+    };
     fetchCategories();
   }, []);
 
