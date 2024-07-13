@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { registerAdmin, loginAdmin } from '../controllers/admin/adminController.js';
+import { register, login } from '../controllers/admin/adminController.js';
 import { grantPrivileges, revokePrivileges } from '../controllers/admin/privileges.js';
 import { manageUsers, addUser } from '../controllers/admin/manageUsers.js';
 import { manageCourses } from '../controllers/admin/manageCourses.js';
@@ -15,8 +15,8 @@ import {
 
 const router = Router();
 
-router.post('/register-admin', /*authMiddleware, isAdmin,*/ registerAdmin);
-router.post('/admin-login', /*authMiddleware, isAdmin,*/ loginAdmin);
+router.post('/register', /*authMiddleware, isAdmin,*/ register);
+router.post('/admin', /*authMiddleware, isAdmin,*/ login);
 router.post("/grant-privileges", grantPrivileges);
 router.post("/revoke-privileges", revokePrivileges);
 router.get('/manage-users', manageUsers);
