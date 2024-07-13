@@ -86,7 +86,7 @@ function Header() {
           </div>
           {/* Navigation Links */}
           <ul className="flex space-x-4">
-            <Link className="text-lg text-gray-600 hover:text-gray-900" to="/user-dashboard">
+            <Link className="text-lg text-gray-600 hover:text-gray-900" to="/home">
               Dashboard
             </Link>
             {/* <li>

@@ -129,7 +129,7 @@ const UserDashboard = () => {
             </div>
             <div>
               <Link
-                to="/my-learning"
+                to="/home/my-courses/learning"
                 className="text-blue-950 pr-4 text-lg hover:underline hover:text-blue-900"
               >
                 View All Courses
@@ -141,7 +141,7 @@ const UserDashboard = () => {
               {enrolledCourses.map((course) => (
                 <div key={course.id} className="p-4">
                   <div className="flex bg-white p-8 pr-8 border-2 h-40 w-100 overflow-hidden">
-                    <img src={course.imageurl} alt="" className="w-32" />
+                    <img src={course.imageurl} alt="course-img" className="w-32" />
                     <div className="">
                       <h3 className="text-xl font-semibold">{course.title}</h3>
                       <p className="text-lg">{course.duration}</p>

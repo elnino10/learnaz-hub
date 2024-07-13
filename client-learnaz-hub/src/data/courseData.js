@@ -101,7 +101,7 @@ export const suggestedCourses = [
   {
     id: 3,
     title: "Introduction to React",
-    imageurl: "https://www.youtube.com/watch?v=NQP89ish9t8&t=1870s",
+    imageurl: image,
     duration: "2.5 hours",
   },
   {
