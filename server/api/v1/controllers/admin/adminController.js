@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import User from "../../models/userModel.js";
 
-const registerAdmin = async (req, res) => {
+const register = async (req, res) => {
     try {
         const { email, password, firstName, lastName } = req.body;
 
@@ -45,7 +45,7 @@ const registerAdmin = async (req, res) => {
     }
 }
 
-const loginAdmin = async (req, res) => {
+const login = async (req, res) => {
     try {
         const { email, password } = req.body;
 
@@ -92,4 +92,4 @@ const loginAdmin = async (req, res) => {
     }
 };
 
-export { registerAdmin, loginAdmin };
+export { register, login };
