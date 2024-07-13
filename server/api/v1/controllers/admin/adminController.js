@@ -1,6 +1,6 @@
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../../models/userModel.js";
+import { comparePassword, hashPassword } from "../../utils/helperFunctions.js";
 
 const registerAdmin = async (req, res) => {
     try {
@@ -13,11 +13,11 @@ const registerAdmin = async (req, res) => {
         }
 
         // Ensure that only admins can register new admin
-        if (!req.user || req.user.role !== "admin") {
-            return res
-                .status(403)
-                .json({ message: "Forbidden: Only admins can register admins" });
-        }
+        // if (!req.user || req.user.role !== "admin") {
+        //     return res
+        //         .status(403)
+        //         .json({ message: "Forbidden: Only admins can register admins" });
+        // }
 
         // Check for existing user
         const existingUser = await User.exists({ email });
@@ -25,12 +25,12 @@ const registerAdmin = async (req, res) => {
             return res.status(400).json({ message: "User already exists" });
         }
 
-        const salt = await bcrypt.genSalt();
-        const hashedPassword = await bcrypt.hash(password, salt);
+        // const hashedPassword = await hashPassword(password);
+        // console.log(email, password);
 
         const newAdmin = new User({
             email,
-            password: hashedPassword,
+            password,
             firstName,
             lastName,
             role: "admin",
@@ -43,6 +43,7 @@ const registerAdmin = async (req, res) => {
         });
 
         res.status(201).json({
+            status: "success",
             message: "Admin user registered successfully",
             token,
         });
@@ -65,11 +66,11 @@ const loginAdmin = async (req, res) => {
         const user = await User.findOne({ email });
 
         if (!user) {
-            return res.status(401).json({ message: "Invalid email or password" });
+            return res.status(401).json({ message: "User does not exists" });
         }
 
         // Validate password using bcrypt
-        const validPassword = await bcrypt.compare(password, user.password);
+        const validPassword = user.matchPassword(password);
 
         if (!validPassword) {
             return res.status(401).json({ message: "Invalid email or password" });
@@ -88,6 +89,7 @@ const loginAdmin = async (req, res) => {
         });
 
         res.status(200).json({
+            status: "success",
             message: "Admin logged in successfully",
             token,
         });

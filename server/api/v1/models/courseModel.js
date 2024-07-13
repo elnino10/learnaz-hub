@@ -42,12 +42,10 @@ const courseSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  // //Allow courses from external sources like a third party api
-  // externalId: {
-  //   type: String,
-  //   unique: true,
-  //   sparse: true, // Allows for both unique and null values
-  // },
+  category: {
+    type: String,
+    required: [true, "Please provide a category"],
+  }
 });
 
 const Course = mongoose.model("Course", courseSchema);
