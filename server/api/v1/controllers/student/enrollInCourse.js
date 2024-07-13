@@ -30,12 +30,11 @@ export const enrollInCourse = async (req, res) => {
 };
 
 // View enrolled courses
-export const getEnrolledCourses = async (req, res) => {
+export const getEnrolledCourses = async (studentId) => {
     try {
-        const studentId = req.user.id;
         const student = await User.findById(studentId).populate('coursesEnrolled');
-        res.status(200).json(student.coursesEnrolled);
+        return student.coursesEnrolled;
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        throw error;
     }
 };
