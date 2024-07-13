@@ -1,96 +1,99 @@
 // server/src/api/v1/controllers/userController.js
-import User from '../models/userModel.js';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+import User from "../models/userModel.js";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 // Generate JWT Token
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: '30d',
+    expiresIn: "30d",
   });
 };
 
 // Helper function for validation.....used manual instead of express validator
-const validateUserData = (name, email, password) => {
-  const errors = [];
-  if (!name || typeof name !== 'string') errors.push('Name is required and must be a string.');
-  if (!email || typeof email !== 'string') errors.push('Email is required and must be a string.');
-  if (!password || typeof password !== 'string') errors.push('Password is required and must be a string.');
-  return errors;
-};
+// const validateUserData = (name, email, password) => {
+//   const errors = [];
+//   if (!name || typeof name !== "string")
+//     errors.push("Name is required and must be a string.");
+//   if (!email || typeof email !== "string")
+//     errors.push("Email is required and must be a string.");
+//   if (!password || typeof password !== "string")
+//     errors.push("Password is required and must be a string.");
+//   return errors;
+// };
 
 // Register a new user
 export const registerUser = async (req, res) => {
-  const { name, email, password, role } = req.body;
-  const errors = validateUserData(name, email, password);
+  const { firstName, lastName, email, password } = req.body;
+  // const errors = validateUserData(name, email, password);
 
-  if (errors.length > 0) {
-    return res.status(400).json({ errors });
-  }
+  // if (errors.length > 0) {
+  //   return res.status(400).json({ errors });
+  // }
 
   try {
     const userExists = await User.findOne({ email });
 
     if (userExists) {
-      return res.status(400).json({ message: 'User already exists' });
+      return res.status(400).json({ message: "User already exists" });
     }
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    // const salt = await bcrypt.genSalt(10);
+    // const hashedPassword = await bcrypt.hash(password, salt);
 
     const user = await User.create({
-      name,
+      firstName,
+      lastName,
       email,
-      password: hashedPassword,
-      role,
+      password,
     });
 
     if (user) {
       res.status(201).json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
+        status: "success",
+        message: "User created successfully",
         token: generateToken(user._id),
       });
     } else {
-      res.status(400).json({ message: 'Invalid user data' });
+      res.status(400).json({ message: "Invalid user data" });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: "Server error" });
   }
 };
 
 // Authenticate user and get token
 export const authUser = async (req, res) => {
   const { email, password } = req.body;
-  const errors = [];
+  // const errors = [];
 
-  if (!email || typeof email !== 'string') errors.push('Email is required and must be a string.');
-  if (!password || typeof password !== 'string') errors.push('Password is required and must be a string.');
+  // if (!email || typeof email !== "string")
+  //   errors.push("Email is required and must be a string.");
+  // if (!password || typeof password !== "string")
+  //   errors.push("Password is required and must be a string.");
 
-  if (errors.length > 0) {
-    return res.status(400).json({ errors });
-  }
+  // if (errors.length > 0) {
+  //   return res.status(400).json({ errors });
+  // }
 
   try {
     const user = await User.findOne({ email });
 
-    if (user && (await bcrypt.compare(password, user.password))) {
-      res.json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        token: generateToken(user._id),
-      });
-    } else {
-      res.status(401).json({ message: 'Invalid email or password' });
+    const validUser = await user.matchPassword(password);
+
+    if (!validUser) {
+      res.status(401).json({ message: "Invalid email or password" });
     }
+
+    res.status(200).json({
+      status: "success",
+      message: "User authenticated successfully",
+      token: generateToken(user._id),
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: "Server error" });
   }
 };
 
@@ -101,7 +104,7 @@ export const getUsers = async (req, res) => {
     res.status(200).json(users);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: "Server error" });
   }
 };
 
@@ -112,11 +115,11 @@ export const getUserById = async (req, res) => {
     if (user) {
       res.json(user);
     } else {
-      res.status(404).json({ message: 'User not found' });
+      res.status(404).json({ message: "User not found" });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: "Server error" });
   }
 };
 
@@ -125,8 +128,10 @@ export const updateUser = async (req, res) => {
   const { name, email, role } = req.body;
   const errors = [];
 
-  if (!name || typeof name !== 'string') errors.push('Name is required and must be a string.');
-  if (!email || typeof email !== 'string') errors.push('Email is required and must be a string.');
+  if (!name || typeof name !== "string")
+    errors.push("Name is required and must be a string.");
+  if (!email || typeof email !== "string")
+    errors.push("Email is required and must be a string.");
 
   if (errors.length > 0) {
     return res.status(400).json({ errors });
@@ -154,11 +159,11 @@ export const updateUser = async (req, res) => {
         role: updatedUser.role,
       });
     } else {
-      res.status(404).json({ message: 'User not found' });
+      res.status(404).json({ message: "User not found" });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: "Server error" });
   }
 };
 
@@ -169,12 +174,12 @@ export const deleteUser = async (req, res) => {
 
     if (user) {
       await user.remove();
-      res.json({ message: 'User removed' });
+      res.json({ message: "User removed" });
     } else {
-      res.status(404).json({ message: 'User not found' });
+      res.status(404).json({ message: "User not found" });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: "Server error" });
   }
 };
