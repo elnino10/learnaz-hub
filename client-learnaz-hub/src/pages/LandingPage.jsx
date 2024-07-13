@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import Learn from "../assets/study.png";
-import Teacher from "../assets/teacher.png";
+import Learn from "../assets/images/study.png";
+import Teacher from "../assets/images/teacher.png";
 import { Link } from "react-router-dom";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // Import carousel styles
 import { Carousel } from "react-responsive-carousel";

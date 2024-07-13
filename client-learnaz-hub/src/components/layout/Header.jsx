@@ -1,46 +1,45 @@
 import { Link } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+
+import { courses } from "../../data/courseData";
 
 function Header() {
   const [drpdwn, setDrpdwn] = useState(false);
   const [courseCategories, setCourseCategories] = useState([]);
-
-  // useEffect(() => {
-  //   const fetchCategories = async () => {
-  //     try {
-  //       const response = await fetch("your-backend-api-endpoint");
-  //       const data = await response.json();
-  //       setCourseCategories(data);
-  //     } catch (error) {
-  //       console.error("Error fetching course categories:", error);
-  //     }
-  //   };
-
-  //   fetchCategories();
-  // }, []);
-
+  const dropdownRef = useRef(null);
+  
   useEffect(() => {
-    // Simulate fetching data from the backend
-    const fetchCategories = () => {
-      const dummyData = [
-        "Video Animation",
-        "Video Editing",
-        "Stop Motion",
-        "Photography",
-        "Graphics Design",
-        "Web Development",
-        "HTML",
-      ];
-      setCourseCategories(dummyData);
-    };
+    const fetchCategories = async () => {
+      try {
+        // fetch data from the backend
 
+        const categories = []
+        courses.map((course) => {
+          categories.push(course.category);
+        })
+        setCourseCategories(categories);
+      } catch (error) {
+        console.log("Error fetching course categories: ", error);
+      }
+    };
     fetchCategories();
   }, []);
 
   const toggleDrpdwn = () => {
     setDrpdwn(!drpdwn);
   };
+
+  useEffect(() => {
+    const clickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDrpdwn(false);
+      }
+    };
+    document.addEventListener("mousedown", clickOutside);
+    // return () => document.removeEventListener("mousedown", clickOutside);
+    
+  }, [dropdownRef]);
 
   return (
     <>
@@ -51,12 +50,12 @@ function Header() {
             <div className="text-xl font-bold">Learnaz-Hub</div>
           </Link>
           {/* course category */}
-          <div>
+          <div ref={dropdownRef}>
             <button
               onClick={toggleDrpdwn}
               className="pl-6 text-lg text-gray-600 hover:text-gray-900 focus:outline-none"
             >
-              Courses
+              Course Category
             </button>
             {drpdwn && (
               <div className="absolute bg-white shadow-md w-80% mt-2">
@@ -86,8 +85,8 @@ function Header() {
           </div>
           {/* Navigation Links */}
           <ul className="flex space-x-4">
-            <Link className="" to="/user-dashboard">
-              Learning
+            <Link className="text-lg text-gray-600 hover:text-gray-900" to="/home">
+              Dashboard
             </Link>
             {/* <li>
               <a href="#" className="text-lg text-gray-600 hover:text-gray-900">

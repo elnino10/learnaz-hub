@@ -1,43 +1,89 @@
-// import {Link} from 'react-router-dom'
-import student from "../assets/student5ani.gif";
-import image from "../assets/teacher.png";
+import { Link } from "react-router-dom";
+import student from "../assets/images/student5ani.gif";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { enrolledCourses, allUsers, suggestedCourses } from "../data/courseData";
+import { useEffect, useState } from "react";
 
+const UserDashboard = () => {
+  const [enrolledCourse, setEnrolledCourse] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [suggestedCourse, setSuggestedCourse] = useState([]);
 
-const users = [
-  {
-    id: 1,
-    firstName: "Amara",
-    lastName: "Okeke",
-    email: "hey.mail.com",
-    role: "user",
-    imageUrl: image
-  },
-];
+  useEffect(() => {
+    const fetchAllCourses = async () => {
+      try {
+        // fetch courses from database
+        setEnrolledCourse(enrolledCourses);
+      } catch (error) {
+        console.log("Error fetching courses: ", error);
+      }
+    };
+    fetchAllCourses();
+  }, []);
 
-function UserDashboard() {
-  // const [users, setUsers] = useState([]);
-  // const [error, setError] = useState(null);
+  useEffect(() => {
+    const fetchSuggestedCourses = async () => {
+      try {
+        // fetch courses from database
+        setSuggestedCourse(suggestedCourses);
+      } catch (error) {
+        console.log("Error fetching courses: ", error);
+      }
+    };
+    fetchSuggestedCourses();
+  }, []);
 
-  // useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     try {
-  //       const response = await axios.get("localhost/users");
-  //       setUsers(response.data);
-  //
-  //     } catch (err) {
-  //       setError(err.message);
-  //     }
-  //   };
-
-  //   fetchUsers();
-  // }, []);
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        // fetch courses from database
+        setUsers(allUsers);
+      } catch (error) {
+        console.log("Error fetching courses: ", error);
+      }
+    };
+    fetchUser();
+  }, []);
 
   const getInitials = (firstName, lastName) => {
     return `${firstName[0]}${lastName[0]}`;
   };
 
+  const settings = {
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
   return (
-    <div className="h-screen pt-16">
+    <div className="m-0 p-0 pt-16 min-h-screen scroll">
       {users.map((user) => (
         <div key={user.id} className="flex items-center p-16 pl-4">
           {user.imageUrl ? (
@@ -65,11 +111,70 @@ function UserDashboard() {
           </p>
         </div>
         <div className="mb-8 w-50">
-          <img src={student} className="w-full h-64 object-cover rounded-md" />
+          <img src={student} className="w-full h-64 object-cover" />
         </div>
+      </div>
+      {enrolledCourse.length > 0 ? (
+        <>
+          <div className=" pt-10 flex justify-between">
+            <div className="pl-4 text-4xl text-gray-700 font-bold ">
+              Continue Learning
+            </div>
+            <div>
+              <Link
+                to="/home/my-courses/learning"
+                className="text-blue-950 pr-4 text-lg hover:underline hover:text-blue-900"
+              >
+                View All Courses
+              </Link>
+            </div>
+          </div>
+          <div className="m-auto">
+            <Slider {...settings}>
+              {enrolledCourses.map((course) => (
+                <div key={course.id} className="p-4">
+                  <div className="flex bg-white p-8 pr-8 border-2 h-40 w-100 overflow-hidden">
+                    <img
+                      src={course.imageurl}
+                      alt="course-img"
+                      className="w-32"
+                    />
+                    <div className="">
+                      <h3 className="text-xl font-semibold">{course.title}</h3>
+                      <p className="text-lg">{course.duration}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </Slider>
+          </div>
+        </>
+      ) : (
+        <div className="p-6 text-center text-4xl text-gray-500 pt-10 italic">
+          You haven&apos;t enrolled in any course yet. Start your learning
+          journey today!
+        </div>
+      )}
+      <div className="pt-10">
+        <div className="pl-4 text-4xl text-gray-700 font-bold pb-4">
+          Suggested Courses
+        </div>
+        <Slider {...settings}>
+          {suggestedCourse.map((course) => (
+            <div key={course.id} className="p-4 w-80">
+              <div className="flex bg-white p-8 pr-8 border h-40 w-100 overflow-hidden">
+                <img src="" alt="" className="w-32" />
+                <div className="">
+                  <h3 className="text-xl font-semibold">{course.title}</h3>
+                  <p className="text-lg">{course.duration}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </Slider>
       </div>
     </div>
   );
-}
+};
 
 export default UserDashboard;
