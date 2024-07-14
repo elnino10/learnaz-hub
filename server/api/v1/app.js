@@ -1,12 +1,12 @@
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
-import db from "./utils/db.js";
 import courseRouter from "./routes/courseRoutes.js";
 import authRouter from "./routes/authRoutes.js";
 import userRouter from "./routes/userRoutes.js";
 import adminRouter from "./routes/adminRoutes.js";
 import lessonRouter from "./routes/lessonRoutes.js";
+import dbClient from "./utils/db.js";
 
 const app = express();
 

@@ -118,3 +118,37 @@ export const manageUsers = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+// instructor registration handler
+export const registerInstructor = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({
+        status: "failed",
+        message: "User not found",
+      });
+    }
+
+    // Check if user is an instructor
+    if (user.role === "instructor") {
+      return res
+        .status(400)
+        .json({ message: "User is already an instructor" });
+    }
+
+    // Update user role to instructor
+    user.role = "instructor";
+
+    await user.save();
+
+    res.status(201).json({
+      status: "success",
+      message: "Instructor registered successfully",
+    });
+  } catch (error) {
+    console.error("Error in registering instructor:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
