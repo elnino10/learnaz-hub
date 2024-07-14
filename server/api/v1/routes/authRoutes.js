@@ -1,8 +1,6 @@
 import { Router } from "express";
 import {
-  loginInstructor,
   loginUser,
-  registerInstructor,
   registerUser,
 } from "../controllers/authController.js";
 import { authMiddleware, isAdmin } from "../utils/authMiddleware.js";
@@ -22,9 +20,6 @@ const router = Router();
 router.post("/signup-user", registerUser);
 router.post("/login-user", loginUser);
 
-// routes for Instructor authentication
-router.post("/signup-instructor", registerInstructor);
-router.post("/login-instructor", loginInstructor);
 
 // routes for Admin authentication
 router.post("/register-admin", /*authMiddleware, isAdmin,*/ registerAdmin);
