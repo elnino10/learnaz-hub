@@ -10,27 +10,9 @@ const generateToken = (id) => {
   });
 };
 
-// Helper function for validation.....used manual instead of express validator
-// const validateUserData = (name, email, password) => {
-//   const errors = [];
-//   if (!name || typeof name !== "string")
-//     errors.push("Name is required and must be a string.");
-//   if (!email || typeof email !== "string")
-//     errors.push("Email is required and must be a string.");
-//   if (!password || typeof password !== "string")
-//     errors.push("Password is required and must be a string.");
-//   return errors;
-// };
-
 // Register a new user
 export const registerUser = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
-  // const errors = validateUserData(name, email, password);
-
-  // if (errors.length > 0) {
-  //   return res.status(400).json({ errors });
-  // }
-
   try {
     const userExists = await User.findOne({ email });
 
@@ -38,8 +20,7 @@ export const registerUser = async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    // const salt = await bcrypt.genSalt(10);
-    // const hashedPassword = await bcrypt.hash(password, salt);
+
 
     const user = await User.create({
       firstName,
@@ -66,16 +47,6 @@ export const registerUser = async (req, res) => {
 // Authenticate user and get token
 export const authUser = async (req, res) => {
   const { email, password } = req.body;
-  // const errors = [];
-
-  // if (!email || typeof email !== "string")
-  //   errors.push("Email is required and must be a string.");
-  // if (!password || typeof password !== "string")
-  //   errors.push("Password is required and must be a string.");
-
-  // if (errors.length > 0) {
-  //   return res.status(400).json({ errors });
-  // }
 
   try {
     const user = await User.findOne({ email });
