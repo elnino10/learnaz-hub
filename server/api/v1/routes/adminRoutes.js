@@ -16,7 +16,7 @@ import {
 const router = Router();
 
 router.post('/register', /*authMiddleware, isAdmin,*/ register);
-router.post('/admin', /*authMiddleware, isAdmin,*/ login);
+router.post('/login', /*authMiddleware, isAdmin,*/ login);
 router.post("/grant-privileges", grantPrivileges);
 router.post("/revoke-privileges", revokePrivileges);
 router.get('/manage-users', manageUsers);
