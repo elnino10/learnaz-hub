@@ -1,25 +1,32 @@
-import mongoose from "mongoose";
-
-const instructorSchema = new mongoose.Schema({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
-  coursesTaught: [
-    {
+const instructorSchema = new mongoose.Schema(
+  {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Course",
-      default: [],
+      ref: "User",
+      required: true,
     },
-  ],
-  createdAt: {
-    type: Date,
-    default: Date.now(),
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
+      type: String,
+      required: true,
+    },
+    coursesTaught: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Course",
+        default: [],
+      },
+    ],
   },
-  updatedAt: Date,
+  {
+    timestamps: true,
+  }
+);
+
+// Virtual for instructor's full name
+instructorSchema.virtual("fullName").get(function () {
+  return `${this.firstName} ${this.lastName}`;
 });
-
-const Instructor = mongoose.model("Instructor", instructorSchema);
-
-export default Instructor;
