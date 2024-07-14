@@ -6,9 +6,7 @@ import courseRouter from "./routes/courseRoutes.js";
 import authRouter from "./routes/authRoutes.js";
 import userRouter from "./routes/userRoutes.js";
 import adminRouter from "./routes/adminRoutes.js";
-import studentRouter from "./routes/studentRoutes.js";
 import lessonRouter from "./routes/lessonRoutes.js";
-import instructorRouter from "./routes/instructorRoutes.js";
 
 const app = express();
 
@@ -17,16 +15,10 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(cors());
 
-console.log("Setting up routes...");
-
-app.use("/api/v1", authRouter);
-app.use("/api/v1", userRouter);
-app.use("/api/v1", courseRouter);
-app.use("/api/v1", studentRouter);
-app.use("/api/v1", lessonRouter);
+app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/admin", adminRouter);
-app.use("/api/v1/instructor", instructorRouter); // Corrected path
-
-console.log("Routes set up successfully");
+app.use("/api/v1/user", userRouter);
+app.use("/api/v1/courses", courseRouter);
+app.use("/api/v1/lessons", lessonRouter);
 
 export default app;

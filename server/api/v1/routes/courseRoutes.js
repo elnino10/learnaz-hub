@@ -1,12 +1,18 @@
-import express from 'express';
+import express from "express";
 import {
-    createCourse,
-    getCourses,
-    getCourseByID,
-    updateCourse,
-    deleteCourse,
-} from '../controllers/instructor/courseController.js';
-import { authMiddleware, checkRole, mockAuth } from '../utils/authMiddleware.js';
+  createCourse,
+  getCourses,
+  getCourseByID,
+  updateCourse,
+  deleteCourse,
+  courseReview,
+} from "../controllers/courseController.js";
+import {
+  authMiddleware,
+  checkRole,
+  mockAuth,
+} from "../utils/authMiddleware.js";
+import { getStudentDashboard, viewGrades } from "../controllers/student/studentDashboard.js";
 
 const router = express.Router();
 
@@ -16,12 +22,21 @@ const router = express.Router();
 router.use(mockAuth);
 
 //Available to admin and instructor
-const roles = ['admin', 'instructor'];
+const roles = ["admin", "instructor"];
 
-router.post('/courses', checkRole(roles), createCourse);
-router.get('/courses', checkRole(roles), getCourses);
-router.get('/courses/:id', checkRole(roles), getCourseByID);
-router.put('/courses/:id', checkRole(roles), updateCourse);
-router.delete('/courses/:id', checkRole(roles), deleteCourse);
+
+// course routes
+router.post("/courses", checkRole(roles), createCourse);
+router.get("/courses", checkRole(roles), getCourses);
+router.get("/courses/:courseId", checkRole(roles), getCourseByID);
+router.put("/courses/:courseId", checkRole(roles), updateCourse);
+router.delete("/courses/:courseId", checkRole(roles), deleteCourse);
+
+
+// Student's course interaction routes
+router.get('/dashboard', getStudentDashboard);
+// router.post('/course/:courseId/submit', submitAssignment);
+router.post('/course/:courseId/review', courseReview);
+router.get('/grades', viewGrades);
 
 export default router;

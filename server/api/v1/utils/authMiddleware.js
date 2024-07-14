@@ -54,4 +54,3 @@ const mockAuth = (req, res, next) => {
 };
 
 export { authMiddleware, isAdmin, checkRole, mockAuth };
-export default authMiddleware;
