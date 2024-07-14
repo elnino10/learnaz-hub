@@ -1,13 +1,12 @@
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 const secretKey = process.env.JWT_SECRET;
 
 export const signup = async (req, res) => {
   try {
-    const { email, password, firstName, lastName, role } = req.body;
+    const { email, password, firstName, lastName, role = "student" } = req.body;
 
-    if (!email || !password || !firstName || !role) {
+    if (!email || !password || !firstName) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
@@ -16,8 +15,7 @@ export const signup = async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    const hashPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ email, password: hashPassword, firstName, lastName, role });
+    const newUser = new User({ email, password, firstName, lastName, role });
     await newUser.save();
 
     const token = jwt.sign({ userId: newUser._id, role: newUser.role }, secretKey, { expiresIn: "30d" });
@@ -45,7 +43,7 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "User not found" });
     }
 
-    const passwordMatch = await bcrypt.compare(password, user.password);
+    const passwordMatch = await user.matchPassword(password);
     if (!passwordMatch) {
       return res.status(400).json({ message: "Password incorrect" });
     }
