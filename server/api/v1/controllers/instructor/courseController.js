@@ -3,9 +3,6 @@ import Course from "../../models/courseModel.js";
 // create a new course
 export const createCourse = async (req, res) => {
   try {
-    // console.log(req.headers);
-    // console.log(req.body);
-    // console.log("Hola desde el controlador");
     const newCourse = new Course(req.body);
     const course = await newCourse.save();
     res.status(201).json(course);
@@ -18,6 +15,7 @@ export const createCourse = async (req, res) => {
 export const getCourses = async (req, res) => {
   try {
     const courses = await Course.find();
+    console.log(courses);
     res.status(200).json(courses);
   } catch (error) {
     res.status(500).json({ message: error });
