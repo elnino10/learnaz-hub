@@ -41,6 +41,9 @@ export const courses = [
     price: "$50",
     category: "Photography",
   },
+  {
+    category: "Videography",
+  },
 ];
 
 // course review data

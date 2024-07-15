@@ -11,6 +11,7 @@ import {
   EnrolledCoursesPage,
   LandingPage,
   UserDashboard,
+  CategoryCourse
 } from "./pages";
 import {
   Footer,
@@ -62,6 +63,7 @@ const MainLayout = () => (
       <Route path="/home" element={<UserDashboard />} />
       {/* <Route path="/course/:courseTitle" element={<CourseContentPage />} /> */}
       <Route path="/course/course-content" element={<CourseContentPage />} />
+      <Route path="/category/:category" element={<CategoryCourse />} />
       <Route path="*" element={<h1>Not Found</h1>} />
     </Routes>
     <Footer />

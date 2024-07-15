@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
 import { useState, useEffect, useRef } from "react";
 
@@ -8,6 +8,7 @@ function Header() {
   const [drpdwn, setDrpdwn] = useState(false);
   const [courseCategories, setCourseCategories] = useState([]);
   const dropdownRef = useRef(null);
+   const navigate = useNavigate();
   
   useEffect(() => {
     const fetchCategories = async () => {
@@ -16,6 +17,7 @@ function Header() {
 
         const categories = []
         courses.map((course) => {
+          if (!categories.includes(course.category))
           categories.push(course.category);
         })
         setCourseCategories(categories);
@@ -28,6 +30,11 @@ function Header() {
 
   const toggleDrpdwn = () => {
     setDrpdwn(!drpdwn);
+  };
+
+  const handleCategoryClick = (category) => {
+    setDrpdwn(false);
+    navigate(`/category/${category}`);
   };
 
   useEffect(() => {
@@ -61,13 +68,13 @@ function Header() {
               <div className="absolute bg-white shadow-md w-80% mt-2">
                 <ul>
                   {courseCategories.map((category, index) => (
-                    <Link
-                      to="/"
+                    <button
+                      onClick={() => handleCategoryClick(category)}
                       key={index}
                       className="block text-gray-900 p-2 hover:bg-gray-100"
                     >
                       {category}
-                    </Link>
+                    </button>
                   ))}
                 </ul>
               </div>
