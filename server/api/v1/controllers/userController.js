@@ -1,101 +1,7 @@
 // server/src/api/v1/controllers/userController.js
 import User from "../models/userModel.js";
-import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-// Generate JWT Token
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: "30d",
-  });
-};
-
-// Helper function for validation.....used manual instead of express validator
-// const validateUserData = (name, email, password) => {
-//   const errors = [];
-//   if (!name || typeof name !== "string")
-//     errors.push("Name is required and must be a string.");
-//   if (!email || typeof email !== "string")
-//     errors.push("Email is required and must be a string.");
-//   if (!password || typeof password !== "string")
-//     errors.push("Password is required and must be a string.");
-//   return errors;
-// };
-
-// Register a new user
-export const registerUser = async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
-  // const errors = validateUserData(name, email, password);
-
-  // if (errors.length > 0) {
-  //   return res.status(400).json({ errors });
-  // }
-
-  try {
-    const userExists = await User.findOne({ email });
-
-    if (userExists) {
-      return res.status(400).json({ message: "User already exists" });
-    }
-
-    // const salt = await bcrypt.genSalt(10);
-    // const hashedPassword = await bcrypt.hash(password, salt);
-
-    const user = await User.create({
-      firstName,
-      lastName,
-      email,
-      password,
-    });
-
-    if (user) {
-      res.status(201).json({
-        status: "success",
-        message: "User created successfully",
-        token: generateToken(user._id),
-      });
-    } else {
-      res.status(400).json({ message: "Invalid user data" });
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Server error" });
-  }
-};
-
-// Authenticate user and get token
-export const authUser = async (req, res) => {
-  const { email, password } = req.body;
-  // const errors = [];
-
-  // if (!email || typeof email !== "string")
-  //   errors.push("Email is required and must be a string.");
-  // if (!password || typeof password !== "string")
-  //   errors.push("Password is required and must be a string.");
-
-  // if (errors.length > 0) {
-  //   return res.status(400).json({ errors });
-  // }
-
-  try {
-    const user = await User.findOne({ email });
-
-    const validUser = await user.matchPassword(password);
-
-    if (!validUser) {
-      res.status(401).json({ message: "Invalid email or password" });
-    }
-
-    res.status(200).json({
-      status: "success",
-      message: "User authenticated successfully",
-      token: generateToken(user._id),
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Server error" });
-  }
-};
 
 // Get all users
 export const getUsers = async (req, res) => {
@@ -181,5 +87,68 @@ export const deleteUser = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Server error" });
+  }
+};
+
+
+// filter users by search query
+export const manageUsers = async (req, res) => {
+  try {
+    const { page = 1, limit = 10, search = "" } = req.query;
+
+    const query = search
+      ? {
+          $or: [{ _id: search }, { email: { $regex: search, $options: "i" } }],
+        }
+      : {};
+
+    const users = await User.find(query)
+      .select("-password")
+      .skip((page - 1) * limit)
+      .limit(Number(limit));
+
+    const totalUsers = await User.countDocuments(query);
+
+    res.status(200).json({
+      users,
+      totalPages: Math.ceil(totalUsers / limit),
+      currentPage: Number(page),
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+// instructor registration handler
+export const applyInstructor = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({
+        status: "failed",
+        message: "User not found",
+      });
+    }
+
+    // Check if user is an instructor
+    if (user.role === "instructor") {
+      return res
+        .status(400)
+        .json({ message: "User is already an instructor" });
+    }
+
+    // Update user role to instructor
+    user.role = "instructor";
+
+    await user.save();
+
+    res.status(201).json({
+      status: "success",
+      message: "Instructor registered successfully",
+    });
+  } catch (error) {
+    console.error("Error in registering instructor:", error);
+    res.status(500).json({ message: error.message });
   }
 };
