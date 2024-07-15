@@ -3,7 +3,7 @@ import Course from "../models/courseModel.js";
 // create a new course
 export const createCourse = async (req, res) => {
   try {
-    const newCourse = new Course.create(req.body);
+    const newCourse = await Course.create(req.body);
     res.status(201).json({
       status: "success",
       message: "course created successfully",
