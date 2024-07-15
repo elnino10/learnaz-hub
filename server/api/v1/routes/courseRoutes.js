@@ -20,14 +20,14 @@ const router = express.Router();
 // router.use(authMiddleware);
 
 //Available to admin and instructor
-// const role = ["admin", "instructor"];
+const role = ["admin", "instructor"];
 
 // course routes
-router.post("/create-course", authMiddleware, checkRole("instructor"), createCourse);
+router.post("/create-course", authMiddleware, checkRole(role), createCourse);
 router.get("/", authMiddleware, getCourses);
 router.get("/:courseId", authMiddleware, getCourseByID);
-router.patch("/:courseId", authMiddleware, checkRole(), updateCourse);
-router.delete("/:courseId", authMiddleware, checkRole(), deleteCourse);
+router.patch("/:courseId", authMiddleware, checkRole(role), updateCourse);
+router.delete("/:courseId", authMiddleware, checkRole(role), deleteCourse);
 
 
 // Student's course interaction routes

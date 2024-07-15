@@ -1,7 +1,5 @@
 // server/src/api/v1/controllers/userController.js
-import mongoose from "mongoose";
 import User from "../models/userModel.js";
-import bcrypt from "bcrypt";
 
 // Get all users
 export const getUsers = async (req, res) => {
@@ -22,7 +20,7 @@ export const getUsers = async (req, res) => {
 export const getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
-    if (user) {
+    if (!user) {
       return res
         .status(404)
         .json({ status: "failed", message: "User not found" });
@@ -35,6 +33,7 @@ export const getUserById = async (req, res) => {
       .json({ error: "Server error", errorMessage: error.message });
   }
 };
+
 
 // Update user
 export const updateUser = async (req, res) => {
