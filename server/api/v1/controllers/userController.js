@@ -18,14 +18,19 @@ export const getUsers = async (req, res) => {
 // Get user by ID
 export const getUserById = async (req, res) => {
   try {
-    const userId = req.params.id; // Assuming the ID is already an ObjectId
+    const userId = req.params.id;
 
-    const user = await User.findById(userId); // Assuming proper ObjectId handling
+    // Validate that userId is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid user ID" });
+    }
+
+    const user = await User.findById(userId);
 
     if (user) {
       res.status(200).json(user);
     } else {
-      res.status(404).json({ message: "User not found" }); // Fix the typo
+      res.status(404).json({ message: "User not found" });
     }
   } catch (error) {
     console.error(error);
@@ -65,11 +70,16 @@ export const updateUser = async (req, res) => {
 // Delete user
 export const deleteUser = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const userId = req.params.id;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid user ID" });
+    }
+
+    const user = await User.findByIdAndDelete(userId);
 
     if (user) {
-      await user.remove();
-      res.json({ message: "User removed" });
+      res.json({ message: "User deleted successfully" });
     } else {
       res.status(404).json({ message: "User not found" });
     }
@@ -104,7 +114,8 @@ export const manageUsers = async (req, res) => {
       currentPage: Number(page),
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error(error);
+    res.status(500).json({ message: "Error fetching users" });
   }
 };
 
