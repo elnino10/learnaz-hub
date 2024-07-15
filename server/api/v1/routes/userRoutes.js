@@ -10,10 +10,9 @@ import {
 
 const router = express.Router();
 
-
 router.get("/", getUsers);
 router.get("/:userId", getUserById);
-router.put("/:userId", updateUser);
+router.patch("/:userId", updateUser);
 router.delete("/:userId", deleteUser);
 
 // register as an instructor
