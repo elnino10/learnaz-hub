@@ -107,7 +107,7 @@ export const suggestedCourses = [
   {
     id: 4,
     title: "CSS for Beginners",
-    imageurl: "https://www.youtube.com/watch?v=NQP89ish9t8&t=1870s",
+    imageurl: image,
     duration: "1.5 hours",
   },
 ];
