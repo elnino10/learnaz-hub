@@ -5,7 +5,7 @@ import {
   getUserById,
   updateUser,
   deleteUser,
-  registerInstructor,
+  applyInstructor,
 } from "../controllers/userController.js";
 
 const router = express.Router();
@@ -17,6 +17,6 @@ router.put("/:userId", updateUser);
 router.delete("/:userId", deleteUser);
 
 // register as an instructor
-router.post("/register-instructor", registerInstructor);
+router.post("/apply-instructor", applyInstructor);
 
 export default router;

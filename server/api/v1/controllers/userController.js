@@ -121,7 +121,7 @@ export const manageUsers = async (req, res) => {
 
 
 // instructor registration handler
-export const registerInstructor = async (req, res) => {
+export const applyInstructor = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) {
