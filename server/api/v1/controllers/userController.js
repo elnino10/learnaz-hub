@@ -3,92 +3,91 @@ import mongoose from "mongoose";
 import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
 
-
 // Get all users
 export const getUsers = async (req, res) => {
   try {
     const users = await User.find();
-    res.status(200).json(users);
+    res
+      .status(200)
+      .json({ status: "success", numUsers: users.length, data: users });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Server error" });
+    res
+      .status(500)
+      .json({ error: "Server error", errorMessage: error.message });
   }
 };
 
 // Get user by ID
 export const getUserById = async (req, res) => {
   try {
-    const userId = req.params.id;
-
-    // Validate that userId is a valid ObjectId
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).json({ message: "Invalid user ID" });
-    }
-
-    const user = await User.findById(userId);
-
+    const user = await User.findById(req.params.userId);
     if (user) {
-      res.status(200).json(user);
-    } else {
-      res.status(404).json({ message: "User not found" });
+      return res
+        .status(404)
+        .json({ status: "failed", message: "User not found" });
     }
+    res.json({ status: "success", message: "User found", data: user });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Server error" });
+    res
+      .status(500)
+      .json({ error: "Server error", errorMessage: error.message });
   }
 };
-
 
 // Update user
 export const updateUser = async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
-  const updates = { ...req.body }; // Create a copy of the request body
+  const reqBody = req.body;
+  const userId = req.params.userId;
 
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, updates, {
-      new: true, // Return the updated document
-      runValidators: true, // Apply validation on update
-    });
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { ...reqBody, updatedAt: Date.now() },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
-    if (user) {
-      res.json({
-        _id: user._id,
-        firstName: user.firstName,
-        email: user.email,
-      });
-    } else {
-      res.status(404).json({ message: "User not found" });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ status: "failed", message: "User not found" });
     }
+
+    res.status(200).json({
+      status: "success",
+      message: "User updated successfully",
+      data: user,
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Server error" });
+    res
+      .status(500)
+      .json({ error: "Server error", errorMessage: error.message });
   }
 };
-
-
 
 // Delete user
 export const deleteUser = async (req, res) => {
   try {
-    const userId = req.params.id;
+    const user = await User.findByIdAndDelete(req.params.userId);
 
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).json({ message: "Invalid user ID" });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ status: "failed", message: "User not found" });
     }
-
-    const user = await User.findByIdAndDelete(userId);
-
-    if (user) {
-      res.json({ message: "User deleted successfully" });
-    } else {
-      res.status(404).json({ message: "User not found" });
-    }
+    res.json({ status: "success", message: "User removed successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Server error" });
+    res
+      .status(500)
+      .json({ error: "Server error", errorMessage: error.message });
   }
 };
-
 
 // filter users by search query
 export const manageUsers = async (req, res) => {
@@ -114,11 +113,11 @@ export const manageUsers = async (req, res) => {
       currentPage: Number(page),
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error fetching users" });
+    res
+      .status(500)
+      .json({ error: "Server error", errorMessage: error.message });
   }
 };
-
 
 // instructor registration handler
 export const applyInstructor = async (req, res) => {
@@ -133,9 +132,7 @@ export const applyInstructor = async (req, res) => {
 
     // Check if user is an instructor
     if (user.role === "instructor") {
-      return res
-        .status(400)
-        .json({ message: "User is already an instructor" });
+      return res.status(400).json({ message: "User is already an instructor" });
     }
 
     // Update user role to instructor
@@ -149,6 +146,8 @@ export const applyInstructor = async (req, res) => {
     });
   } catch (error) {
     console.error("Error in registering instructor:", error);
-    res.status(500).json({ message: error.message });
+    res
+      .status(500)
+      .json({ error: "Server error", errorMessage: error.message });
   }
 };

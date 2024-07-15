@@ -22,13 +22,12 @@ const router = express.Router();
 //Available to admin and instructor
 const roles = ["admin", "instructor"];
 
-
 // course routes
-router.post("/courses", checkRole(roles), createCourse);
-router.get("/courses", checkRole(roles), getCourses);
-router.get("/courses/:courseId", checkRole(roles), getCourseByID);
-router.put("/courses/:courseId", checkRole(roles), updateCourse);
-router.delete("/courses/:courseId", checkRole(roles), deleteCourse);
+router.post("/create-course", checkRole(roles), createCourse);
+router.get("/", checkRole(roles), getCourses);
+router.get("/:courseId", checkRole(roles), getCourseByID);
+router.patch("/:courseId", checkRole(roles), updateCourse);
+router.delete("/:courseId", checkRole(roles), deleteCourse);
 
 
 // Student's course interaction routes

@@ -11,10 +11,8 @@ import {
 const router = express.Router();
 
 router.get("/", getUsers);
-router.get("/:id", getUserById);
-router.put("/:id", updateUser);
-router.delete("/:id", deleteUser);
-router.get("/manage", manageUsers);
-router.put("/apply-instructor/:id", applyInstructor);
+router.get("/:userId", getUserById);
+router.patch("/:userId", updateUser);
+router.delete("/:userId", deleteUser);
 
 export default router;
