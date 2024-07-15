@@ -1,9 +1,3 @@
-// function CourseContentPage() {
-//   return (
-//     <div className="mt-20">CourseContentPage</div>
-//   )
-// }
-
 import { useRef, useState } from "react";
 
 // export default CourseContentPage
