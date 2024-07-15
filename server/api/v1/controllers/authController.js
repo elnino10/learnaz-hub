@@ -5,7 +5,7 @@ import { generateToken } from "../utils/helperfunctions.js";
 
 // user signup handler
 export const registerUser = async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
+  const { firstName, lastName, email, password, role } = req.body;
   // const errors = validateUserData(name, email, password);
 
   try {
@@ -20,6 +20,7 @@ export const registerUser = async (req, res) => {
       lastName,
       email,
       password,
+      role,
     });
 
     if (user) {
@@ -54,7 +55,7 @@ export const loginUser = async (req, res) => {
     res.status(200).json({
       status: "success",
       message: "User authenticated successfully",
-      token: generateToken(user._id),
+      token: generateToken(user._id, user.role),
     });
   } catch (error) {
     console.error(error);
