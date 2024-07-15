@@ -133,12 +133,14 @@ const UserDashboard = () => {
             <Slider {...settings}>
               {enrolledCourses.map((course) => (
                 <div key={course.id} className="p-4">
-                  <div className="flex bg-white p-8 pr-8 border-2 h-40 w-100 overflow-hidden">
-                    <img
-                      src={course.imageurl}
-                      alt="course-img"
-                      className="w-32"
-                    />
+                  <div className="flex justify-between bg-white p-8 pr-8 border-2 h-40 w-100 overflow-hidden">
+                    <div>
+                      <img
+                        src={course.imageurl}
+                        alt="course-img"
+                        className="w-32 object-cover mr-2 border-r-2 border-gray-300"
+                      />
+                    </div>
                     <div className="">
                       <h3 className="text-xl font-semibold">{course.title}</h3>
                       <p className="text-lg">{course.duration}</p>
