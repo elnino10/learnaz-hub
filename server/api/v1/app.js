@@ -6,12 +6,14 @@ import authRouter from "./routes/authRoutes.js";
 import userRouter from "./routes/userRoutes.js";
 import adminRouter from "./routes/adminRoutes.js";
 import lessonRouter from "./routes/lessonRoutes.js";
+import { jsonParserMiddleware } from "./utils/authMiddleware.js";
 import dbClient from "./utils/db.js";
 
 const app = express();
 
 // third-party middlewares
-app.use(express.json());
+app.use(jsonParserMiddleware);
+// app.use(express.json());
 app.use(morgan("dev"));
 app.use(cors());
 

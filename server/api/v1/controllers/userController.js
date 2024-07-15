@@ -1,4 +1,5 @@
 // server/src/api/v1/controllers/userController.js
+import mongoose from "mongoose";
 import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
 
@@ -6,7 +7,7 @@ import bcrypt from "bcrypt";
 // Get all users
 export const getUsers = async (req, res) => {
   try {
-    const users = await User.find({});
+    const users = await User.find();
     res.status(200).json(users);
   } catch (error) {
     console.error(error);
@@ -17,11 +18,14 @@ export const getUsers = async (req, res) => {
 // Get user by ID
 export const getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const userId = req.params.id; // Assuming the ID is already an ObjectId
+
+    const user = await User.findById(userId); // Assuming proper ObjectId handling
+
     if (user) {
-      res.json(user);
+      res.status(200).json(user);
     } else {
-      res.status(404).json({ message: "User not found" });
+      res.status(404).json({ message: "User not found" }); // Fix the typo
     }
   } catch (error) {
     console.error(error);
@@ -29,40 +33,23 @@ export const getUserById = async (req, res) => {
   }
 };
 
+
 // Update user
 export const updateUser = async (req, res) => {
-  const { name, email, role } = req.body;
-  const errors = [];
-
-  if (!name || typeof name !== "string")
-    errors.push("Name is required and must be a string.");
-  if (!email || typeof email !== "string")
-    errors.push("Email is required and must be a string.");
-
-  if (errors.length > 0) {
-    return res.status(400).json({ errors });
-  }
+  const { firstName, lastName, email, password } = req.body;
+  const updates = { ...req.body }; // Create a copy of the request body
 
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findByIdAndUpdate(req.params.id, updates, {
+      new: true, // Return the updated document
+      runValidators: true, // Apply validation on update
+    });
 
     if (user) {
-      user.name = name || user.name;
-      user.email = email || user.email;
-      user.role = role || user.role;
-
-      if (req.body.password) {
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(req.body.password, salt);
-      }
-
-      const updatedUser = await user.save();
-
       res.json({
-        _id: updatedUser._id,
-        name: updatedUser.name,
-        email: updatedUser.email,
-        role: updatedUser.role,
+        _id: user._id,
+        firstName: user.firstName,
+        email: user.email,
       });
     } else {
       res.status(404).json({ message: "User not found" });
@@ -72,6 +59,8 @@ export const updateUser = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
+
+
 
 // Delete user
 export const deleteUser = async (req, res) => {
