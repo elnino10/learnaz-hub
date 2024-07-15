@@ -39,9 +39,9 @@ const isAdmin = (req, res, next) => {
 };
 
 // Middleware to check if user has the required role
-const checkRole = (role) => {
+const checkRole = (roles) => {
   return (req, res, next) => {
-    if (req.user.role === role) {
+    if (roles.includes(req.user.role)) {
       next();
     } else {
       res.status(403).json({ message: "Access denied" });
