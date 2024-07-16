@@ -41,6 +41,9 @@ export const courses = [
     price: "$50",
     category: "Photography",
   },
+  {
+    category: "Videography",
+  },
 ];
 
 // course review data
@@ -92,7 +95,7 @@ export const allUsers = [
     firstName: "Amara",
     lastName: "Okeke",
     email: "hey.mail.com",
-    role: "user",
+    role: "instructor",
     imageUrl: image,
   },
 ];

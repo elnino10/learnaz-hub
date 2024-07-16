@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
 import { useState, useEffect, useRef } from "react";
 
@@ -16,6 +16,7 @@ function Header() {
 
         const categories = []
         courses.map((course) => {
+          if (!categories.includes(course.category))
           categories.push(course.category);
         })
         setCourseCategories(categories);
@@ -29,6 +30,10 @@ function Header() {
   const toggleDrpdwn = () => {
     setDrpdwn(!drpdwn);
   };
+
+   const handleCategoryClick = () => {
+     setDrpdwn(false);
+   };
 
   useEffect(() => {
     const clickOutside = (event) => {
@@ -62,7 +67,8 @@ function Header() {
                 <ul>
                   {courseCategories.map((category, index) => (
                     <Link
-                      to="/"
+                      to={`/category/${category}`}
+                      onClick={() => handleCategoryClick(category)}
                       key={index}
                       className="block text-gray-900 p-2 hover:bg-gray-100"
                     >
@@ -85,7 +91,10 @@ function Header() {
           </div>
           {/* Navigation Links */}
           <ul className="flex space-x-4">
-            <Link className="text-lg text-gray-600 hover:text-gray-900" to="/home">
+            <Link
+              className="text-lg text-gray-600 hover:text-gray-900"
+              to="/home"
+            >
               Dashboard
             </Link>
             {/* <li>

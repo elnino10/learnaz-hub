@@ -11,6 +11,7 @@ import {
   EnrolledCoursesPage,
   LandingPage,
   UserDashboard,
+  CategoryCourse
 } from "./pages";
 import {
   Footer,
@@ -19,6 +20,7 @@ import {
   LoginForm,
   PasswordRecoveryForm,
   SignupForm,
+  CreateCourse
 } from "./components";
 
 const App = () => {
@@ -62,6 +64,9 @@ const MainLayout = () => (
       <Route path="/home" element={<UserDashboard />} />
       {/* <Route path="/course/:courseTitle" element={<CourseContentPage />} /> */}
       <Route path="/course/course-content" element={<CourseContentPage />} />
+      <Route path="/category/:category" element={<CategoryCourse />} />
+      {/* based on the instructor id course is created */}
+      <Route path="/create-course" element={<CreateCourse />} />
       <Route path="*" element={<h1>Not Found</h1>} />
     </Routes>
     <Footer />
