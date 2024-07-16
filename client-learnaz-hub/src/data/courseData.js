@@ -113,6 +113,32 @@ export const allUsers = [
   },
 ];
 
+export const createdCourses = [
+  {
+    id: 1,
+    title: "Introduction to Python Programming",
+    imageurl: image,
+    duration: "2 hours",
+  },
+  {
+    id: 2,
+    title: "Advanced JavaScript",
+    imageurl: image,
+    duration: "3 hours",
+  },
+  {
+    id: 3,
+    title: "css for beginners",
+    imageurl: image,
+    duration: "3 hours",
+  },
+  {
+    id: 4,
+    title: "Computer Science",
+    imageurl: image,
+    duration: "3 hours",
+  },
+];  
 export const suggestedCourses = [
   {
     id: 3,
