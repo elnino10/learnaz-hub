@@ -40,9 +40,9 @@ function Header(props) {
     props.setActivePage((prev) => (prev === "category" ? "" : "category"));
   };
 
-  //  const handleCategoryClick = () => {
-  //    setDrpdwn(false);
-  //  };
+   const handleCategoryClick = () => {
+     setDrpdwn(false);
+   };
 
   useEffect(() => {
     const clickOutside = (event) => {
@@ -107,10 +107,13 @@ function Header(props) {
                         <ul>
                           {courseCategories.map((category, index) => (
                             <li
+                              onClick={handleCategoryClick}
                               key={index}
                               className="block text-gray-900 p-2 hover:bg-gray-100"
                             >
-                              <Link to="/">{category}</Link>
+                              <Link to={`/category/${category}`}>
+                                {category}
+                              </Link>
                             </li>
                           ))}
                         </ul>
