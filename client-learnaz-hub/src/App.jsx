@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Route, Routes } from "react-router-dom";
 import {
   Sidebar,
@@ -23,15 +24,39 @@ import {
   CreateCourse,
   AddLessons
 } from "./components";
+import { useState } from "react";
 
 const App = () => {
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [showImageMenu, setShowImageMenu] = useState(false);
+  const [activePage, setActivePage] = useState("");
+
+  const clickAwayHandler = () => {
+    setMenuVisible(false);
+    setShowImageMenu(false);
+  };
+
   return (
-    <Routes>
-      {/* Admin Route */}
-      <Route path="/admin/*" element={<AdminLayout />} />
-      {/* Main routes */}
-      <Route path="/*" element={<MainLayout />} />
-    </Routes>
+    <div onClick={clickAwayHandler}>
+      <Routes>
+        {/* Admin Route */}
+        <Route path="/admin/*" element={<AdminLayout />} />
+        {/* Main routes */}
+        <Route
+          path="/*"
+          element={
+            <MainLayout
+              setActivePage={setActivePage}
+              activePage={activePage}
+              showImageMenu={showImageMenu}
+              setShowImageMenu={setShowImageMenu}
+              menuVisible={menuVisible}
+              setMenuVisible={setMenuVisible}
+            />
+          }
+        />
+      </Routes>
+    </div>
   );
 };
 
@@ -49,9 +74,16 @@ const AdminLayout = () => (
   </div>
 );
 
-const MainLayout = () => (
+const MainLayout = (props) => (
   <>
-    <Header />
+    <Header
+      setMenuVisible={props.setMenuVisible}
+      menuVisible={props.menuVisible}
+      showImageMenu={props.showImageMenu}
+      setShowImageMenu={props.setShowImageMenu}
+      activePage={props.activePage}
+      setActivePage={props.setActivePage}
+    />
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/signup" element={<SignupForm />} />
