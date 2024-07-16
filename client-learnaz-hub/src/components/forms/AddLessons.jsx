@@ -7,11 +7,12 @@ const primaryButtonClass =
 const AddLessons = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { course } = location.state; // Retrieve the course data passed from CreateCourse
   const [lessons, setLessons] = useState([]);
   const [lessonTitle, setLessonTitle] = useState("");
   const [lessonUrl, setLessonUrl] = useState("");
-
+  
+  const { course } = location.state; // Retrieve the course data passed from CreateCourse
+  
   const handleAddLesson = () => {
     const newLesson = {
       title: lessonTitle,
@@ -32,6 +33,10 @@ const AddLessons = () => {
     // Simulate submission of all lessons
     console.log("Course:", course);
     console.log("All Lessons:", lessons);
+
+    // create lessons
+    // update course by id with lesson ids in database
+
 
     // Show success message
     alert("Course created successfully!");
