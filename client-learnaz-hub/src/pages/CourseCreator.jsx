@@ -59,7 +59,7 @@ const CourseCreator = () => {
           Why Create a Course with Us?
         </h2>
         <div
-          className={`${sharedClasses.grid} ${sharedClasses.gridCols} ${sharedClasses.gridGap}`}
+          className={`${sharedClasses.grid} ${sharedClasses.gridCols} ${sharedClasses.gridGap} items-center`}
         >
           <div
             className={`${sharedClasses.cardBg} ${sharedClasses.cardPadding} ${sharedClasses.cardRounded}`}
@@ -104,7 +104,7 @@ const CourseCreator = () => {
               className={`${sharedClasses.mxAuto} ${sharedClasses.mb4}`}
             />
             <h3
-              className={`text-gray-700 ${sharedClasses.textLarge} ${sharedClasses.textBold} ${sharedClasses.mb2}`}
+              className={`text-gray-700 pt-10 ${sharedClasses.textLarge} ${sharedClasses.textBold} ${sharedClasses.mb2}`}
             >
               Earn Passive Income
             </h3>
