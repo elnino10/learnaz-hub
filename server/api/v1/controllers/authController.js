@@ -26,6 +26,7 @@ export const registerUser = async (req, res) => {
     if (user) {
       res.status(201).json({
         status: "success",
+        userId: user._id,
         message: "User created successfully",
         token: generateToken(user._id),
       });
