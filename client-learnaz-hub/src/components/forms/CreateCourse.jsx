@@ -10,6 +10,7 @@ const CreateCourse = () => {
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
   const [description, setDescription] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [category, setCategory] = useState("programming");
 
   const handleSubmit = (e) => {
@@ -19,6 +20,7 @@ const CreateCourse = () => {
       title,
       summary,
       description,
+      imageUrl,
       category,
     };
     console.log("Course Created: ", newCourse);
@@ -68,6 +70,18 @@ const CreateCourse = () => {
             rows="5"
             required
           ></textarea>
+          <label htmlFor="title" className="text-2xl">
+            Image Url
+          </label>
+          <input
+            type="text"
+            id="title"
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
+            placeholder="Enter course thumbnail"
+            className={inputFieldClass}
+            required
+          />
           <label htmlFor="category" className="text-2xl">
             Category
           </label>
