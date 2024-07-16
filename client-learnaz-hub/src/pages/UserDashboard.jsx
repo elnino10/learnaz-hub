@@ -8,13 +8,15 @@ import {
   enrolledCourses,
   allUsers,
   suggestedCourses,
+  createdCourses,
 } from "../data/courseData";
 import { useEffect, useState } from "react";
 
 const UserDashboard = () => {
   const [enrolledCourse, setEnrolledCourse] = useState([]);
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState({});
   const [suggestedCourse, setSuggestedCourse] = useState([]);
+  const [createdCourse, setCreatedCourse] = useState([]);
 
   // get user id from jwt token
   const id = 2;
@@ -46,18 +48,20 @@ const UserDashboard = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        // fetch courses from database
-        setUser(allUsers.find(user => user.id === id));
+        // fetch user from database
+        const foundUser = allUsers.find((user) => user.id === id);
+        setUser(foundUser);
+
+        // fetch courses created by user if they are an instructor
+        if (foundUser.role === "instructor") {
+          setCreatedCourse(createdCourses);
+        }
       } catch (error) {
-        console.log("Error fetching courses: ", error);
+        console.log("Error fetching user: ", error);
       }
     };
     fetchUser();
   }, []);
-
-  // const getInitials = (firstName, lastName) => {
-  //   return `${firstName[0]}${lastName[0]}`;
-  // };
 
   const settings = {
     speed: 500,
@@ -89,6 +93,7 @@ const UserDashboard = () => {
       },
     ],
   };
+
   return (
     <div className="m-0 p-0 pt-16 min-h-screen scroll">
       <div
@@ -107,11 +112,8 @@ const UserDashboard = () => {
           </Link>
         )}
       </div>
-      <div
-        className="text-gray-700 bg-gray-100 w-[90%] mx-auto py-5 px-10 flex
-      items-center justify-between flex-col md:flex-row"
-      >
-        <div className="">
+      <div className="text-gray-700 bg-gray-100 w-[90%] mx-auto py-5 px-10 flex items-center justify-between flex-col md:flex-row">
+        <div>
           <img src={student} className="h-[20rem] object-cover" />
         </div>
         <div className="w-50 my-10 text-center">
@@ -121,7 +123,50 @@ const UserDashboard = () => {
           </p>
         </div>
       </div>
-      {enrolledCourse.length > 0 ? (
+      {user.role === "instructor" ? (
+        createdCourse.length > 0 ? (
+          <>
+            <div className="flex items-center justify-between px-16 mt-5 mb-3 md:px-32">
+              <h3 className="pl-4 text-2xl text-gray-700 font-bold">
+                Created Courses
+              </h3>
+              <div>
+                <Link
+                  to="/home/created-courses"
+                  className="text-blue-950 hover:underline hover:text-blue-900"
+                >
+                  View All Created Courses
+                </Link>
+              </div>
+            </div>
+            <div className="md:w-[70%] md:mx-auto">
+              <Slider {...settings}>
+                {createdCourse.map((course) => (
+                  <div key={course.id} className="max-w-48">
+                    <div className="flex flex-col bg-gray-100 border h-40 w-100 overflow-hidden">
+                      <div>
+                        <img
+                          src={course.imageurl}
+                          alt="course-img"
+                          className="object-fill w-full h-20"
+                        />
+                      </div>
+                      <div className="text-sm px-2 pt-3">
+                        <h3 className="font-semibold">{course.title}</h3>
+                        <p className="text-xs">{course.duration}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </Slider>
+            </div>
+          </>
+        ) : (
+          <div className="p-6 text-center text-4xl text-gray-500 pt-10 italic">
+            You haven&apos;t created any courses yet.
+          </div>
+        )
+      ) : enrolledCourse.length > 0 ? (
         <>
           <div className="flex items-center justify-between px-16 mt-5 mb-3 md:px-32">
             <h3 className="pl-4 text-2xl text-gray-700 font-bold">
@@ -138,7 +183,7 @@ const UserDashboard = () => {
           </div>
           <div className="md:w-[70%] md:mx-auto">
             <Slider {...settings}>
-              {enrolledCourses.map((course) => (
+              {enrolledCourse.map((course) => (
                 <div key={course.id} className="max-w-48">
                   <div className="flex flex-col bg-gray-100 border h-40 w-100 overflow-hidden">
                     <div>
@@ -160,37 +205,39 @@ const UserDashboard = () => {
         </>
       ) : (
         <div className="p-6 text-center text-4xl text-gray-500 pt-10 italic">
-          You haven&apos;t enrolled in any course yet. Start your learning
+          You have&apos;t enrolled in any courses yet. Start your learning
           journey today!
         </div>
       )}
-      <div className="mt-10 mx-20">
-        <div className="border mb-5"></div>
-        <div className="mb-3 text-2xl text-gray-700 font-bold">
-          <h2>Suggested Courses</h2>
-        </div>
-        <div className="md:w-[70%] md:mx-auto">
-          <Slider {...settings}>
-            {suggestedCourse.map((course) => (
-              <div key={course.id} className="max-w-52 max-h-52">
-                <div className="flex flex-col bg-white border h-40 w-100 overflow-hidden">
-                  <div>
-                    <img
-                      src={course.imageurl}
-                      alt="course-img"
-                      className="object-fill w-full h-20"
-                    />
-                  </div>
-                  <div className="text-sm px-2 pt-3">
-                    <h3 className="font-semibold">{course.title}</h3>
-                    <p className="text-xs">{course.duration}</p>
+      {user.role !== "instructor" && (
+        <div className="mt-10 mx-20">
+          <div className="border mb-5"></div>
+          <div className="mb-3 text-2xl text-gray-700 font-bold">
+            <h2>Suggested Courses</h2>
+          </div>
+          <div className="md:w-[70%] md:mx-auto">
+            <Slider {...settings}>
+              {suggestedCourse.map((course) => (
+                <div key={course.id} className="max-w-52 max-h-52">
+                  <div className="flex flex-col bg-white border h-40 w-100 overflow-hidden">
+                    <div>
+                      <img
+                        src={course.imageurl}
+                        alt="course-img"
+                        className="object-fill w-full h-20"
+                      />
+                    </div>
+                    <div className="text-sm px-2 pt-3">
+                      <h3 className="font-semibold">{course.title}</h3>
+                      <p className="text-xs">{course.duration}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </Slider>
+              ))}
+            </Slider>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
