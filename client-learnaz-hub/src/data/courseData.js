@@ -95,7 +95,7 @@ export const allUsers = [
     firstName: "Amara",
     lastName: "Okeke",
     email: "hey.mail.com",
-    role: "user",
+    role: "instructor",
     imageUrl: image,
   },
 ];
