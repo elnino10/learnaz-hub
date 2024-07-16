@@ -131,6 +131,7 @@ export const createdCourses = [
     title: "css for beginners",
     imageurl: image,
     duration: "3 hours",
+    
   },
   {
     id: 4,

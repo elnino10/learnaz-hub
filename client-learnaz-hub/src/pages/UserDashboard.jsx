@@ -19,7 +19,7 @@ const UserDashboard = () => {
   const [createdCourse, setCreatedCourse] = useState([]);
 
   // get user id from jwt token
-  const id = 2;
+  const id = 3;
 
   useEffect(() => {
     const fetchAllCourses = async () => {
@@ -112,7 +112,7 @@ const UserDashboard = () => {
           </Link>
         )}
       </div>
-      <div className="text-gray-700 bg-gray-100 w-[90%] mx-auto py-5 px-10 flex items-center justify-between flex-col md:flex-row">
+      <div className="text-gray-700 bg-gray-100 w-[100%] mx-auto py-5 px-10 flex items-center justify-between flex-col md:flex-row">
         <div>
           <img src={student} className="h-[20rem] object-cover" />
         </div>
