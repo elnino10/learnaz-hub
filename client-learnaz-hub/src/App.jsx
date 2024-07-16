@@ -20,7 +20,8 @@ import {
   LoginForm,
   PasswordRecoveryForm,
   SignupForm,
-  CreateCourse
+  CreateCourse,
+  AddLessons
 } from "./components";
 
 const App = () => {
@@ -67,6 +68,7 @@ const MainLayout = () => (
       <Route path="/category/:category" element={<CategoryCourse />} />
       {/* based on the instructor id course is created */}
       <Route path="/create-course" element={<CreateCourse />} />
+      <Route path="/add-lessons" element={<AddLessons />} />
       <Route path="*" element={<h1>Not Found</h1>} />
     </Routes>
     <Footer />
