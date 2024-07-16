@@ -100,6 +100,15 @@ const UserDashboard = () => {
           <div className="text-4xl text-gray-700 font-bold pl-12">
             Welcome back, {user.firstName}
           </div>
+          {user.role === "instructor" && (
+            <Link
+              to="/create-course"
+              className="text-blue-950 pl-4 text-lg hover:underline hover:text-blue-900"
+            >
+              Create a Course
+            </Link>
+          )
+            }
         </div>
       ))}
       <div className="text-gray-700 bg-gray-100 flex w-full justify-between p-16 pl-4">

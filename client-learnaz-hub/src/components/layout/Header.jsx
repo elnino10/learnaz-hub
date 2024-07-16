@@ -40,6 +40,10 @@ function Header(props) {
     props.setActivePage((prev) => (prev === "category" ? "" : "category"));
   };
 
+  //  const handleCategoryClick = () => {
+  //    setDrpdwn(false);
+  //  };
+
   useEffect(() => {
     const clickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -64,7 +68,6 @@ function Header(props) {
             <div className="text-xl font-bold">Learnaz-Hub</div>
           </Link>
           {/* course category */}
-
           <div className="relative ml-20">
             <input
               type="text"
