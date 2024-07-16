@@ -12,7 +12,9 @@ import {
   EnrolledCoursesPage,
   LandingPage,
   UserDashboard,
-  CategoryCourse
+  CategoryCourse,
+  CreatedCourses,
+  CourseCreator,
 } from "./pages";
 import {
   Footer,
@@ -96,10 +98,12 @@ const MainLayout = (props) => (
       />
       <Route path="/home" element={<UserDashboard />} />
       {/* <Route path="/course/:courseTitle" element={<CourseContentPage />} /> */}
+      <Route path="/course-creator" element={<CourseCreator />} />
       <Route path="/course/course-content" element={<CourseContentPage />} />
       <Route path="/category/:category" element={<CategoryCourse />} />
       {/* based on the instructor id course is created */}
       <Route path="/create-course" element={<CreateCourse />} />
+      <Route path="/home/created-courses" element={<CreatedCourses />} />
       <Route path="/add-lessons" element={<AddLessons />} />
       <Route path="*" element={<h1>Not Found</h1>} />
     </Routes>
