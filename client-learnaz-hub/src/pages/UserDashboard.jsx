@@ -15,8 +15,13 @@ import { useEffect, useState } from "react";
 const UserDashboard = () => {
   const [enrolledCourse, setEnrolledCourse] = useState([]);
   const [user, setUser] = useState({});
+  const [user, setUser] = useState([]);
+
   const [suggestedCourse, setSuggestedCourse] = useState([]);
   const [createdCourse, setCreatedCourse] = useState([]);
+
+  // get user id from jwt token
+  const id = 2;
 
   // get user id from jwt token
   const id = 2;
@@ -56,12 +61,19 @@ const UserDashboard = () => {
         if (foundUser.role === "instructor") {
           setCreatedCourse(createdCourses);
         }
+        // fetch courses from database
+        setUser(allUsers.find(user => user.id === id));
       } catch (error) {
         console.log("Error fetching user: ", error);
       }
     };
     fetchUser();
   }, []);
+
+
+  // const getInitials = (firstName, lastName) => {
+  //   return `${firstName[0]}${lastName[0]}`;
+  // };
 
   const settings = {
     speed: 500,
@@ -114,6 +126,23 @@ const UserDashboard = () => {
       </div>
       <div className="text-gray-700 bg-gray-100 w-[90%] mx-auto py-5 px-10 flex items-center justify-between flex-col md:flex-row">
         <div>
+          <img src={student} className="h-[20rem] object-cover" />
+        </div>
+        </div>
+        {user.role === "instructor" && (
+          <Link
+            to="/create-course"
+            className="text-blue-950 p-3 rounded-md shadow-md text-lg border hover:shadow-sm hover:text-blue-900"
+          >
+            Create a Course
+          </Link>
+        )}
+      </div>
+      <div
+        className="text-gray-700 bg-gray-100 w-[90%] mx-auto py-5 px-10 flex
+      items-center justify-between flex-col md:flex-row"
+      >
+        <div className="">
           <img src={student} className="h-[20rem] object-cover" />
         </div>
         <div className="w-50 my-10 text-center">
@@ -184,6 +213,7 @@ const UserDashboard = () => {
           <div className="md:w-[70%] md:mx-auto">
             <Slider {...settings}>
               {enrolledCourse.map((course) => (
+              {enrolledCourses.map((course) => (
                 <div key={course.id} className="max-w-48">
                   <div className="flex flex-col bg-gray-100 border h-40 w-100 overflow-hidden">
                     <div>
@@ -238,6 +268,33 @@ const UserDashboard = () => {
           </div>
         </div>
       )}
+      <div className="mt-10 mx-20">
+        <div className="border mb-5"></div>
+        <div className="mb-3 text-2xl text-gray-700 font-bold">
+          <h2>Suggested Courses</h2>
+        </div>
+        <div className="md:w-[70%] md:mx-auto">
+          <Slider {...settings}>
+            {suggestedCourse.map((course) => (
+              <div key={course.id} className="max-w-52 max-h-52">
+                <div className="flex flex-col bg-white border h-40 w-100 overflow-hidden">
+                  <div>
+                    <img
+                      src={course.imageurl}
+                      alt="course-img"
+                      className="object-fill w-full h-20"
+                    />
+                  </div>
+                  <div className="text-sm px-2 pt-3">
+                    <h3 className="font-semibold">{course.title}</h3>
+                    <p className="text-xs">{course.duration}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </Slider>
+        </div>
+      </div>
     </div>
   );
 };
