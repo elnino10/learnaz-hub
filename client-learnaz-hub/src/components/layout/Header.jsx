@@ -79,7 +79,7 @@ function Header(props) {
         </div>
 
         <div className="md:w-[50%]">
-          <div onClick={toggleMenuHandler} className="md:hidden text-slate-200">
+          <div onClick={toggleMenuHandler} className="md:hidden text-gray-900">
             {props.menuVisible ? <MenuOpen /> : <MenuIcon />}
           </div>
           {/* <nav> */}
@@ -144,7 +144,7 @@ function Header(props) {
                 } text-gray-600 hover:text-gray-900`}
                 onClick={() => props.setActivePage("creator")}
               >
-                <a href="#">Become a Creator</a>
+                <Link to="/course-creator">Become a Creator</Link>
               </li>
               <li
                 className="border rounded-md text-sm p-2 transition
