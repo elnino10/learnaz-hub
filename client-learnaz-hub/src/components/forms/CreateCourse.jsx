@@ -23,12 +23,18 @@ const CreateCourse = () => {
       imageUrl,
       category,
     };
+
+    // create course with details in database
+    // return the course id
+    // assign returned course id to newCourse object
+
+    
     console.log("Course Created: ", newCourse);
     // Navigate to the lesson creation page with the new course data
     navigate("/add-lessons", { state: { course: newCourse } });
   };
   return (
-    <div className="mt-20 min-h-screen flex flex-col items-center justify-center">
+    <div className="mt-28 min-h-screen flex flex-col items-center justify-center">
       <div className="max-w-md w-full p-6 rounded-lg border-2">
         <h2 className="text-2xl text-gray-800 font-bold mb-4">
           Create a New Course
@@ -71,7 +77,7 @@ const CreateCourse = () => {
             required
           ></textarea>
           <label htmlFor="title" className="text-2xl">
-            Image Url
+            thumbnail Url
           </label>
           <input
             type="text"
