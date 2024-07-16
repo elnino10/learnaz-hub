@@ -107,7 +107,7 @@ const UserDashboard = () => {
           <h2 className="text-4xl font-bold">Learning that gets you</h2>
           <p className="mt-2 text-2xl">
             Skills for your present and your future.
-            <p>Keep Learning</p>.
+            <span>Keep Learning</span>.
           </p>
         </div>
         <div className="mb-8 w-50">
