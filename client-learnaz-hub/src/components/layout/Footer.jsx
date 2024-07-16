@@ -4,10 +4,10 @@ function Footer() {
   const currentYear = new Date().getFullYear();
   return (
     <footer
-      className="text-white p-8 w-full bg-gray-900"
+      className="text-white w-full bg-gray-900 mt-10 pl-10"
     >
       {/* correct routing */}
-      <div className="pb-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-2 pt-7 mb-5 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Link to="/signup">Teach On Learnaz-Hub</Link>
         <Link to="/signup">About Learnaz-Hub</Link>
         <Link to="/signup">Contact us</Link>
@@ -37,9 +37,9 @@ function Footer() {
           />
         </div>
       </div>
-      <div className="pt-12 flex justify-between">
-        <div className="text-bold text-2xl">Learnaz-Hub</div>
-        <div>
+      <div className="mt-5 pb-5 flex items-center justify-center">
+        <div className="text-bold text-sm mr-5">Learnaz-Hub</div>
+        <div className="">
           <p>© {currentYear} Learnaz-Hub</p>
         </div>
       </div>

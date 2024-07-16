@@ -4,13 +4,22 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { enrolledCourses, allUsers, suggestedCourses } from "../data/courseData";
+import {
+  enrolledCourses,
+  allUsers,
+  suggestedCourses,
+  createdCourses,
+} from "../data/courseData";
 import { useEffect, useState } from "react";
 
 const UserDashboard = () => {
   const [enrolledCourse, setEnrolledCourse] = useState([]);
-  const [users, setUsers] = useState([]);
+  const [user, setUser] = useState({});
   const [suggestedCourse, setSuggestedCourse] = useState([]);
+  const [createdCourse, setCreatedCourse] = useState([]);
+
+  // get user id from jwt token
+  const id = 2;
 
   useEffect(() => {
     const fetchAllCourses = async () => {
@@ -39,18 +48,20 @@ const UserDashboard = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        // fetch courses from database
-        setUsers(allUsers);
+        // fetch user from database
+        const foundUser = allUsers.find((user) => user.id === id);
+        setUser(foundUser);
+
+        // fetch courses created by user if they are an instructor
+        if (foundUser.role === "instructor") {
+          setCreatedCourse(createdCourses);
+        }
       } catch (error) {
-        console.log("Error fetching courses: ", error);
+        console.log("Error fetching user: ", error);
       }
     };
     fetchUser();
   }, []);
-
-  const getInitials = (firstName, lastName) => {
-    return `${firstName[0]}${lastName[0]}`;
-  };
 
   const settings = {
     speed: 500,
@@ -82,68 +93,109 @@ const UserDashboard = () => {
       },
     ],
   };
+
   return (
     <div className="m-0 p-0 pt-16 min-h-screen scroll">
-      {users.map((user) => (
-        <div key={user.id} className="flex items-center p-16 pl-4">
-          {user.imageUrl ? (
-            <img
-              src={user.imageUrl}
-              alt={`${user.firstName} ${user.lastName}`}
-              className="w-20 h-20 rounded-full object-cover"
-            />
-          ) : (
-            <div className="w-20 h-20 rounded-full flex items-center justify-center bg-gray-900 text-white text-2xl">
-              {getInitials(user.firstName, user.lastName)}
-            </div>
-          )}
-          <div className="text-4xl text-gray-700 font-bold pl-12">
-            Welcome back, {user.firstName}
-          </div>
+      <div
+        key={user.id}
+        className="flex items-center justify-between p-16 pl-4"
+      >
+        <div className="text-4xl text-gray-700 font-bold pl-12">
+          Welcome back, {user.firstName}
         </div>
-      ))}
-      <div className="text-gray-700 bg-gray-100 flex w-full justify-between p-16 pl-4">
-        <div className="text center pl-28 pt-20 w-50 text-center">
+        {user.role === "instructor" && (
+          <Link
+            to="/create-course"
+            className="text-blue-950 p-3 rounded-md shadow-md text-lg border hover:shadow-sm hover:text-blue-900"
+          >
+            Create a Course
+          </Link>
+        )}
+      </div>
+      <div className="text-gray-700 bg-gray-100 w-[100%] mx-auto py-5 px-10 flex items-center justify-between flex-col md:flex-row">
+        <div>
+          <img src={student} className="h-[20rem] object-cover" />
+        </div>
+        <div className="w-50 my-10 text-center">
           <h2 className="text-4xl font-bold">Learning that gets you</h2>
-          <p className="mt-2 text-2xl">
-            Skills for your present and your future.
-            <p>Keep Learning</p>.
+          <p className="text-xl">
+            Skills for your present and your future. Keep Learning.
           </p>
         </div>
-        <div className="mb-8 w-50">
-          <img src={student} className="w-full h-64 object-cover" />
-        </div>
       </div>
-      {enrolledCourse.length > 0 ? (
-        <>
-          <div className=" pt-10 flex justify-between">
-            <div className="pl-4 text-4xl text-gray-700 font-bold ">
-              Continue Learning
+      {user.role === "instructor" ? (
+        createdCourse.length > 0 ? (
+          <>
+            <div className="flex items-center justify-between px-16 mt-5 mb-3 md:px-32">
+              <h3 className="pl-4 text-2xl text-gray-700 font-bold">
+                Created Courses
+              </h3>
+              <div>
+                <Link
+                  to="/home/created-courses"
+                  className="text-blue-950 hover:underline hover:text-blue-900"
+                >
+                  View All Created Courses
+                </Link>
+              </div>
             </div>
+            <div className="md:w-[70%] md:mx-auto">
+              <Slider {...settings}>
+                {createdCourse.map((course) => (
+                  <div key={course.id} className="max-w-48">
+                    <div className="flex flex-col bg-gray-100 border h-40 w-100 overflow-hidden">
+                      <div>
+                        <img
+                          src={course.imageurl}
+                          alt="course-img"
+                          className="object-fill w-full h-20"
+                        />
+                      </div>
+                      <div className="text-sm px-2 pt-3">
+                        <h3 className="font-semibold">{course.title}</h3>
+                        <p className="text-xs">{course.duration}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </Slider>
+            </div>
+          </>
+        ) : (
+          <div className="p-6 text-center text-4xl text-gray-500 pt-10 italic">
+            You haven&apos;t created any courses yet.
+          </div>
+        )
+      ) : enrolledCourse.length > 0 ? (
+        <>
+          <div className="flex items-center justify-between px-16 mt-5 mb-3 md:px-32">
+            <h3 className="pl-4 text-2xl text-gray-700 font-bold">
+              Continue Learning
+            </h3>
             <div>
               <Link
                 to="/home/my-courses/learning"
-                className="text-blue-950 pr-4 text-lg hover:underline hover:text-blue-900"
+                className="text-blue-950 hover:underline hover:text-blue-900"
               >
                 View All Courses
               </Link>
             </div>
           </div>
-          <div className="m-auto">
+          <div className="md:w-[70%] md:mx-auto">
             <Slider {...settings}>
-              {enrolledCourses.map((course) => (
-                <div key={course.id} className="p-4">
-                  <div className="flex justify-between bg-white p-8 pr-8 border-2 h-40 w-100 overflow-hidden">
+              {enrolledCourse.map((course) => (
+                <div key={course.id} className="max-w-48">
+                  <div className="flex flex-col bg-gray-100 border h-40 w-100 overflow-hidden">
                     <div>
                       <img
                         src={course.imageurl}
                         alt="course-img"
-                        className="w-32 object-cover mr-2 border-r-2 border-gray-300"
+                        className="object-fill w-full h-20"
                       />
                     </div>
-                    <div className="">
-                      <h3 className="text-xl font-semibold">{course.title}</h3>
-                      <p className="text-lg">{course.duration}</p>
+                    <div className="text-sm px-2 pt-3">
+                      <h3 className="font-semibold">{course.title}</h3>
+                      <p className="text-xs">{course.duration}</p>
                     </div>
                   </div>
                 </div>
@@ -153,28 +205,39 @@ const UserDashboard = () => {
         </>
       ) : (
         <div className="p-6 text-center text-4xl text-gray-500 pt-10 italic">
-          You haven&apos;t enrolled in any course yet. Start your learning
-          journey today!
+          You haven&apos;t enrolled in any courses yet. Start your learning journey
+          today!
         </div>
       )}
-      <div className="pt-10">
-        <div className="pl-4 text-4xl text-gray-700 font-bold pb-4">
-          Suggested Courses
-        </div>
-        <Slider {...settings}>
-          {suggestedCourse.map((course) => (
-            <div key={course.id} className="p-4 w-80">
-              <div className="flex bg-white p-8 pr-8 border h-40 w-100 overflow-hidden">
-                <img src="" alt="" className="w-32" />
-                <div className="">
-                  <h3 className="text-xl font-semibold">{course.title}</h3>
-                  <p className="text-lg">{course.duration}</p>
+      {user.role !== "instructor" && (
+        <div className="mt-10 mx-20">
+          <div className="border mb-5"></div>
+          <div className="mb-3 text-2xl text-gray-700 font-bold">
+            <h2>Suggested Courses</h2>
+          </div>
+          <div className="md:w-[70%] md:mx-auto">
+            <Slider {...settings}>
+              {suggestedCourse.map((course) => (
+                <div key={course.id} className="max-w-52 max-h-52">
+                  <div className="flex flex-col bg-white border h-40 w-100 overflow-hidden">
+                    <div>
+                      <img
+                        src={course.imageurl}
+                        alt="course-img"
+                        className="object-fill w-full h-20"
+                      />
+                    </div>
+                    <div className="text-sm px-2 pt-3">
+                      <h3 className="font-semibold">{course.title}</h3>
+                      <p className="text-xs">{course.duration}</p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          ))}
-        </Slider>
-      </div>
+              ))}
+            </Slider>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

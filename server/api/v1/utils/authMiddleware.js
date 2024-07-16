@@ -1,3 +1,4 @@
+import express from "express";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 
@@ -48,16 +49,13 @@ const checkRole = (roles) => {
   };
 };
 
-// Mock authentication middleware for testing purposes
-const mockAuth = (req, res, next) => {
-  const role = req.headers["x-user-role"] || "admin"; // Default to 'admin' if not provided
-  const userId = req.headers["x-user-id"] || "123"; // Default to '123' if not provided
 
-  req.user = {
-    id: userId,
-    role: role,
-  };
-  next();
+const jsonParserMiddleware = (req, res, next) => {
+  if (req.method === 'GET') {
+    return next(); // Skip JSON parsing for GET requests
+  }
+  return express.json()(req, res, next); // Parse JSON payload for non-GET requests
 };
 
-export { authMiddleware, isAdmin, checkRole, mockAuth };
+
+export { authMiddleware, isAdmin, checkRole, jsonParserMiddleware };

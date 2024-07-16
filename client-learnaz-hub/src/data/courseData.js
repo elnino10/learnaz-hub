@@ -41,6 +41,9 @@ export const courses = [
     price: "$50",
     category: "Photography",
   },
+  {
+    category: "Videography",
+  },
 ];
 
 // course review data
@@ -61,7 +64,7 @@ export const reviews = [
 
 export const enrolledCourses = [
   {
-    id: 1,
+    _id: 1,
     title: "Introduction to Python Programming",
     imageurl: image,
     duration: "2 hours",
@@ -92,11 +95,51 @@ export const allUsers = [
     firstName: "Amara",
     lastName: "Okeke",
     email: "hey.mail.com",
-    role: "user",
-    imageUrl: image,
+    role: "instructor",
+  },
+  {
+    id: 2,
+    firstName: "John",
+    lastName: "Jack",
+    email: "john@mail.com",
+    role: "instructor",
+  },
+  {
+    id: 3,
+    firstName: "Luke",
+    lastName: "Donald",
+    email: "mail.com",
+    role: "student",
   },
 ];
 
+export const createdCourses = [
+  {
+    id: 1,
+    title: "Introduction to Python Programming",
+    imageurl: image,
+    duration: "2 hours",
+  },
+  {
+    id: 2,
+    title: "Advanced JavaScript",
+    imageurl: image,
+    duration: "3 hours",
+  },
+  {
+    id: 3,
+    title: "css for beginners",
+    imageurl: image,
+    duration: "3 hours",
+    
+  },
+  {
+    id: 4,
+    title: "Computer Science",
+    imageurl: image,
+    duration: "3 hours",
+  },
+];  
 export const suggestedCourses = [
   {
     id: 3,

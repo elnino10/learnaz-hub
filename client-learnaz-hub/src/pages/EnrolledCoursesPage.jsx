@@ -24,12 +24,15 @@ function EnrolledCoursesPage() {
         <h1 className="font-serif font-bold text-4xl">My learning</h1>
       </div>
       <div className="w-[70%] flex flex-col items-start mx-auto my-5 p-7 border shadow-sm">
-        <h3 className="font-bold mb-1.5">𝌩 Motivate yourself each day</h3>
-        <p className="text-sm font-thin">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi
-          dolorum recusandae reiciendis asperiores aut vitae error optio, facere
-          accusamus blanditiis nemo quo? Veritatis eveniet quibusdam minus nisi
-          culpa quidem quas.
+        <h3 className="font-bold text-gray-900 text-xl mb-1.55">
+          𝌩 Motivate yourself each day
+        </h3>
+        <p className="text-sm text-gray-500 font-bold">
+          Embark on your learning journey with enthusiasm and curiosity. Every
+          course you take is a step towards a brighter future, equipped with the
+          skills and knowledge to achieve your dreams. Stay committed, embrace
+          the challenges, and remember that the effort you invest today will
+          shape the success you experience tomorrow. Keep learning and growing!
         </p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-5 px-28">
