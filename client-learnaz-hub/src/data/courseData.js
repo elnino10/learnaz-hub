@@ -64,7 +64,7 @@ export const reviews = [
 
 export const enrolledCourses = [
   {
-    id: 1,
+    _id: 1,
     title: "Introduction to Python Programming",
     imageurl: image,
     duration: "2 hours",
@@ -96,7 +96,20 @@ export const allUsers = [
     lastName: "Okeke",
     email: "hey.mail.com",
     role: "instructor",
-    imageUrl: image,
+  },
+  {
+    id: 2,
+    firstName: "John",
+    lastName: "Jack",
+    email: "john@mail.com",
+    role: "instructor",
+  },
+  {
+    id: 3,
+    firstName: "Luke",
+    lastName: "Donald",
+    email: "mail.com",
+    role: "student",
   },
 ];
 
