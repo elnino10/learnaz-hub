@@ -1,7 +1,5 @@
 import { useRef, useState } from "react";
 
-// export default CourseContentPage
-
 // Shared Tailwind CSS classes
 const buttonClasses = "px-2 py-1 rounded";
 const mutedButtonClasses = "bg-muted text-muted-foreground " + buttonClasses;
