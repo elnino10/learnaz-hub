@@ -113,10 +113,10 @@ function LandingPage() {
               <h3 className="text-2xl md:text-3xl text-gray-900 font-bold mb-4">
                 {selectedCategory} Courses
               </h3>
-              <CourseCard
-                selectedCategory={selectedCategory}
-                courses={allCourses}
-              />
+                <CourseCard
+                  selectedCategory={selectedCategory}
+                  courses={allCourses}
+                />
             </div>
           )}
         </section>
