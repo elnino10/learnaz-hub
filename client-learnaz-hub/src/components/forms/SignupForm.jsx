@@ -14,8 +14,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import axios from 'axios';
-
+import axios from "axios";
 
 const defaultTheme = createTheme();
 
@@ -25,7 +24,7 @@ function SignupForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
-  
+
   // const navigate = useNavigate();
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
@@ -43,19 +42,17 @@ function SignupForm() {
       };
 
       const res = await axios.post(apiUrl, userData);
-      if (res) {
-        setFirstName("");
-        setLastName("");
-        setEmail("");
-        setPassword("");
-      }
       if (res.data.status !== "success") {
         setErrMsg(res.data.message);
       }
-      console.log(res.data);
+      console.log(res);
     } catch (error) {
-      console.log("Error signing up user: ", error);
+      setErrMsg(error.response.data.message);
     }
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setPassword("");
   };
 
   return (
@@ -77,13 +74,15 @@ function SignupForm() {
             <Typography component="h1" variant="h5">
               Sign up
             </Typography>
+            <div className={`${!errMsg && "invisible"} text-red-400 h-5`}>
+              <p>{errMsg}</p>
+            </div>
             <Box
               component="form"
               noValidate
               onSubmit={handleSubmit}
               sx={{ mt: 3 }}
             >
-              <div><p>{errMsg && errMsg}</p></div>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                   <TextField
@@ -95,7 +94,10 @@ function SignupForm() {
                     label="First Name"
                     autoFocus
                     value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
+                    onChange={(e) => {
+                      setFirstName(e.target.value);
+                      setErrMsg("");
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -107,7 +109,10 @@ function SignupForm() {
                     name="lastName"
                     autoComplete="lname"
                     value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
+                    onChange={(e) => {
+                      setLastName(e.target.value);
+                      setErrMsg("");
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -119,7 +124,10 @@ function SignupForm() {
                     name="email"
                     autoComplete="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      setErrMsg("");
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -132,7 +140,10 @@ function SignupForm() {
                     id="password"
                     autoComplete="new-password"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      setErrMsg("");
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
