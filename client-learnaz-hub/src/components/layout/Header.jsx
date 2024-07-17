@@ -2,6 +2,8 @@
 import { Link } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
 import { useState, useEffect, useRef } from "react";
+import Logo from "../../assets/images/LH2.png";
+
 
 import { MenuOpen } from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -9,6 +11,7 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 
 import { courses } from "../../data/courseData";
+// import { icon } from "@fortawesome/fontawesome-svg-core";
 
 function Header(props) {
   const [drpdwn, setDrpdwn] = useState(false);
@@ -65,7 +68,12 @@ function Header(props) {
         {/* Logo */}
         <div className="flex items-center justify-between">
           <Link to="/" onClick={() => props.setActivePage("home")}>
-            <div className="text-xl font-bold">Learnaz-Hub</div>
+            <img
+              src={Logo}
+              alt="Learnaz-Hub Logo"
+              className="block md:hidden h-16 rounded-full"
+            />
+            <div className="hidden md:block text-xl font-bold">Learnaz-Hub</div>
           </Link>
           {/* course category */}
           <div className="relative ml-20">

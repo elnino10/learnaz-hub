@@ -2,6 +2,8 @@ import image from "../assets/images/teacher.png";
 
 export const courses = [
   {
+    id: 1,
+    videoUrl: "https://intranet-projects-files.s3.amazonaws.com/webstack/BigBuckBunny.mp4",
     title: "Introduction to Video Animation",
     image: "http://example.com/video-animation.jpg",
     author: "John Doe",
@@ -10,6 +12,8 @@ export const courses = [
     category: "Video Animation",
   },
   {
+    id: 2,
+    videoUrl: "http://example.com/video-animation.mp4",
     title: "Introduction to Video Animation",
     image: "http://example.com/video-animation.jpg",
     author: "John Doe",
@@ -18,6 +22,8 @@ export const courses = [
     category: "Video Animation",
   },
   {
+    id: 3,
+    videoUrl: "http://example.com/video-editing.mp4",
     title: "Introduction to Video Editing",
     image: "http://example.com/video-editing.jpg",
     author: "Jane Smith",
@@ -26,6 +32,8 @@ export const courses = [
     category: "Video Editing",
   },
   {
+    id: 4,
+    videoUrl: "http://example.com/photography.mp4",
     title: "Introduction to Stop Motion",
     image: "http://example.com/stop-motion.jpg",
     author: "Alice Brown",
@@ -34,15 +42,14 @@ export const courses = [
     category: "Stop Motion",
   },
   {
+    id: 5,
+    videoUrl: "http://example.com/photography.mp4",
     title: "Introduction to Photography",
     image: "http://example.com/photography.jpg",
     author: "John Doe",
     numberEnrolled: 30,
     price: "$50",
     category: "Photography",
-  },
-  {
-    category: "Videography",
   },
 ];
 
