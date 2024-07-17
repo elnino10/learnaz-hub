@@ -50,7 +50,7 @@ function CategoryCourses() {
               </p>
               {/* <p className="text-gray-700 font-bold">{course.price}</p> */}
               <div className="flex justify-end w-80%">
-                <button className="bg-gray-900 rounded text-white">
+                <button className="bg-gray-900 rounded text-white px-3 py-2 hover:text-gray-400">
                   Enroll
                 </button>
               </div>

@@ -16,9 +16,10 @@ import { useState } from "react";
 const defaultTheme = createTheme();
 
 function SignupForm() {
-  const [role, setRole] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -28,7 +29,6 @@ function SignupForm() {
       lastName: data.get("lastName"),
       email: data.get("email"),
       password: data.get("password"),
-      role,
     });
   };
 
@@ -58,24 +58,6 @@ function SignupForm() {
               sx={{ mt: 3 }}
             >
               <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <Button
-                    variant={role === "learner" ? "contained" : "outlined"}
-                    fullWidth
-                    onClick={() => setRole("learner")}
-                  >
-                    Student
-                  </Button>
-                </Grid>
-                <Grid item xs={12}>
-                  <Button
-                    variant={role === "instructor" ? "contained" : "outlined"}
-                    fullWidth
-                    onClick={() => setRole("instructor")}
-                  >
-                    Instructor
-                  </Button>
-                </Grid>
                 <Grid item xs={12} sm={6}>
                   <TextField
                     autoComplete="fname"
@@ -109,6 +91,8 @@ function SignupForm() {
                     label="Email Address"
                     name="email"
                     autoComplete="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -120,6 +104,8 @@ function SignupForm() {
                     type="password"
                     id="password"
                     autoComplete="new-password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -136,7 +122,7 @@ function SignupForm() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                disabled={!role}
+                disabled={!firstName || !email || !password}
               >
                 Sign Up
               </Button>
