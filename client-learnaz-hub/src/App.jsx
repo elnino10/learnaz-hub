@@ -42,8 +42,6 @@ const App = () => {
     setShowImageMenu(false);
   };
 
-  console.log(authUser);
-
   return (
     <div onClick={clickAwayHandler}>
       <Routes>
