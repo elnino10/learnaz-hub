@@ -15,7 +15,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import axios from "axios";
-import {KJUR} from "jsrsasign";
+import { KJUR } from "jsrsasign";
 
 const defaultTheme = createTheme();
 
@@ -23,7 +23,6 @@ function LoginForm(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
-  
 
   const navigate = useNavigate();
 
@@ -48,7 +47,7 @@ function LoginForm(props) {
 
       const decoded = KJUR.jws.JWS.parse(token);
       decoded && props.setAuthUser(decoded.payloadObj);
-      navigate("/home", { state : {id: decoded.payloadObj.id} });
+      navigate("/home", { state: { id: decoded.payloadObj.id } });
     } catch (error) {
       setErrMsg(error.response.data.message);
     }
@@ -94,7 +93,10 @@ function LoginForm(props) {
                 autoComplete="email"
                 autoFocus
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setErrMsg("");
+                }}
               />
               <TextField
                 margin="normal"
@@ -106,7 +108,10 @@ function LoginForm(props) {
                 id="password"
                 autoComplete="current-password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setErrMsg("");
+                }}
               />
               <Button
                 type="submit"
@@ -120,12 +125,17 @@ function LoginForm(props) {
               <Grid container>
                 <Grid item xs>
                   <Link to="/forgot-password" variant="body2">
-                    Forgot password?
+                    <span className="text-blue-500 hover:underline">
+                      Forgot password?
+                    </span>
                   </Link>
                 </Grid>
                 <Grid item>
                   <Link to="/signup" variant="body2">
-                    {"Don't have an account? Sign Up"}
+                    {"Don't have an account?"}{" "}
+                    <span className="text-blue-500 hover:underline">
+                      Sign up
+                    </span>
                   </Link>
                 </Grid>
               </Grid>

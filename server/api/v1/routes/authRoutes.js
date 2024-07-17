@@ -4,6 +4,7 @@ import {
   registerUser,
   forgotPassword,
   resetPassword,
+  signoutUser,
 } from "../controllers/authController.js";
 import { authMiddleware, isAdmin } from "../utils/authMiddleware.js";
 import {
@@ -21,6 +22,7 @@ const router = Router();
 // Routes for user authentication
 router.post("/signup-user", registerUser);
 router.post("/login-user", loginUser);
+router.post("/signout", signoutUser);
 router.post("/forgot-password", forgotPassword);
 router.put("/reset-password/:token", resetPassword);
 

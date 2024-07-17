@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import Learn from "../assets/images/study.png";
 import Teacher from "../assets/images/teacher2.png";
@@ -14,7 +15,7 @@ import {
 import { courses, reviews } from "../data/courseData";
 import { CourseCard } from "../components";
 
-function LandingPage() {
+function LandingPage(props) {
   const [allCourses, setAllCourses] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [categories, setCategories] = useState([]);
@@ -62,8 +63,8 @@ function LandingPage() {
             className="w-full md:w-1/2 p-4 mb-8 md:mb-0 md:mr-12"
             alt="Person learning online"
           />
-          <div className="w-full md:w-1/2 text-center md:text-left ">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-600 mb-4 mt-20 md:mt-0">
+          <div className="w-full pb-5 md:w-1/2 text-center md:text-left">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-600 mb-4 md:mt-0">
               Master New Skills Anytime, Anywhere
             </h1>
             <p className="text-xl md:text-2xl text-gray-700 mb-6">
@@ -82,7 +83,7 @@ function LandingPage() {
         </section>
         {/* Courses Section */}
         <section className="p-8 w-full bg-white">
-          <h2 className="pb-4 text-3xl md:text-4xl text-gray-900 font-bold">
+          <h2 className="pb-4 text-2xl md:text-3xl text-gray-900 font-bold">
             Explore Our Wide Range of Courses
           </h2>
           <p className="text-xl md:text-2xl text-gray-900">
@@ -121,13 +122,13 @@ function LandingPage() {
           )}
         </section>
         {/* Reviews Section */}
-        <section className="p-8 w-full bg-white">
-          <h2 className="mb-6 text-gray-900 text-3xl md:text-4xl font-bold">
+        <section className="w-full bg-white">
+          <h2 className="text-gray-900 text-2xl px-10 mb-5 md:text-3xl font-bold">
             Hear From Our Learners
           </h2>
-          <div className="max-w-4xl mx-auto border">
+          <div className="max-w-xl mx-auto border rounded-md shadow-md">
             <Carousel
-              className="p-6 m-6"
+              className="m-6"
               showThumbs={false}
               infiniteLoop
               useKeyboardArrows
@@ -161,7 +162,7 @@ function LandingPage() {
               }
             >
               {reviews.map((review, index) => (
-                <div key={index} className="p-4">
+                <div key={index} className="px-4">
                   <blockquote className="text-lg md:text-xl italic text-gray-700">
                     {review.review}
                   </blockquote>
@@ -173,28 +174,30 @@ function LandingPage() {
             </Carousel>
           </div>
         </section>
-        <section className="flex justify-center items-center p-8 w-full">
+        <section className="flex justify-center items-center w-full">
           <div className="container flex flex-col md:flex-row items-center">
             <img
               src={Teacher}
               alt="Woman teaching online"
-              className="w-full md:w-1/2 mb-8 md:mb-0 md:mr-12"
+              className="w-full md:w-1/2 md:mb-0 md:mr-12"
             />
             <div className="w-full md:w-1/2 text-center md:text-left">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-600 mb-4 mt-12 md:mt-0">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-600 md:mt-0">
                 Become a Course Creator
               </h2>
-              <p className="text-xl md:text-2xl text-gray-700 mb-6">
+              <p className="text-lg md:text-lg text-gray-700 mb-8">
                 Share your expertise with learners from around the world. Join
                 our community of skilled instructors today.
               </p>
-              <Link
-                to="/course-creator"
-                className="bg-gray-900 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded"
-                aria-label="Become a course creator"
-              >
-                Start Creating
-              </Link>
+              {props.authUser && props.authUser.role !== "instructor" &&
+                  <Link
+                    to="/course-creator"
+                    className="bg-gray-900 hover:bg-gray-800 hover:text-gray-300 text-white font-bold py-2 px-4 rounded"
+                    aria-label="Become a course creator"
+                  >
+                    Start Creating
+                  </Link>
+                }
             </div>
           </div>
         </section>
