@@ -12,24 +12,30 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+
+
 
 const defaultTheme = createTheme();
 
 function SignupForm() {
+  const navigate = useNavigate();
+  const [role, setRole] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const formData = {
       firstName: data.get("firstName"),
       lastName: data.get("lastName"),
       email: data.get("email"),
       password: data.get("password"),
-    });
+    };
   };
 
   return (

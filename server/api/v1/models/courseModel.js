@@ -1,4 +1,3 @@
-//courses schema
 import mongoose from "mongoose";
 
 const courseSchema = new mongoose.Schema({
@@ -43,6 +42,17 @@ const courseSchema = new mongoose.Schema({
   averageRating: {
     type: Number,
     default: 0,
+  },
+  thumbnailURL: {
+    type: String,
+    required: true,
+    validate: {
+      validator: function (v) {
+        return /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/.test(v);
+      },
+      message: (props) => `${props.value} is not a valid URL!`,
+    },
+    default: 'http://learnazHub.com/default-thumbnail.jpg',
   },
   category: {
     type: String,
