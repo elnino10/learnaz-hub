@@ -3,6 +3,7 @@ import image from "../assets/images/teacher.png";
 export const courses = [
   {
     id: 1,
+    videoUrl: "https://intranet-projects-files.s3.amazonaws.com/webstack/BigBuckBunny.mp4",
     title: "Introduction to Video Animation",
     image: "http://example.com/video-animation.jpg",
     author: "John Doe",
@@ -24,6 +25,7 @@ export const courses = [
   },
   {
     id: 2,
+    videoUrl: "http://example.com/video-animation.mp4",
     title: "Introduction to Video Animation",
     image: "http://example.com/video-animation.jpg",
     author: "John Doe",
@@ -40,6 +42,7 @@ export const courses = [
   },
   {
     id: 3,
+    videoUrl: "http://example.com/video-editing.mp4",
     title: "Introduction to Video Editing",
     image: "http://example.com/video-editing.jpg",
     author: "Jane Smith",
@@ -49,6 +52,7 @@ export const courses = [
   },
   {
     id: 4,
+    videoUrl: "http://example.com/photography.mp4",
     title: "Introduction to Stop Motion",
     image: "http://example.com/stop-motion.jpg",
     author: "Alice Brown",
@@ -58,6 +62,7 @@ export const courses = [
   },
   {
     id: 5,
+    videoUrl: "http://example.com/photography.mp4",
     title: "Introduction to Photography",
     image: "http://example.com/photography.jpg",
     author: "John Doe",

@@ -174,17 +174,20 @@ const UserDashboard = (props) => {
                 {createdCourse.map((course) => (
                   <div key={course.id} className="max-w-48">
                     <div className="flex flex-col bg-gray-100 border h-40 w-100 overflow-hidden">
-                      <div>
-                        <img
-                          src={course.imageurl}
-                          alt={course.title}
-                          className="object-fill w-full h-20"
-                        />
-                      </div>
-                      <div className="text-sm px-2 pt-3">
-                        <h3 className="font-semibold">{course.title}</h3>
-                        <p className="text-xs">{course.duration}</p>
-                      </div>
+                      <Link to={`/course/course-content/${course.id}`}>
+                        <div>
+                          <img
+                            src={course.imageurl}
+                            alt={course.title}
+                            className="object-fill w-full h-20"
+                          />
+                        </div>
+                        <div className="text-sm px-2 pt-3">
+                          <h3 className="font-semibold">{course.title}</h3>
+                          <p className="text-xs">{course.duration}</p>
+                        </div>
+                      </Link>
+                      
                     </div>
                   </div>
                 ))}
@@ -217,17 +220,19 @@ const UserDashboard = (props) => {
               {enrolledCourse.map((course) => (
                 <div key={course.id} className="max-w-48">
                   <div className="flex flex-col bg-gray-100 border h-40 w-100 overflow-hidden">
-                    <div>
-                      <img
-                        src={course.imageurl}
-                        alt={course.title}
-                        className="object-fill w-full h-20"
-                      />
-                    </div>
-                    <div className="text-sm px-2 pt-3">
-                      <h3 className="font-semibold">{course.title}</h3>
-                      <p className="text-xs">{course.duration}</p>
-                    </div>
+                    <Link to={`/course/course-content/${course.id}`}>
+                      <div>
+                        <img
+                          src={course.imageurl}
+                          alt={course.title}
+                          className="object-fill w-full h-20"
+                        />
+                      </div>
+                      <div className="text-sm px-2 pt-3">
+                        <h3 className="font-semibold">{course.title}</h3>
+                        <p className="text-xs">{course.duration}</p>
+                      </div>
+                    </Link>
                   </div>
                 </div>
               ))}
@@ -251,17 +256,19 @@ const UserDashboard = (props) => {
               {suggestedCourse.map((course) => (
                 <div key={course.id} className="max-w-52 max-h-52">
                   <div className="flex flex-col bg-white border h-40 w-100 overflow-hidden">
-                    <div>
-                      <img
-                        src={course.imageurl}
-                        alt={course.title}
-                        className="object-fill w-full h-20"
-                      />
-                    </div>
-                    <div className="text-sm px-2 pt-3">
-                      <h3 className="font-semibold">{course.title}</h3>
-                      <p className="text-xs">{course.duration}</p>
-                    </div>
+                    <Link to={`/course/course-content/${course.id}`}>
+                      <div>
+                        <img
+                          src={course.imageurl}
+                          alt={course.title}
+                          className="object-fill w-full h-20"
+                        />
+                      </div>
+                      <div className="text-sm px-2 pt-3">
+                        <h3 className="font-semibold">{course.title}</h3>
+                        <p className="text-xs">{course.duration}</p>
+                      </div>
+                    </Link>
                   </div>
                 </div>
               ))}
