@@ -12,24 +12,38 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+
+
 
 const defaultTheme = createTheme();
 
 function SignupForm() {
+  const navigate = useNavigate();
   const [role, setRole] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const formData = {
       firstName: data.get("firstName"),
       lastName: data.get("lastName"),
       email: data.get("email"),
       password: data.get("password"),
       role,
-    });
+    };
+
+    try {
+      const response = await axios.post("http://localhost:5000/api/v1/auth/signup-user", formData);
+      console.log(response.data);
+      navigate("/login", { replace: true });
+    } catch (error) {
+      console.error(error);
+      // Handle error (e.g., display error message)
+    }
   };
 
   return (
@@ -60,9 +74,9 @@ function SignupForm() {
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <Button
-                    variant={role === "learner" ? "contained" : "outlined"}
+                    variant={role === "student" ? "contained" : "outlined"}
                     fullWidth
-                    onClick={() => setRole("learner")}
+                    onClick={() => setRole("student")}
                   >
                     Student
                   </Button>
