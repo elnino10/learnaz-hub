@@ -1,5 +1,5 @@
 import { useState } from "react";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -25,7 +25,7 @@ function SignupForm() {
   const [password, setPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
   const apiUrl = `${baseUrl}/auth/signup-user`;
@@ -45,7 +45,8 @@ function SignupForm() {
       if (res.data.status !== "success") {
         setErrMsg(res.data.message);
       }
-      console.log(res);
+      alert("You signed up successfully. Please login to continue.");
+      navigate("/login");
     } catch (error) {
       setErrMsg(error.response.data.message);
     }

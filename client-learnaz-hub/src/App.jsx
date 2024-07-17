@@ -1,5 +1,7 @@
 /* eslint-disable react/prop-types */
+import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
+
 import {
   Sidebar,
   Navbar,
@@ -24,14 +26,14 @@ import {
   PasswordRecoveryForm,
   SignupForm,
   CreateCourse,
-  AddLessons
+  AddLessons,
 } from "./components";
-import { useState } from "react";
 
 const App = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [showImageMenu, setShowImageMenu] = useState(false);
   const [activePage, setActivePage] = useState("");
+  const [authUser, setAuthUser] = useState(null);
 
   const clickAwayHandler = () => {
     setMenuVisible(false);
@@ -54,6 +56,8 @@ const App = () => {
               setShowImageMenu={setShowImageMenu}
               menuVisible={menuVisible}
               setMenuVisible={setMenuVisible}
+              authUser={authUser}
+              setAuthUser={setAuthUser}
             />
           }
         />
@@ -85,18 +89,26 @@ const MainLayout = (props) => (
       setShowImageMenu={props.setShowImageMenu}
       activePage={props.activePage}
       setActivePage={props.setActivePage}
+      setAuthUser={props.setAuthUser}
+      authUser={props.authUser}
     />
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/signup" element={<SignupForm />} />
-      <Route path="/login" element={<LoginForm />} />
+      <Route
+        path="/login"
+        element={<LoginForm setAuthUser={props.setAuthUser} />}
+      />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/password-recovery" element={<PasswordRecoveryForm />} />
       <Route
         path="/home/my-courses/learning"
         element={<EnrolledCoursesPage />}
       />
-      <Route path="/home" element={<UserDashboard />} />
+      <Route
+        path="/home"
+        element={<UserDashboard authUser={props.authUser} />}
+      />
       {/* <Route path="/course/:courseTitle" element={<CourseContentPage />} /> */}
       <Route path="/course-creator" element={<CourseCreator />} />
       <Route path="/course/course-content" element={<CourseContentPage />} />
