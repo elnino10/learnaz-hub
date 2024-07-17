@@ -11,7 +11,7 @@ import {
   authMiddleware,
   checkRole,
 } from "../utils/authMiddleware.js";
-import { getStudentDashboard, viewGrades } from "../controllers/student/studentDashboard.js";
+import { getStudentDashboard, /*viewGrades*/ } from "../controllers/student/studentDashboard.js";
 
 const router = express.Router();
 
@@ -34,6 +34,6 @@ router.delete("/:courseId", authMiddleware, checkRole(role), deleteCourse);
 router.get('/dashboard', getStudentDashboard);
 // router.post('/course/:courseId/submit', submitAssignment);
 router.post('/course/:courseId/review', courseReview);
-router.get('/grades', viewGrades);
+// router.get('/grades', viewGrades);
 
 export default router;
