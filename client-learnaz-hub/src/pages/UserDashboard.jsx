@@ -107,21 +107,38 @@ const UserDashboard = () => {
           <Link
             to="/create-course"
             className="text-blue-950 p-3 rounded-md shadow-md text-lg border hover:shadow-sm hover:text-blue-900"
+            aria-label="Create a course"
           >
             Create a Course
           </Link>
         )}
       </div>
-      <div className="text-gray-700 bg-gray-100 w-[100%] mx-auto py-5 px-10 flex items-center justify-between flex-col md:flex-row">
+      <div className="text-gray-700 bg-gray-100 w-[100%] mx-auto py-5 px-10 flex items-center justify-center flex-col md:flex-row">
         <div>
-          <img src={student} className="h-[20rem] object-cover" />
+          <img
+            src={student}
+            className="h-[20rem] object-cover"
+            alt="Animated student studying online"
+          />
         </div>
-        <div className="w-50 my-10 text-center">
-          <h2 className="text-4xl font-bold">Learning that gets you</h2>
-          <p className="text-xl">
-            Skills for your present and your future. Keep Learning.
-          </p>
-        </div>
+        {user.role === "instructor" ? (
+          <div className="w-50 my-10 text-center">
+            <h2 className="text-4xl font-bold">
+              Impact the World Through Teaching
+            </h2>
+            <p className="text-xl pl-6">
+              By becoming an instructor, you have the power to
+              shape the future and make a real difference in people&rsquo;s lives.
+            </p>
+          </div>
+        ) : (
+          <div className="w-50 my-10 text-center">
+            <h2 className="text-4xl font-bold">Learning that Gets You</h2>
+            <p className="text-xl">
+              Acquire skills for your present and future. Keep Learning.
+            </p>
+          </div>
+        )}
       </div>
       {user.role === "instructor" ? (
         createdCourse.length > 0 ? (
@@ -134,6 +151,7 @@ const UserDashboard = () => {
                 <Link
                   to="/home/created-courses"
                   className="text-blue-950 hover:underline hover:text-blue-900"
+                  aria-label="View all created courses"
                 >
                   View All Created Courses
                 </Link>
@@ -147,7 +165,7 @@ const UserDashboard = () => {
                       <div>
                         <img
                           src={course.imageurl}
-                          alt="course-img"
+                          alt={course.title}
                           className="object-fill w-full h-20"
                         />
                       </div>
@@ -176,6 +194,7 @@ const UserDashboard = () => {
               <Link
                 to="/home/my-courses/learning"
                 className="text-blue-950 hover:underline hover:text-blue-900"
+                aria-label="View all enrolled courses"
               >
                 View All Courses
               </Link>
@@ -189,7 +208,7 @@ const UserDashboard = () => {
                     <div>
                       <img
                         src={course.imageurl}
-                        alt="course-img"
+                        alt={course.title}
                         className="object-fill w-full h-20"
                       />
                     </div>
@@ -205,8 +224,8 @@ const UserDashboard = () => {
         </>
       ) : (
         <div className="p-6 text-center text-4xl text-gray-500 pt-10 italic">
-          You haven&apos;t enrolled in any courses yet. Start your learning journey
-          today!
+          You haven&apos;t enrolled in any courses yet. Start your learning
+          journey today!
         </div>
       )}
       {user.role !== "instructor" && (
@@ -223,7 +242,7 @@ const UserDashboard = () => {
                     <div>
                       <img
                         src={course.imageurl}
-                        alt="course-img"
+                        alt={course.title}
                         className="object-fill w-full h-20"
                       />
                     </div>
