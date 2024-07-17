@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
 import { useState, useEffect, useRef } from "react";
 import Logo from "../../assets/images/LH2.png";
@@ -17,6 +17,7 @@ function Header(props) {
   const [drpdwn, setDrpdwn] = useState(false);
   const [courseCategories, setCourseCategories] = useState([]);
   const dropdownRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -43,9 +44,9 @@ function Header(props) {
     props.setActivePage((prev) => (prev === "category" ? "" : "category"));
   };
 
-   const handleCategoryClick = () => {
-     setDrpdwn(false);
-   };
+  const handleCategoryClick = () => {
+    setDrpdwn(false);
+  };
 
   useEffect(() => {
     const clickOutside = (event) => {
@@ -60,6 +61,13 @@ function Header(props) {
   const toggleMenuHandler = (e) => {
     e.stopPropagation();
     props.setMenuVisible(!props.menuVisible);
+  };
+
+  // log out handler
+  const logOutHandler = () => {
+    localStorage.removeItem("token");
+    props.setAuthUser(null);
+    navigate("/");
   };
 
   return (
@@ -152,14 +160,22 @@ function Header(props) {
                 } text-gray-600 hover:text-gray-900`}
                 onClick={() => props.setActivePage("creator")}
               >
-                <Link to="/course-creator">Become a Creator</Link>
+                {!props.authUser || props.authUser.role !== "instructor" && (
+                  <Link to="/course-creator">Become a Creator</Link>
+                )}
               </li>
               <li
                 className="border rounded-md text-sm p-2 transition
               ease-in-out delay-150 bg-gray-800 text-white hover:-translate-y-1
               hover:scale-110 duration-300"
               >
-                <Link to="/login">Log In</Link>
+                {props.authUser ? (
+                  <Link to="/" onClick={logOutHandler}>
+                    Log out
+                  </Link>
+                ) : (
+                  <Link to="/login">Log in</Link>
+                )}
               </li>
               <li className="border rounded-md text-sm p-2 transition ease-in-out delay-150 bg-gray-800 text-white hover:-translate-y-1 hover:scale-110 duration-300">
                 <Link to="/signup">Sign Up</Link>

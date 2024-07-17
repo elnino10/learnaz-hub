@@ -10,6 +10,18 @@ export const courses = [
     numberEnrolled: 30,
     price: "$50",
     category: "Video Animation",
+    lessons: [
+      {
+        title: "Lesson 1",
+        duration: "1 hour",
+        videoUrl: "https://www.youtube.com/watch?v=lH3ZkwbVp5E",
+      },
+      {
+        title: "Lesson 2",
+        duration: "1 hour",
+        videoUrl: "https://www.youtube.com/watch?v=iZMqQLWRQEU",
+      },
+    ],
   },
   {
     id: 2,
@@ -20,6 +32,13 @@ export const courses = [
     numberEnrolled: 30,
     price: "$50",
     category: "Video Animation",
+    lessons: [
+      {
+        title: "Lesson 1",
+        duration: "1 hour",
+        videoUrl: "https://www.youtube.com/watch?v=lH3ZkwbVp5E",
+      },
+    ],
   },
   {
     id: 3,

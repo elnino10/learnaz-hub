@@ -1,4 +1,7 @@
-import { Link } from "react-router-dom";
+/* eslint-disable react/prop-types */
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+
 import student from "../assets/images/student5ani.gif";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import Slider from "react-slick";
@@ -6,21 +9,27 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import {
   enrolledCourses,
-  allUsers,
+  // allUsers,
   suggestedCourses,
   createdCourses,
 } from "../data/courseData";
-import { useEffect, useState } from "react";
 
-const UserDashboard = () => {
+import axios from "axios";
+
+const UserDashboard = (props) => {
   const [enrolledCourse, setEnrolledCourse] = useState([]);
-  const [user, setUser] = useState({});
   const [suggestedCourse, setSuggestedCourse] = useState([]);
   const [createdCourse, setCreatedCourse] = useState([]);
 
-  // get user id from jwt token
-  const id = 2;
+  const location = useLocation();
 
+  // get user id from login
+  const id = location.state.id;
+
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  const apiUrl = id && `${baseUrl}/users/${id}`;
+
+  // fetch courses user enrolled for from database
   useEffect(() => {
     const fetchAllCourses = async () => {
       try {
@@ -33,6 +42,7 @@ const UserDashboard = () => {
     fetchAllCourses();
   }, []);
 
+  // fetch suggested courses from database
   useEffect(() => {
     const fetchSuggestedCourses = async () => {
       try {
@@ -45,12 +55,15 @@ const UserDashboard = () => {
     fetchSuggestedCourses();
   }, []);
 
+  // fetch user data from database
   useEffect(() => {
     const fetchUser = async () => {
       try {
         // fetch user from database
-        const foundUser = allUsers.find((user) => user.id === id);
-        setUser(foundUser);
+        const res = await axios.get(apiUrl);
+        console.log(res.data);
+        const foundUser = res.data.data;
+        props.setUserData(foundUser);
 
         // fetch courses created by user if they are an instructor
         if (foundUser.role === "instructor") {
@@ -97,13 +110,13 @@ const UserDashboard = () => {
   return (
     <div className="m-0 p-0 pt-16 min-h-screen scroll">
       <div
-        key={user.id}
+        key={props.userData && props.userData.id}
         className="flex items-center justify-between p-16 pl-4"
       >
         <div className="text-4xl text-gray-700 font-bold pl-12">
-          Welcome back, {user.firstName}
+          Welcome back, {props.userData && props.userData.firstName}
         </div>
-        {user.role === "instructor" && (
+        {props.userData && props.userData.role === "instructor" && (
           <Link
             to="/create-course"
             className="text-blue-950 p-3 rounded-md shadow-md text-lg border hover:shadow-sm hover:text-blue-900"
@@ -121,7 +134,7 @@ const UserDashboard = () => {
             alt="Animated student studying online"
           />
         </div>
-        {user.role === "instructor" ? (
+        {props.userData && props.userData.role === "instructor" ? (
           <div className="w-50 my-10 text-center">
             <h2 className="text-4xl font-bold">
               Impact the World Through Teaching
@@ -140,7 +153,7 @@ const UserDashboard = () => {
           </div>
         )}
       </div>
-      {user.role === "instructor" ? (
+      {props.userData && props.userData.role === "instructor" ? (
         createdCourse.length > 0 ? (
           <>
             <div className="flex items-center justify-between px-16 mt-5 mb-3 md:px-32">
@@ -233,7 +246,7 @@ const UserDashboard = () => {
           journey today!
         </div>
       )}
-      {user.role !== "instructor" && (
+      {props.userData && props.userData.role !== "instructor" && (
         <div className="mt-10 mx-20">
           <div className="border mb-5"></div>
           <div className="mb-3 text-2xl text-gray-700 font-bold">
