@@ -133,29 +133,31 @@ function Header(props) {
                   </div>
                 </div>
               </li>
-              <li
-                className="text-gray-900 hover:text-gray-900"
-                onClick={() => props.setActivePage("dashboard")}
-              >
-                <Link
-                  to="/home"
-                  className={`${
-                    props.activePage === "dashboard" ? "text-gray-900" : ""
-                  }`}
+              {props.authUser && (
+                <li
+                  className="text-gray-900 hover:text-gray-900"
+                  onClick={() => props.setActivePage("dashboard")}
                 >
-                  Dashboard
-                </Link>
-              </li>
-              <li
-                className={`${
-                  props.activePage === "creator"
-                } text-gray-600 hover:text-gray-900`}
-                onClick={() => props.setActivePage("creator")}
-              >
-                {!props.authUser || props.authUser.role !== "instructor" && (
+                  <Link
+                    to="/home"
+                    className={`${
+                      props.activePage === "dashboard" ? "text-gray-900" : ""
+                    }`}
+                  >
+                    Dashboard
+                  </Link>
+                </li>
+              )}
+              {(!props.authUser || props.authUser.role !== "instructor") && (
+                <li
+                  className={`${
+                    props.activePage === "creator"
+                  } text-gray-600 hover:text-gray-900`}
+                  onClick={() => props.setActivePage("creator")}
+                >
                   <Link to="/course-creator">Become a Creator</Link>
-                )}
-              </li>
+                </li>
+              )}
               <li
                 className="border rounded-md text-sm p-2 transition
               ease-in-out delay-150 bg-gray-800 text-white hover:-translate-y-1

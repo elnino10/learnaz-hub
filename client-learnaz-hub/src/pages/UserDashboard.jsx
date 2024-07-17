@@ -24,7 +24,7 @@ const UserDashboard = (props) => {
   const location = useLocation();
 
   // get user id from login
-  const id = location.state.id;
+  const id = location.state && location.state.id;
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
   const apiUrl = id && `${baseUrl}/users/${id}`;
@@ -61,7 +61,6 @@ const UserDashboard = (props) => {
       try {
         // fetch user from database
         const res = await axios.get(apiUrl);
-        console.log(res.data);
         const foundUser = res.data.data;
         props.setUserData(foundUser);
 

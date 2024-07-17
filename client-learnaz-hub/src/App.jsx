@@ -27,6 +27,7 @@ import {
   SignupForm,
   CreateCourse,
   AddLessons,
+  SignupInstructor,
 } from "./components";
 
 const App = () => {
@@ -40,6 +41,8 @@ const App = () => {
     setMenuVisible(false);
     setShowImageMenu(false);
   };
+
+  console.log(authUser);
 
   return (
     <div onClick={clickAwayHandler}>
@@ -98,8 +101,9 @@ const MainLayout = (props) => (
       authUser={props.authUser}
     />
     <Routes>
-      <Route path="/" element={<LandingPage />} />
+      <Route path="/" element={<LandingPage authUser={props.authUser} />} />
       <Route path="/signup" element={<SignupForm />} />
+      <Route path="/instructor-signup" element={<SignupInstructor />} />
       <Route
         path="/login"
         element={<LoginForm setAuthUser={props.setAuthUser} />}

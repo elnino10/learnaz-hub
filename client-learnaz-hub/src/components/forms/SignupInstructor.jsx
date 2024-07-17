@@ -17,7 +17,7 @@ import axios from "axios";
 
 const defaultTheme = createTheme();
 
-function SignupForm() {
+function SignupInstructor() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -38,6 +38,7 @@ function SignupForm() {
         lastName: data.get("lastName"),
         email: data.get("email"),
         password: data.get("password"),
+        role: "instructor",
       };
 
       const res = await axios.post(apiUrl, userData);
@@ -167,7 +168,10 @@ function SignupForm() {
               <Grid container justifyContent="center">
                 <Grid item>
                   <Link to="/login" variant="body2">
-                    Already have an account? <span className="text-blue-500 hover:underline">Sign in</span>
+                    Already have an account?{" "}
+                    <span className="text-blue-500 hover:underline">
+                      Sign in
+                    </span>
                   </Link>
                 </Grid>
               </Grid>
@@ -179,4 +183,4 @@ function SignupForm() {
   );
 }
 
-export default SignupForm;
+export default SignupInstructor;

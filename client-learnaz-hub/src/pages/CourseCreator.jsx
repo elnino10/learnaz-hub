@@ -50,13 +50,13 @@ const CourseCreator = (props) => {
 
   const applyInstructorHandler = async () => {
     try {
-      if (props.authUser.role !== "instructor") {
+      if (props.authUser && props.authUser.role !== "instructor") {
         const res = await axios.patch(apiUrl, { role: "instructor" });
         console.log(res.data);
         alert(res.data.message);
         navigate("/home", { state: {id: props.authUser.id} });
-      } else {
-        alert("You are already an instructor");
+      } else if (!props.authUser) {
+        navigate("/instructor-signup");
       }
     } catch (error) {
       console.log(error);
