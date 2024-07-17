@@ -2,22 +2,44 @@ import image from "../assets/images/teacher.png";
 
 export const courses = [
   {
+    id: 1,
     title: "Introduction to Video Animation",
     image: "http://example.com/video-animation.jpg",
     author: "John Doe",
     numberEnrolled: 30,
     price: "$50",
     category: "Video Animation",
+    lessons: [
+      {
+        title: "Lesson 1",
+        duration: "1 hour",
+        videoUrl: "https://www.youtube.com/watch?v=lH3ZkwbVp5E",
+      },
+      {
+        title: "Lesson 2",
+        duration: "1 hour",
+        videoUrl: "https://www.youtube.com/watch?v=iZMqQLWRQEU",
+      },
+    ],
   },
   {
+    id: 2,
     title: "Introduction to Video Animation",
     image: "http://example.com/video-animation.jpg",
     author: "John Doe",
     numberEnrolled: 30,
     price: "$50",
     category: "Video Animation",
+    lessons: [
+      {
+        title: "Lesson 1",
+        duration: "1 hour",
+        videoUrl: "https://www.youtube.com/watch?v=lH3ZkwbVp5E",
+      },
+    ],
   },
   {
+    id: 3,
     title: "Introduction to Video Editing",
     image: "http://example.com/video-editing.jpg",
     author: "Jane Smith",
@@ -26,6 +48,7 @@ export const courses = [
     category: "Video Editing",
   },
   {
+    id: 4,
     title: "Introduction to Stop Motion",
     image: "http://example.com/stop-motion.jpg",
     author: "Alice Brown",
@@ -34,15 +57,13 @@ export const courses = [
     category: "Stop Motion",
   },
   {
+    id: 5,
     title: "Introduction to Photography",
     image: "http://example.com/photography.jpg",
     author: "John Doe",
     numberEnrolled: 30,
     price: "$50",
     category: "Photography",
-  },
-  {
-    category: "Videography",
   },
 ];
 

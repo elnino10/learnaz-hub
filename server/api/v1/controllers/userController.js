@@ -39,26 +39,35 @@ export const getUsersByRole = async (req, res) => {
     const { role } = req.params;
 
     // Get all distinct roles from the database
-    const roles = await User.distinct('role');
+    const roles = await User.distinct("role");
 
     if (!role) {
-      return res.status(400).json({ status: 'fail', message: 'Role parameter is required' });
+      return res
+        .status(400)
+        .json({ status: "fail", message: "Role parameter is required" });
     }
 
     // Check if the role exists in the database
     if (!roles.includes(role)) {
-      return res.status(400).json({ status: 'fail', message: 'Invalid role parameter', availableRoles: roles });
+      return res
+        .status(400)
+        .json({
+          status: "fail",
+          message: "Invalid role parameter",
+          availableRoles: roles,
+        });
     }
 
     const users = await User.find({ role: role });
 
-    res.status(200).json({ status: 'success', numUsers: users.length, data: users });
+    res
+      .status(200)
+      .json({ status: "success", numUsers: users.length, data: users });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ status: 'error', message: 'Internal Server Error' });
+    res.status(500).json({ status: "error", message: "Internal Server Error" });
   }
 };
-
 
 // Update user
 export const updateUser = async (req, res) => {

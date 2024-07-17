@@ -152,7 +152,9 @@ function Header(props) {
                 } text-gray-600 hover:text-gray-900`}
                 onClick={() => props.setActivePage("creator")}
               >
-                <Link to="/course-creator">Become a Creator</Link>
+                {!props.authUser || props.authUser.role !== "instructor" && (
+                  <Link to="/course-creator">Become a Creator</Link>
+                )}
               </li>
               <li
                 className="border rounded-md text-sm p-2 transition

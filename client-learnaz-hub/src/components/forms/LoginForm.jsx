@@ -47,8 +47,8 @@ function LoginForm(props) {
       localStorage.setItem("token", token);
 
       const decoded = KJUR.jws.JWS.parse(token);
-      props.setAuthUser(decoded.payloadObj);
-      navigate("/home");
+      decoded && props.setAuthUser(decoded.payloadObj);
+      navigate("/home", { state : {id: decoded.payloadObj.id} });
     } catch (error) {
       setErrMsg(error.response.data.message);
     }

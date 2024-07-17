@@ -34,6 +34,7 @@ const App = () => {
   const [showImageMenu, setShowImageMenu] = useState(false);
   const [activePage, setActivePage] = useState("");
   const [authUser, setAuthUser] = useState(null);
+  const [userData, setUserData] = useState({});
 
   const clickAwayHandler = () => {
     setMenuVisible(false);
@@ -58,6 +59,8 @@ const App = () => {
               setMenuVisible={setMenuVisible}
               authUser={authUser}
               setAuthUser={setAuthUser}
+              setUserData={setUserData}
+              userData={userData}
             />
           }
         />
@@ -66,6 +69,7 @@ const App = () => {
   );
 };
 
+// admin page layout
 const AdminLayout = () => (
   <div className="flex h-screen bg-gray-100">
     <Sidebar />
@@ -80,6 +84,7 @@ const AdminLayout = () => (
   </div>
 );
 
+// users page layout
 const MainLayout = (props) => (
   <>
     <Header
@@ -107,11 +112,23 @@ const MainLayout = (props) => (
       />
       <Route
         path="/home"
-        element={<UserDashboard authUser={props.authUser} />}
+        element={
+          <UserDashboard
+            authUser={props.authUser}
+            userData={props.userData}
+            setUserData={props.setUserData}
+          />
+        }
       />
       {/* <Route path="/course/:courseTitle" element={<CourseContentPage />} /> */}
-      <Route path="/course-creator" element={<CourseCreator />} />
-      <Route path="/course/course-content" element={<CourseContentPage />} />
+      <Route
+        path="/course-creator"
+        element={<CourseCreator authUser={props.authUser} />}
+      />
+      <Route
+        path="/course/course-content/:courseId"
+        element={<CourseContentPage />}
+      />
       <Route path="/category/:category" element={<CategoryCourse />} />
       {/* based on the instructor id course is created */}
       <Route path="/create-course" element={<CreateCourse />} />
