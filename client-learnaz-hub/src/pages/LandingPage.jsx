@@ -56,38 +56,40 @@ function LandingPage() {
       {/* Main Content */}
       <main className="w-full">
         {/* Text Content */}
-        <section className="pt-32 w-full flex flex-col md:flex-row">
+        <section className="pt-32 text-gray-700 bg-gray-100 w-[100%] mx-auto py-5 px-10 flex items-center justify-between flex-col md:flex-row">
           <img
             src={Learn}
             className="w-full md:w-1/2 p-4 mb-8 md:mb-0 md:mr-12"
-            alt="Learning Online"
+            alt="Person learning online"
           />
           <div className="w-full md:w-1/2 text-center md:text-left">
             <h1 className="text-3xl md:text-4xl font-bold text-gray-600 mb-4 mt-20 md:mt-0">
-              One Skill At a Time
+              Master New Skills Anytime, Anywhere
             </h1>
             <p className="text-xl md:text-2xl text-gray-700 mb-6">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Join thousands of learners around the world in advancing your
+              career and personal growth. Our diverse range of courses offers
+              something for everyone.
             </p>
             <Link
               to="/signup"
               className="bg-gray-900 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded"
+              aria-label="Sign up for free"
             >
-              Join for Free
+              Get Started for Free
             </Link>
           </div>
         </section>
         {/* Courses Section */}
         <section className="p-8 w-full bg-white">
-          <p className="pb-4 text-3xl md:text-4xl text-gray-900 font-bold">
-            A Broad Range of Courses You Can Take
-          </p>
+          <h2 className="pb-4 text-3xl md:text-4xl text-gray-900 font-bold">
+            Explore Our Wide Range of Courses
+          </h2>
           <p className="text-xl md:text-2xl text-gray-900">
-            Learn a new skill in as little as 6 months. Select from over 100
-            different courses, taught by industry experts.
+            Gain new skills and knowledge in as little as six months. Choose
+            from over 100 courses taught by industry experts.
           </p>
-          <div className="text-gray-700 text-lg md:text-xl flex flex-wrap gap-4 pt-6 ">
+          <div className="text-gray-700 text-lg md:text-xl flex flex-wrap gap-4 pt-6">
             {categories.map((category, index) => (
               <div key={index}>
                 <button
@@ -98,6 +100,7 @@ function LandingPage() {
                   className={`${
                     activeCategory === category && "underline"
                   } hover:underline hover:text-gray-900`}
+                  aria-label={`Select ${category} category`}
                 >
                   {category}
                 </button>
@@ -107,9 +110,9 @@ function LandingPage() {
 
           {selectedCategory && (
             <div className="pt-6">
-              <h2 className="text-2xl md:text-3xl text-gray-900 font-bold mb-4">
+              <h3 className="text-2xl md:text-3xl text-gray-900 font-bold mb-4">
                 {selectedCategory} Courses
-              </h2>
+              </h3>
               <CourseCard
                 selectedCategory={selectedCategory}
                 courses={allCourses}
@@ -117,11 +120,11 @@ function LandingPage() {
             </div>
           )}
         </section>
-        {/* review */}
+        {/* Reviews Section */}
         <section className="p-8 w-full bg-white">
-          <p className="mb-6 text-gray-900 text-3xl md:text-4xl font-bold">
-            What Our Learners are saying
-          </p>
+          <h2 className="mb-6 text-gray-900 text-3xl md:text-4xl font-bold">
+            Hear From Our Learners
+          </h2>
           <div className="max-w-4xl mx-auto border">
             <Carousel
               className="p-6 m-6"
@@ -137,6 +140,7 @@ function LandingPage() {
                     onClick={onClickHandler}
                     title={label}
                     className="absolute top-1/2 left-0 transform -translate-y-1/2 p-2 bg-gray-800 text-white rounded-full focus:outline-none"
+                    aria-label="Previous review"
                   >
                     <FontAwesomeIcon icon={faChevronLeft} size="2x" />
                   </button>
@@ -149,6 +153,7 @@ function LandingPage() {
                     onClick={onClickHandler}
                     title={label}
                     className="absolute top-1/2 right-0 transform -translate-y-1/2 p-2 bg-gray-800 text-white rounded-full focus:outline-none"
+                    aria-label="Next review"
                   >
                     <FontAwesomeIcon icon={faChevronRight} size="2x" />
                   </button>
@@ -172,19 +177,21 @@ function LandingPage() {
           <div className="container flex flex-col md:flex-row items-center">
             <img
               src={Teacher}
-              alt="A woman"
+              alt="Woman teaching online"
               className="w-full md:w-1/2 mb-8 md:mb-0 md:mr-12"
             />
             <div className="w-full md:w-1/2 text-center md:text-left">
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-600 mb-4 mt-12 md:mt-0">
-                Become A Course Creator
-              </h1>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-600 mb-4 mt-12 md:mt-0">
+                Become a Course Creator
+              </h2>
               <p className="text-xl md:text-2xl text-gray-700 mb-6">
-                Course creators from around the world can share their expertise.
+                Share your expertise with learners from around the world. Join
+                our community of skilled instructors today.
               </p>
               <Link
-                to="/signup"
+                to="/course-creator"
                 className="bg-gray-900 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded"
+                aria-label="Become a course creator"
               >
                 Start Creating
               </Link>
