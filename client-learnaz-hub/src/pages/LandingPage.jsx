@@ -114,10 +114,10 @@ function LandingPage(props) {
               <h3 className="text-2xl md:text-3xl text-gray-900 font-bold mb-4">
                 {selectedCategory} Courses
               </h3>
-                <CourseCard
-                  selectedCategory={selectedCategory}
-                  courses={allCourses}
-                />
+              <CourseCard
+                selectedCategory={selectedCategory}
+                courses={allCourses}
+              />
             </div>
           )}
         </section>
@@ -183,21 +183,31 @@ function LandingPage(props) {
             />
             <div className="w-full md:w-1/2 text-center md:text-left">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-600 md:mt-0">
-                Become a Course Creator
+                {!props.authUser ||
+              (props.authUser && props.authUser.role !== "instructor") ? "Become a Course Creator" : "Create Your Course"}
               </h2>
               <p className="text-lg md:text-lg text-gray-700 mb-8">
                 Share your expertise with learners from around the world. Join
                 our community of skilled instructors today.
               </p>
-              {props.authUser && props.authUser.role !== "instructor" &&
-                  <Link
-                    to="/course-creator"
-                    className="bg-gray-900 hover:bg-gray-800 hover:text-gray-300 text-white font-bold py-2 px-4 rounded"
-                    aria-label="Become a course creator"
-                  >
-                    Start Creating
-                  </Link>
-                }
+              {!props.authUser ||
+              (props.authUser && props.authUser.role !== "instructor") ? (
+                <Link
+                  to="/instructor-signup"
+                  className="bg-gray-900 hover:bg-gray-800 hover:text-gray-300 text-white font-bold py-2 px-4 rounded"
+                  aria-label="Become a course creator"
+                >
+                  Join Now
+                </Link>
+              ) : (
+                <Link
+                  to="/create-course"
+                  className="bg-gray-900 hover:bg-gray-800 hover:text-gray-300 text-white font-bold py-2 px-4 rounded"
+                  aria-label="Become a course creator"
+                >
+                  Start Creating
+                </Link>
+              )}
             </div>
           </div>
         </section>
