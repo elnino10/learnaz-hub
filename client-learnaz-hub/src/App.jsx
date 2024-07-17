@@ -1,5 +1,7 @@
 /* eslint-disable react/prop-types */
+import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
+
 import {
   Sidebar,
   Navbar,
@@ -24,14 +26,16 @@ import {
   PasswordRecoveryForm,
   SignupForm,
   CreateCourse,
-  AddLessons
+  AddLessons,
+  SignupInstructor,
 } from "./components";
-import { useState } from "react";
 
 const App = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [showImageMenu, setShowImageMenu] = useState(false);
   const [activePage, setActivePage] = useState("");
+  const [authUser, setAuthUser] = useState(null);
+  const [userData, setUserData] = useState({});
 
   const clickAwayHandler = () => {
     setMenuVisible(false);
@@ -54,6 +58,10 @@ const App = () => {
               setShowImageMenu={setShowImageMenu}
               menuVisible={menuVisible}
               setMenuVisible={setMenuVisible}
+              authUser={authUser}
+              setAuthUser={setAuthUser}
+              setUserData={setUserData}
+              userData={userData}
             />
           }
         />
@@ -62,6 +70,7 @@ const App = () => {
   );
 };
 
+// admin page layout
 const AdminLayout = () => (
   <div className="flex h-screen bg-gray-100">
     <Sidebar />
@@ -76,6 +85,7 @@ const AdminLayout = () => (
   </div>
 );
 
+// users page layout
 const MainLayout = (props) => (
   <>
     <Header
@@ -85,21 +95,42 @@ const MainLayout = (props) => (
       setShowImageMenu={props.setShowImageMenu}
       activePage={props.activePage}
       setActivePage={props.setActivePage}
+      setAuthUser={props.setAuthUser}
+      authUser={props.authUser}
     />
     <Routes>
-      <Route path="/" element={<LandingPage />} />
+      <Route path="/" element={<LandingPage authUser={props.authUser} />} />
       <Route path="/signup" element={<SignupForm />} />
-      <Route path="/login" element={<LoginForm />} />
+      <Route path="/instructor-signup" element={<SignupInstructor />} />
+      <Route
+        path="/login"
+        element={<LoginForm setAuthUser={props.setAuthUser} />}
+      />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/password-recovery" element={<PasswordRecoveryForm />} />
       <Route
         path="/home/my-courses/learning"
         element={<EnrolledCoursesPage />}
       />
-      <Route path="/home" element={<UserDashboard />} />
+      <Route
+        path="/home"
+        element={
+          <UserDashboard
+            authUser={props.authUser}
+            userData={props.userData}
+            setUserData={props.setUserData}
+          />
+        }
+      />
       {/* <Route path="/course/:courseTitle" element={<CourseContentPage />} /> */}
-      <Route path="/course-creator" element={<CourseCreator />} />
-      <Route path="/course/course-content" element={<CourseContentPage />} />
+      <Route
+        path="/course-creator"
+        element={<CourseCreator authUser={props.authUser} />}
+      />
+      <Route
+        path="/course/course-content/:courseId"
+        element={<CourseContentPage />}
+      />
       <Route path="/category/:category" element={<CategoryCourse />} />
       {/* based on the instructor id course is created */}
       <Route path="/create-course" element={<CreateCourse />} />

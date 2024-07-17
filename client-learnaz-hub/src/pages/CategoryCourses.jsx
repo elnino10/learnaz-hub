@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { courses } from "../data/courseData";
 
 function CategoryCourses() {
@@ -36,24 +36,26 @@ function CategoryCourses() {
         {filteredCourses.length > 0 ? (
           filteredCourses.map((course, index) => (
             <div key={index} className="p-4 border rounded-lg">
-              <img
-                src={course.image}
-                alt={course.title}
-                className="w-full h-48 object-cover mb-4"
-              />
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                {course.title}
-              </h3>
-              <p className="text-gray-700 mb-2">Author: {course.author}</p>
-              <p className="text-gray-700 mb-2">
-                Number Enrolled: {course.numberEnrolled}
-              </p>
-              {/* <p className="text-gray-700 font-bold">{course.price}</p> */}
-              <div className="flex justify-end w-80%">
-                <button className="bg-gray-900 rounded text-white">
-                  Enroll
-                </button>
-              </div>
+              <Link to={`/course/course-content/${course.id}`}>
+                <img
+                  src={course.image}
+                  alt={course.title}
+                  className="w-full h-48 object-cover mb-4"
+                />
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                  {course.title}
+                </h3>
+                <p className="text-gray-700 mb-2">Author: {course.author}</p>
+                <p className="text-gray-700 mb-2">
+                  Number Enrolled: {course.numberEnrolled}
+                </p>
+                {/* <p className="text-gray-700 font-bold">{course.price}</p> */}
+                <div className="flex justify-end w-80%">
+                  <button className="bg-gray-900 rounded text-white px-3 py-2 hover:text-gray-400">
+                    Enroll
+                  </button>
+                </div>
+              </Link>
             </div>
           ))
         ) : (

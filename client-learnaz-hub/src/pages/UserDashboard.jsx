@@ -1,4 +1,7 @@
-import { Link } from "react-router-dom";
+/* eslint-disable react/prop-types */
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+
 import student from "../assets/images/student5ani.gif";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import Slider from "react-slick";
@@ -6,21 +9,27 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import {
   enrolledCourses,
-  allUsers,
+  // allUsers,
   suggestedCourses,
   createdCourses,
 } from "../data/courseData";
-import { useEffect, useState } from "react";
 
-const UserDashboard = () => {
+import axios from "axios";
+
+const UserDashboard = (props) => {
   const [enrolledCourse, setEnrolledCourse] = useState([]);
-  const [user, setUser] = useState({});
   const [suggestedCourse, setSuggestedCourse] = useState([]);
   const [createdCourse, setCreatedCourse] = useState([]);
 
-  // get user id from jwt token
-  const id = 2;
+  const location = useLocation();
 
+  // get user id from login
+  const id = location.state && location.state.id;
+
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  const apiUrl = id && `${baseUrl}/users/${id}`;
+
+  // fetch courses user enrolled for from database
   useEffect(() => {
     const fetchAllCourses = async () => {
       try {
@@ -33,6 +42,7 @@ const UserDashboard = () => {
     fetchAllCourses();
   }, []);
 
+  // fetch suggested courses from database
   useEffect(() => {
     const fetchSuggestedCourses = async () => {
       try {
@@ -45,12 +55,14 @@ const UserDashboard = () => {
     fetchSuggestedCourses();
   }, []);
 
+  // fetch user data from database
   useEffect(() => {
     const fetchUser = async () => {
       try {
         // fetch user from database
-        const foundUser = allUsers.find((user) => user.id === id);
-        setUser(foundUser);
+        const res = await axios.get(apiUrl);
+        const foundUser = res.data.data;
+        props.setUserData(foundUser);
 
         // fetch courses created by user if they are an instructor
         if (foundUser.role === "instructor") {
@@ -97,33 +109,50 @@ const UserDashboard = () => {
   return (
     <div className="m-0 p-0 pt-16 min-h-screen scroll">
       <div
-        key={user.id}
+        key={props.userData && props.userData.id}
         className="flex items-center justify-between p-16 pl-4"
       >
         <div className="text-4xl text-gray-700 font-bold pl-12">
-          Welcome back, {user.firstName}
+          Welcome back, {props.userData && props.userData.firstName}
         </div>
-        {user.role === "instructor" && (
+        {props.userData && props.userData.role === "instructor" && (
           <Link
             to="/create-course"
             className="text-blue-950 p-3 rounded-md shadow-md text-lg border hover:shadow-sm hover:text-blue-900"
+            aria-label="Create a course"
           >
             Create a Course
           </Link>
         )}
       </div>
-      <div className="text-gray-700 bg-gray-100 w-[100%] mx-auto py-5 px-10 flex items-center justify-between flex-col md:flex-row">
+      <div className="text-gray-700 bg-gray-100 w-[100%] mx-auto py-5 px-10 flex items-center justify-center flex-col md:flex-row">
         <div>
-          <img src={student} className="h-[20rem] object-cover" />
+          <img
+            src={student}
+            className="h-[20rem] object-cover"
+            alt="Animated student studying online"
+          />
         </div>
-        <div className="w-50 my-10 text-center">
-          <h2 className="text-4xl font-bold">Learning that gets you</h2>
-          <p className="text-xl">
-            Skills for your present and your future. Keep Learning.
-          </p>
-        </div>
+        {props.userData && props.userData.role === "instructor" ? (
+          <div className="w-50 my-10 text-center">
+            <h2 className="text-4xl font-bold">
+              Impact the World Through Teaching
+            </h2>
+            <p className="text-xl pl-6">
+              By becoming an instructor, you have the power to shape the future
+              and make a real difference in people&rsquo;s lives.
+            </p>
+          </div>
+        ) : (
+          <div className="w-50 my-10 text-center">
+            <h2 className="text-4xl font-bold">Learning that Gets You</h2>
+            <p className="text-xl">
+              Acquire skills for your present and future. Keep Learning.
+            </p>
+          </div>
+        )}
       </div>
-      {user.role === "instructor" ? (
+      {props.userData && props.userData.role === "instructor" ? (
         createdCourse.length > 0 ? (
           <>
             <div className="flex items-center justify-between px-16 mt-5 mb-3 md:px-32">
@@ -134,6 +163,7 @@ const UserDashboard = () => {
                 <Link
                   to="/home/created-courses"
                   className="text-blue-950 hover:underline hover:text-blue-900"
+                  aria-label="View all created courses"
                 >
                   View All Created Courses
                 </Link>
@@ -144,17 +174,20 @@ const UserDashboard = () => {
                 {createdCourse.map((course) => (
                   <div key={course.id} className="max-w-48">
                     <div className="flex flex-col bg-gray-100 border h-40 w-100 overflow-hidden">
-                      <div>
-                        <img
-                          src={course.imageurl}
-                          alt="course-img"
-                          className="object-fill w-full h-20"
-                        />
-                      </div>
-                      <div className="text-sm px-2 pt-3">
-                        <h3 className="font-semibold">{course.title}</h3>
-                        <p className="text-xs">{course.duration}</p>
-                      </div>
+                      <Link to={`/course/course-content/${course.id}`}>
+                        <div>
+                          <img
+                            src={course.imageurl}
+                            alt={course.title}
+                            className="object-fill w-full h-20"
+                          />
+                        </div>
+                        <div className="text-sm px-2 pt-3">
+                          <h3 className="font-semibold">{course.title}</h3>
+                          <p className="text-xs">{course.duration}</p>
+                        </div>
+                      </Link>
+                      
                     </div>
                   </div>
                 ))}
@@ -176,6 +209,7 @@ const UserDashboard = () => {
               <Link
                 to="/home/my-courses/learning"
                 className="text-blue-950 hover:underline hover:text-blue-900"
+                aria-label="View all enrolled courses"
               >
                 View All Courses
               </Link>
@@ -186,17 +220,19 @@ const UserDashboard = () => {
               {enrolledCourse.map((course) => (
                 <div key={course.id} className="max-w-48">
                   <div className="flex flex-col bg-gray-100 border h-40 w-100 overflow-hidden">
-                    <div>
-                      <img
-                        src={course.imageurl}
-                        alt="course-img"
-                        className="object-fill w-full h-20"
-                      />
-                    </div>
-                    <div className="text-sm px-2 pt-3">
-                      <h3 className="font-semibold">{course.title}</h3>
-                      <p className="text-xs">{course.duration}</p>
-                    </div>
+                    <Link to={`/course/course-content/${course.id}`}>
+                      <div>
+                        <img
+                          src={course.imageurl}
+                          alt={course.title}
+                          className="object-fill w-full h-20"
+                        />
+                      </div>
+                      <div className="text-sm px-2 pt-3">
+                        <h3 className="font-semibold">{course.title}</h3>
+                        <p className="text-xs">{course.duration}</p>
+                      </div>
+                    </Link>
                   </div>
                 </div>
               ))}
@@ -205,11 +241,11 @@ const UserDashboard = () => {
         </>
       ) : (
         <div className="p-6 text-center text-4xl text-gray-500 pt-10 italic">
-          You haven&apos;t enrolled in any courses yet. Start your learning journey
-          today!
+          You haven&apos;t enrolled in any courses yet. Start your learning
+          journey today!
         </div>
       )}
-      {user.role !== "instructor" && (
+      {props.userData && props.userData.role !== "instructor" && (
         <div className="mt-10 mx-20">
           <div className="border mb-5"></div>
           <div className="mb-3 text-2xl text-gray-700 font-bold">
@@ -220,17 +256,19 @@ const UserDashboard = () => {
               {suggestedCourse.map((course) => (
                 <div key={course.id} className="max-w-52 max-h-52">
                   <div className="flex flex-col bg-white border h-40 w-100 overflow-hidden">
-                    <div>
-                      <img
-                        src={course.imageurl}
-                        alt="course-img"
-                        className="object-fill w-full h-20"
-                      />
-                    </div>
-                    <div className="text-sm px-2 pt-3">
-                      <h3 className="font-semibold">{course.title}</h3>
-                      <p className="text-xs">{course.duration}</p>
-                    </div>
+                    <Link to={`/course/course-content/${course.id}`}>
+                      <div>
+                        <img
+                          src={course.imageurl}
+                          alt={course.title}
+                          className="object-fill w-full h-20"
+                        />
+                      </div>
+                      <div className="text-sm px-2 pt-3">
+                        <h3 className="font-semibold">{course.title}</h3>
+                        <p className="text-xs">{course.duration}</p>
+                      </div>
+                    </Link>
                   </div>
                 </div>
               ))}

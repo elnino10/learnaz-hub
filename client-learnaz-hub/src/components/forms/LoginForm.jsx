@@ -1,8 +1,12 @@
+/* eslint-disable react/prop-types */
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -10,16 +14,45 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
+import axios from "axios";
+import { KJUR } from "jsrsasign";
+
 const defaultTheme = createTheme();
 
-function LoginForm() {
-  const handleSubmit = (event) => {
+function LoginForm(props) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errMsg, setErrMsg] = useState("");
+
+  const navigate = useNavigate();
+
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  const apiUrl = `${baseUrl}/auth/login-user`;
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    try {
+      const data = new FormData(event.currentTarget);
+      const userData = {
+        email: data.get("email"),
+        password: data.get("password"),
+      };
+
+      const res = await axios.post(apiUrl, userData);
+      if (res.data.status !== "success") {
+        setErrMsg(res.data.message);
+      }
+      const token = res.data.token;
+      localStorage.setItem("token", token);
+
+      const decoded = KJUR.jws.JWS.parse(token);
+      decoded && props.setAuthUser(decoded.payloadObj);
+      navigate("/home", { state: { id: decoded.payloadObj.id } });
+    } catch (error) {
+      setErrMsg(error.response.data.message);
+    }
+    setEmail("");
+    setPassword("");
   };
 
   return (
@@ -41,6 +74,9 @@ function LoginForm() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
+            <div className={`${!errMsg && "invisible"} text-red-400 h-5`}>
+              <p>{errMsg}</p>
+            </div>
             <Box
               component="form"
               onSubmit={handleSubmit}
@@ -56,6 +92,11 @@ function LoginForm() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setErrMsg("");
+                }}
               />
               <TextField
                 margin="normal"
@@ -66,24 +107,35 @@ function LoginForm() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setErrMsg("");
+                }}
               />
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                disabled={!email || !password}
               >
                 Sign In
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="/forgot-password" variant="body2">
-                    Forgot password?
+                  <Link to="/forgot-password" variant="body2">
+                    <span className="text-blue-500 hover:underline">
+                      Forgot password?
+                    </span>
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="/signup" variant="body2">
-                    {"Don't have an account? Sign Up"}
+                  <Link to="/signup" variant="body2">
+                    {"Don't have an account?"}{" "}
+                    <span className="text-blue-500 hover:underline">
+                      Sign up
+                    </span>
                   </Link>
                 </Grid>
               </Grid>

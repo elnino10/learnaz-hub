@@ -1,8 +1,11 @@
-import { Link } from "react-router-dom";
+/* eslint-disable react/prop-types */
 import student from "../assets/images/teacher2.png";
 import iconTeam from "../assets/images/iconTeam.png";
 import iconTeach from "../assets/images/iconTeach2.png";
 import iconIcome from "../assets/images/iconIncome.png";
+
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const sharedClasses = {
   primaryBg: "bg-primary",
@@ -36,7 +39,30 @@ const sharedClasses = {
   mb2: "mb-2",
 };
 
-const CourseCreator = () => {
+const CourseCreator = (props) => {
+  const navigate = useNavigate();
+
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  let apiUrl = "";
+  if (props.authUser) {
+    apiUrl = `${baseUrl}/users/${props.authUser.id}`;
+  }
+
+  const applyInstructorHandler = async () => {
+    try {
+      if (props.authUser && props.authUser.role !== "instructor") {
+        const res = await axios.patch(apiUrl, { role: "instructor" });
+        console.log(res.data);
+        alert(res.data.message);
+        navigate("/home", { state: {id: props.authUser.id} });
+      } else if (!props.authUser) {
+        navigate("/instructor-signup");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <div
       className={`mt-20 ${sharedClasses.primaryBg} ${sharedClasses.primaryFg} min-h-screen`}
@@ -59,7 +85,7 @@ const CourseCreator = () => {
           Why Create a Course with Us?
         </h2>
         <div
-          className={`${sharedClasses.grid} ${sharedClasses.gridCols} ${sharedClasses.gridGap}`}
+          className={`${sharedClasses.grid} ${sharedClasses.gridCols} ${sharedClasses.gridGap} items-center`}
         >
           <div
             className={`${sharedClasses.cardBg} ${sharedClasses.cardPadding} ${sharedClasses.cardRounded}`}
@@ -104,7 +130,7 @@ const CourseCreator = () => {
               className={`${sharedClasses.mxAuto} ${sharedClasses.mb4}`}
             />
             <h3
-              className={`text-gray-700 ${sharedClasses.textLarge} ${sharedClasses.textBold} ${sharedClasses.mb2}`}
+              className={`text-gray-700 pt-10 ${sharedClasses.textLarge} ${sharedClasses.textBold} ${sharedClasses.mb2}`}
             >
               Earn Passive Income
             </h3>
@@ -126,12 +152,12 @@ const CourseCreator = () => {
         <p className={`${sharedClasses.textLarge} mb-4`}>
           Join our platform today and begin creating your course!
         </p>
-        <Link
-          to="/signup"
-          className={`px-6 py-3 rounded-lg bg-gray-700 text-white hover:bg-gray-900 ${sharedClasses.secondaryFg} ${sharedClasses.buttonPadding} ${sharedClasses.buttonRounded}`}
+        <button
+          onClick={applyInstructorHandler}
+          className={`px-6 py-3 mt-2 rounded-lg bg-gray-700 text-white hover:bg-gray-900 ${sharedClasses.secondaryFg} ${sharedClasses.buttonPadding} ${sharedClasses.buttonRounded}`}
         >
-          Sign Up Now
-        </Link>
+          Apply Now
+        </button>
       </section>
     </div>
   );
