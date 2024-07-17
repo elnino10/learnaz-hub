@@ -62,7 +62,7 @@ function LandingPage() {
             className="w-full md:w-1/2 p-4 mb-8 md:mb-0 md:mr-12"
             alt="Person learning online"
           />
-          <div className="w-full md:w-1/2 text-center md:text-left">
+          <div className="w-full md:w-1/2 text-center md:text-left ">
             <h1 className="text-3xl md:text-4xl font-bold text-gray-600 mb-4 mt-20 md:mt-0">
               Master New Skills Anytime, Anywhere
             </h1>
