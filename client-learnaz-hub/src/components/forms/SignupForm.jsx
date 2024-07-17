@@ -1,3 +1,6 @@
+import { useState } from "react";
+// import { useNavigate } from "react-router-dom";
+
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -11,31 +14,45 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useState } from "react";
-import axios from 'axios';
-import { useNavigate } from "react-router-dom";
-
-
+import axios from "axios";
 
 const defaultTheme = createTheme();
 
 function SignupForm() {
-  const navigate = useNavigate();
-  const [role, setRole] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errMsg, setErrMsg] = useState("");
+
+  // const navigate = useNavigate();
+
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  const apiUrl = `${baseUrl}/auth/signup-user`;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const formData = {
-      firstName: data.get("firstName"),
-      lastName: data.get("lastName"),
-      email: data.get("email"),
-      password: data.get("password"),
-    };
+    try {
+      const data = new FormData(event.currentTarget);
+      const userData = {
+        firstName: data.get("firstName"),
+        lastName: data.get("lastName"),
+        email: data.get("email"),
+        password: data.get("password"),
+      };
+
+      const res = await axios.post(apiUrl, userData);
+      if (res.data.status !== "success") {
+        setErrMsg(res.data.message);
+      }
+      console.log(res);
+    } catch (error) {
+      setErrMsg(error.response.data.message);
+    }
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setPassword("");
   };
 
   return (
@@ -57,6 +74,9 @@ function SignupForm() {
             <Typography component="h1" variant="h5">
               Sign up
             </Typography>
+            <div className={`${!errMsg && "invisible"} text-red-400 h-5`}>
+              <p>{errMsg}</p>
+            </div>
             <Box
               component="form"
               noValidate
@@ -74,7 +94,10 @@ function SignupForm() {
                     label="First Name"
                     autoFocus
                     value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
+                    onChange={(e) => {
+                      setFirstName(e.target.value);
+                      setErrMsg("");
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -86,7 +109,10 @@ function SignupForm() {
                     name="lastName"
                     autoComplete="lname"
                     value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
+                    onChange={(e) => {
+                      setLastName(e.target.value);
+                      setErrMsg("");
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -98,7 +124,10 @@ function SignupForm() {
                     name="email"
                     autoComplete="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      setErrMsg("");
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -111,7 +140,10 @@ function SignupForm() {
                     id="password"
                     autoComplete="new-password"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      setErrMsg("");
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
