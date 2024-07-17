@@ -130,7 +130,7 @@ function Header(props) {
                 onClick={() => props.setActivePage("dashboard")}
               >
                 <Link
-                  to="/home"
+                  to="/home/user/:userId"
                   className={`${
                     props.activePage === "dashboard" ? "text-gray-900" : ""
                   }`}

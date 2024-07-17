@@ -19,7 +19,7 @@ const UserDashboard = () => {
   const [createdCourse, setCreatedCourse] = useState([]);
 
   // get user id from jwt token
-  const id = 2;
+  const id = 3;
 
   useEffect(() => {
     const fetchAllCourses = async () => {

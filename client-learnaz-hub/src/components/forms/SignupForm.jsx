@@ -13,6 +13,8 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
 
+import axios from "axios";
+
 const defaultTheme = createTheme();
 
 function SignupForm() {
@@ -20,16 +22,37 @@ function SignupForm() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errMsg, setErrMsg] = useState("");
 
-  const handleSubmit = (event) => {
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  const apiUrl = `${baseUrl}/auth/signup-user`;
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      firstName: data.get("firstName"),
-      lastName: data.get("lastName"),
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    try {
+      const data = new FormData(event.currentTarget);
+      const userData = {
+        firstName: data.get("firstName"),
+        lastName: data.get("lastName"),
+        email: data.get("email"),
+        password: data.get("password"),
+      };
+
+      const res = await axios.post(apiUrl, userData);
+      if (res) {
+        setFirstName("");
+        setLastName("");
+        setEmail("");
+        setPassword("");
+      }
+      if (res.data.status !== "success") {
+        setErrMsg(res.data.message);
+      }
+      console.log(res.data);
+    } catch (error) {
+      console.log("Error signing up user: ", error);
+    }
+    
   };
 
   return (
@@ -57,6 +80,7 @@ function SignupForm() {
               onSubmit={handleSubmit}
               sx={{ mt: 3 }}
             >
+              <div><p>{errMsg && errMsg}</p></div>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                   <TextField
