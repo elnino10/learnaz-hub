@@ -1,3 +1,6 @@
+import { useState } from "react";
+// import { useNavigate } from "react-router-dom";
+
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -11,9 +14,8 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useState } from "react";
+import axios from 'axios';
 
-import axios from "axios";
 
 const defaultTheme = createTheme();
 
@@ -23,6 +25,8 @@ function SignupForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
+  
+  // const navigate = useNavigate();
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
   const apiUrl = `${baseUrl}/auth/signup-user`;
@@ -52,7 +56,6 @@ function SignupForm() {
     } catch (error) {
       console.log("Error signing up user: ", error);
     }
-    
   };
 
   return (

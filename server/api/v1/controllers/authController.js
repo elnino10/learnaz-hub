@@ -3,17 +3,16 @@ import User from "../models/userModel.js";
 import { generateToken } from "../utils/helperfunctions.js";
 import { sendEmail } from "../utils/emailFunction.js";
 
-
 // user signup handler
 export const registerUser = async (req, res) => {
   const { firstName, lastName, email, password, role } = req.body;
-  // const errors = validateUserData(name, email, password);
-
   try {
     const userExists = await User.findOne({ email });
 
     if (userExists) {
-      return res.status(400).json({ message: "User already exists" });
+      return res
+        .status(400)
+        .json({ status: "failed", message: "User already exists" });
     }
 
     const user = await User.create({
@@ -32,14 +31,14 @@ export const registerUser = async (req, res) => {
         token: generateToken(user._id),
       });
     } else {
-      res.status(400).json({ message: "Invalid user data" });
+      res.status(400).json({ status: "failed", message: "Invalid user data" });
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Server error" });
+    res
+      .status(500)
+      .json({ error: "Server error", errorMessage: error.message });
   }
 };
-
 
 // user authentication handler
 export const loginUser = async (req, res) => {
@@ -64,13 +63,13 @@ export const loginUser = async (req, res) => {
       token: generateToken(user._id, user.role),
     });
   } catch (error) {
-    console.error(error);
     if (!res.headersSent) {
-      res.status(500).json({ error: "Server error" });
+      res
+        .status(500)
+        .json({ error: "Server error", errorMessage: error.message });
     }
   }
 };
-
 
 // forgot password handler
 export const forgotPassword = async (req, res) => {
@@ -99,11 +98,11 @@ export const forgotPassword = async (req, res) => {
 
     res.status(200).json({ message: "Password reset email sent successfully" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Server error" });
+    res
+      .status(500)
+      .json({ error: "Server error", errorMessage: error.message });
   }
 };
-
 
 // reset password handler
 export const resetPassword = async (req, res) => {
@@ -128,9 +127,8 @@ export const resetPassword = async (req, res) => {
 
     res.status(200).json({ message: "Password reset successfully" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Server error" });
+    res
+      .status(500)
+      .json({ error: "Server error", errorMessage: error.message });
   }
 };
-
-

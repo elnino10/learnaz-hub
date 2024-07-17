@@ -11,10 +11,13 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
 function LoginForm() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -26,6 +29,19 @@ function LoginForm() {
       password: data.get("password"),
     });
   };
+  try {
+    const response = await axios.post("http://127.0.0.1:5000/api/v1/auth/login-user", data, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log(response.data);
+    // Redirect to dashboard on successful login
+      navigate("/home", { replace: true });
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   return (
     <section className="mt-28 mb-10">

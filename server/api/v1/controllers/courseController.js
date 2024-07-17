@@ -1,4 +1,5 @@
 import Course from "../models/courseModel.js";
+import Instructor from "../models/instructormodel.js";
 
 // create a new course
 export const createCourse = async (req, res) => {
@@ -48,6 +49,22 @@ export const getCourseByID = async (req, res) => {
       .json({ error: "Server error", errorMessage: error.message });
   }
 };
+
+// Get courses created by a particular instructor
+export const getCoursesByInstructor = async (req, res) => {
+  const { instructorId } = req.params.instructorId;
+
+  try {
+    const courses = await Instructor.find({ instructorId });
+    if (courses.length === 0) {
+      return res.status(404).json({ status: "failed", message: "No courses found for this instructor" });
+    }
+    res.status(200).json({ status: "success", numCourses: courses.length, data: courses });
+  } catch (error) {
+    res.status(500).json({ error: "Server error", errorMessage: error.message });
+  }
+};
+
 
 //Update course by ID
 export const updateCourse = async (req, res) => {
