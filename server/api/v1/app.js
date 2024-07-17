@@ -7,6 +7,7 @@ import userRouter from "./routes/userRoutes.js";
 import adminRouter from "./routes/adminRoutes.js";
 import lessonRouter from "./routes/lessonRoutes.js";
 import enrollmentRouter from "./routes/enrollmentRoute.js";
+import analyticsRouter from "./routes/analyticsRoutes.js";
 import { jsonParserMiddleware } from "./utils/authMiddleware.js";
 import dbClient from "./utils/db.js";
 
@@ -24,5 +25,6 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/courses", courseRouter);
 app.use("/api/v1/enroll", enrollmentRouter);
 app.use("/api/v1/lessons", lessonRouter);
+app.use("/api/v1/analytics", analyticsRouter);
 
 export default app;
