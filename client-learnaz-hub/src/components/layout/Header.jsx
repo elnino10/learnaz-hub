@@ -16,6 +16,8 @@ import { courses } from "../../data/courseData";
 function Header(props) {
   const [drpdwn, setDrpdwn] = useState(false);
   const [courseCategories, setCourseCategories] = useState([]);
+  const [filteredCourses, setFilteredCourses] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -62,6 +64,24 @@ function Header(props) {
     props.setMenuVisible(!props.menuVisible);
   };
 
+  const handleSearchChange = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    if (query) {
+      const filtered = courses.filter((course) =>
+        course.title.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredCourses(filtered);
+    } else {
+      setFilteredCourses([]);
+    }
+  };
+
+  const handleSearchResultClick = () => {
+    setSearchQuery("");
+    setFilteredCourses([]);
+  };
+
   return (
     <>
       <header className="h-20 bg-white shadow-md top-0 z-20 fixed w-full flex justify-between items-center px-10">
@@ -81,8 +101,27 @@ function Header(props) {
               type="text"
               className="md:w-80 bg-blue-100 border border-gray-300 rounded-full px-4 py-2 pl-10 focus:outline-none focus:border-blue-500"
               placeholder="Search courses"
+              value={searchQuery}
+              onChange={handleSearchChange}
             />
             <FiSearch className="w-5 h-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
+            {searchQuery && (
+              <ul className="absolute bg-white shadow-md rounded-md mt-2 w-full z-10">
+                {filteredCourses.length > 0 ? (
+                  filteredCourses.map((course) => (
+                    <li key={course.id} 
+                    className="p-2 hover:bg-gray-100"
+                    onClick={handleSearchResultClick}>
+                      <Link to={`/course/course-content/${course.id}`}>
+                        {course.title}
+                      </Link>
+                    </li>
+                  ))
+                ) : (
+                  <li className="p-2 text-gray-500">No courses found</li>
+                )}
+              </ul>
+            )}
           </div>
         </div>
 
