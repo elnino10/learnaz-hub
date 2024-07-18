@@ -20,15 +20,13 @@ export const registerUser = async (req, res) => {
       lastName,
       email,
       password,
-      role,
+      role
     });
 
     if (user) {
       res.status(201).json({
         status: "success",
-        userId: user._id,
         message: "User created successfully",
-        token: generateToken(user._id),
       });
     } else {
       res.status(400).json({ status: "failed", message: "Invalid user data" });
@@ -126,6 +124,20 @@ export const resetPassword = async (req, res) => {
     await user.save();
 
     res.status(200).json({ message: "Password reset successfully" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Server error", errorMessage: error.message });
+  }
+};
+
+// user signout handler
+export const signoutUser = async (req, res) => {
+  try {
+    res.clearCookie("token");
+    res
+      .status(200)
+      .json({ status: "success", message: "User signed out successfully" });
   } catch (error) {
     res
       .status(500)

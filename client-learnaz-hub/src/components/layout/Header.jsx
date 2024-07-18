@@ -1,9 +1,8 @@
 /* eslint-disable react/prop-types */
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
 import { useState, useEffect, useRef } from "react";
 import Logo from "../../assets/images/LH2.png";
-
 
 import { MenuOpen } from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -16,9 +15,11 @@ import { courses } from "../../data/courseData";
 function Header(props) {
   const [drpdwn, setDrpdwn] = useState(false);
   const [courseCategories, setCourseCategories] = useState([]);
-  const [filteredCourses, setFilteredCourses] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
+
+  const [searchedCourses, setSearchedCourses] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
   const dropdownRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -45,9 +46,9 @@ function Header(props) {
     props.setActivePage((prev) => (prev === "category" ? "" : "category"));
   };
 
-   const handleCategoryClick = () => {
-     setDrpdwn(false);
-   };
+  const handleCategoryClick = () => {
+    setDrpdwn(false);
+  };
 
   useEffect(() => {
     const clickOutside = (event) => {
@@ -63,23 +64,19 @@ function Header(props) {
     e.stopPropagation();
     props.setMenuVisible(!props.menuVisible);
   };
+  // search handler
+  useEffect(() => {
+    const search = courses.filter((course) =>
+      course.title.toLowerCase().includes(searchValue.toLowerCase())
+    );
+    setSearchedCourses(search);
+  }, [searchValue]);
 
-  const handleSearchChange = (e) => {
-    const query = e.target.value;
-    setSearchQuery(query);
-    if (query) {
-      const filtered = courses.filter((course) =>
-        course.title.toLowerCase().includes(query.toLowerCase())
-      );
-      setFilteredCourses(filtered);
-    } else {
-      setFilteredCourses([]);
-    }
-  };
-
-  const handleSearchResultClick = () => {
-    setSearchQuery("");
-    setFilteredCourses([]);
+  // log out handler
+  const logOutHandler = () => {
+    localStorage.removeItem("token");
+    props.setAuthUser(null);
+    navigate("/");
   };
 
   return (
@@ -96,31 +93,30 @@ function Header(props) {
             <div className="hidden md:block text-xl font-bold">Learnaz-Hub</div>
           </Link>
           {/* course category */}
-          <div className="relative ml-20">
+          <div className="relative ml-20 flex flex-col">
             <input
               type="text"
               className="md:w-80 bg-blue-100 border border-gray-300 rounded-full px-4 py-2 pl-10 focus:outline-none focus:border-blue-500"
               placeholder="Search courses"
-              value={searchQuery}
-              onChange={handleSearchChange}
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
             />
             <FiSearch className="w-5 h-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
-            {searchQuery && (
-              <ul className="absolute bg-white shadow-md rounded-md mt-2 w-full z-10">
-                {filteredCourses.length > 0 ? (
-                  filteredCourses.map((course) => (
-                    <li key={course.id} 
-                    className="p-2 hover:bg-gray-100"
-                    onClick={handleSearchResultClick}>
-                      <Link to={`/course/course-content/${course.id}`}>
-                        {course.title}
-                      </Link>
-                    </li>
-                  ))
-                ) : (
-                  <li className="p-2 text-gray-500">No courses found</li>
-                )}
-              </ul>
+            {searchValue && (
+              <div className="absolute translate-y-12 min-w-[15rem] rounded-b-sm pb-2 px-2 bg-white max-w-[10rem] md:min-w-[20rem]">
+                {searchedCourses.map((course, index) => (
+                  <div
+                    onClick={() => {
+                      navigate(`/course/course-content/${course.id}`);
+                      setSearchValue("");
+                    }}
+                    key={index}
+                    className="border-t-2 min-h-[3rem] py-2 cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap"
+                  >
+                    {course.title}
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         </div>
@@ -172,33 +168,43 @@ function Header(props) {
                   </div>
                 </div>
               </li>
-              <li
-                className="text-gray-900 hover:text-gray-900"
-                onClick={() => props.setActivePage("dashboard")}
-              >
-                <Link
-                  to="/home"
-                  className={`${
-                    props.activePage === "dashboard" ? "text-gray-900" : ""
-                  }`}
+              {props.authUser && (
+                <li
+                  className="text-gray-900 hover:text-gray-900"
+                  onClick={() => props.setActivePage("dashboard")}
                 >
-                  Dashboard
-                </Link>
-              </li>
-              <li
-                className={`${
-                  props.activePage === "creator"
-                } text-gray-600 hover:text-gray-900`}
-                onClick={() => props.setActivePage("creator")}
-              >
-                <Link to="/course-creator">Become a Creator</Link>
-              </li>
+                  <Link
+                    to="/home"
+                    className={`${
+                      props.activePage === "dashboard" ? "text-gray-900" : ""
+                    }`}
+                  >
+                    Dashboard
+                  </Link>
+                </li>
+              )}
+              {(!props.authUser || props.authUser.role !== "instructor") && (
+                <li
+                  className={`${
+                    props.activePage === "creator"
+                  } text-gray-600 hover:text-gray-900`}
+                  onClick={() => props.setActivePage("creator")}
+                >
+                  <Link to="/course-creator">Become a Creator</Link>
+                </li>
+              )}
               <li
                 className="border rounded-md text-sm p-2 transition
               ease-in-out delay-150 bg-gray-800 text-white hover:-translate-y-1
               hover:scale-110 duration-300"
               >
-                <Link to="/login">Log In</Link>
+                {props.authUser ? (
+                  <Link to="/" onClick={logOutHandler}>
+                    Log out
+                  </Link>
+                ) : (
+                  <Link to="/login">Log in</Link>
+                )}
               </li>
               <li className="border rounded-md text-sm p-2 transition ease-in-out delay-150 bg-gray-800 text-white hover:-translate-y-1 hover:scale-110 duration-300">
                 <Link to="/signup">Sign Up</Link>
