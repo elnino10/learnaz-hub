@@ -3,7 +3,8 @@ import image from "../assets/images/teacher.png";
 export const courses = [
   {
     id: 1,
-    videoUrl: "https://intranet-projects-files.s3.amazonaws.com/webstack/BigBuckBunny.mp4",
+    videoUrl:
+      "https://intranet-projects-files.s3.amazonaws.com/webstack/BigBuckBunny.mp4",
     title: "Introduction to Video Animation",
     image: "http://example.com/video-animation.jpg",
     author: "John Doe",
@@ -52,7 +53,7 @@ export const courses = [
   },
   {
     id: 4,
-    videoUrl: "http://example.com/photography.mp4",
+    videoUrl: "http://example.com/stop-motion.mp4",
     title: "Introduction to Stop Motion",
     image: "http://example.com/stop-motion.jpg",
     author: "Alice Brown",
@@ -70,6 +71,26 @@ export const courses = [
     price: "$50",
     category: "Photography",
   },
+  {
+    id: 6,
+    videoUrl: "http://example.com/web-development.mp4",
+    title: "Introduction to Web Development",
+    image: "http://example.com/web-development.jpg",
+    author: "Emily White",
+    numberEnrolled: 40,
+    price: "$60",
+    category: "Web Development",
+  },
+  {
+    id: 7,
+    videoUrl: "http://example.com/graphic-design.mp4",
+    title: "Graphic Design Basics",
+    image: "http://example.com/graphic-design.jpg",
+    author: "Michael Green",
+    numberEnrolled: 35,
+    price: "$55",
+    category: "Graphic Design",
+  },
 ];
 
 // course review data
@@ -85,6 +106,14 @@ export const reviews = [
   {
     username: "Alice Johnson",
     review: "I learned so much in such a short time!",
+  },
+  {
+    username: "Michael Brown",
+    review: "Great content and very well structured.",
+  },
+  {
+    username: "Emily Davis",
+    review: "The instructors are very knowledgeable.",
   },
 ];
 
@@ -103,7 +132,7 @@ export const enrolledCourses = [
   },
   {
     id: 6,
-    title: "css for beginners",
+    title: "CSS for Beginners",
     imageurl: image,
     duration: "3 hours",
   },
@@ -112,6 +141,12 @@ export const enrolledCourses = [
     title: "Computer Science",
     imageurl: image,
     duration: "3 hours",
+  },
+  {
+    id: 4,
+    title: "Data Science Basics",
+    imageurl: image,
+    duration: "4 hours",
   },
 ];
 
@@ -137,6 +172,20 @@ export const allUsers = [
     email: "mail.com",
     role: "student",
   },
+  {
+    id: 4,
+    firstName: "Emily",
+    lastName: "Davis",
+    email: "emily@mail.com",
+    role: "student",
+  },
+  {
+    id: 5,
+    firstName: "Michael",
+    lastName: "Brown",
+    email: "michael@mail.com",
+    role: "instructor",
+  },
 ];
 
 export const createdCourses = [
@@ -154,10 +203,9 @@ export const createdCourses = [
   },
   {
     id: 3,
-    title: "css for beginners",
+    title: "CSS for Beginners",
     imageurl: image,
     duration: "3 hours",
-    
   },
   {
     id: 4,
@@ -165,7 +213,14 @@ export const createdCourses = [
     imageurl: image,
     duration: "3 hours",
   },
-];  
+  {
+    id: 5,
+    title: "Introduction to Data Science",
+    imageurl: image,
+    duration: "4 hours",
+  },
+];
+
 export const suggestedCourses = [
   {
     id: 3,
@@ -178,5 +233,17 @@ export const suggestedCourses = [
     title: "CSS for Beginners",
     imageurl: image,
     duration: "1.5 hours",
+  },
+  {
+    id: 5,
+    title: "Node.js Fundamentals",
+    imageurl: image,
+    duration: "3 hours",
+  },
+  {
+    id: 6,
+    title: "Basics of Machine Learning",
+    imageurl: image,
+    duration: "2 hours",
   },
 ];
