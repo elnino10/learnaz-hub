@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 
@@ -24,18 +24,20 @@ const api = axios.create({
     Authorization: `Bearer ${token}`,
   },
 });
+  const location = useLocation();
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Default thumbnail URL if imageUrl is empty
     const defaultImageUrl = "http://learnazHub.com/default-thumbnail.jpg";
-
+    const userId = location.state?.userId;
     const newCourse = {
       title,
       summary,
       description,
       imageUrl: imageUrl || defaultImageUrl, // Use defaultImageUrl if imageUrl is empty
       category,
+      instructorId: userId,
     };
 
     try {

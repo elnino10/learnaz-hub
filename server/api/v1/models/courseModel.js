@@ -61,6 +61,13 @@ const courseSchema = new mongoose.Schema({
   review: String,
 });
 
+// courseSchema.pre('save', async function (next) {
+//     if (!this.instructorId) {
+//         this.instructorId = req.user._id; // Assuming user info is available in request object
+//     }
+//     next();
+// });
+
 const Course = mongoose.model("Course", courseSchema);
 
 export default Course;
