@@ -23,9 +23,21 @@ function CreatedCourses() {
         console.error("Error fetching courses: ", error);
       }
     };
+
+    // Fetch courses initially
     if (instructorId) {
       fetchCourses();
     }
+
+    // Set up polling to fetch courses every 30 seconds
+    const intervalId = setInterval(() => {
+      if (instructorId) {
+        fetchCourses();
+      }
+    }, 30000); // 30 seconds
+
+    // Clean up interval on component unmount
+    return () => clearInterval(intervalId);
   }, [instructorId]);
 
   return (
