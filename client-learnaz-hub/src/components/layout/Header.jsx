@@ -98,6 +98,7 @@ function Header(props) {
               type="text"
               className="md:w-80 bg-blue-100 border border-gray-300 rounded-full px-4 py-2 pl-10 focus:outline-none focus:border-blue-500"
               placeholder="Search courses"
+              value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
             />
             <FiSearch className="w-5 h-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
@@ -105,11 +106,12 @@ function Header(props) {
               <div className="absolute translate-y-12 min-w-[15rem] rounded-b-sm pb-2 px-2 bg-white max-w-[10rem] md:min-w-[20rem]">
                 {searchedCourses.map((course, index) => (
                   <div
-                    onClick={() =>
-                      navigate(`/course/course-content/${course.id}`)
-                    }
+                    onClick={() => {
+                      navigate(`/course/course-content/${course.id}`);
+                      setSearchValue("");
+                    }}
                     key={index}
-                    className="border-t-2 min-h-[3rem] py-2 overflow-hidden text-ellipsis whitespace-nowrap"
+                    className="border-t-2 min-h-[3rem] py-2 cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap"
                   >
                     {course.title}
                   </div>
