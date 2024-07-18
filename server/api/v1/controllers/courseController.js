@@ -4,14 +4,8 @@ import User from "../models/userModel.js";
 
 // create a new course
 export const createCourse = async (req, res) => {
-  const { title, summary, description, price, thumbnailURL, category } = req.body;
-
   try {
-    // Use the logged-in user's ID for instructorId
-    const instructorId = req.user._id;
-    console.log(instructorId);
-
-    const course = new Course({ title, summary, description, price, thumbnailURL, category, instructorId });
+    const course = new Course(req.body);
     await course.save();
 
     res.status(201).json({ status: "success", message: "Course created successfully" });
