@@ -247,3 +247,5 @@ export const suggestedCourses = [
     duration: "2 hours",
   },
 ];
+
+

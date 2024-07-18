@@ -15,6 +15,7 @@ import { courses } from "../../data/courseData";
 function Header(props) {
   const [drpdwn, setDrpdwn] = useState(false);
   const [courseCategories, setCourseCategories] = useState([]);
+
   const [searchedCourses, setSearchedCourses] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const dropdownRef = useRef(null);
@@ -63,7 +64,6 @@ function Header(props) {
     e.stopPropagation();
     props.setMenuVisible(!props.menuVisible);
   };
-
   // search handler
   useEffect(() => {
     const search = courses.filter((course) =>
