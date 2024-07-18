@@ -82,10 +82,18 @@ const CourseContentPage = () => {
           </div>
           <div className="pt=6  flex space-x-4 mt-4 border-b border-border">
             <button className="text-primary-foreground">Overview</button>
-            <button className="text-muted-foreground">Q&A</button>
-            <button className="text-muted-foreground">Notes</button>
-            <button className="text-muted-foreground">Reviews</button>
-            <button className="text-muted-foreground">Learning tools</button>
+            <button className="text-muted-foreground hover:underline hover:text-blue-900">
+              Q&A
+            </button>
+            <button className="text-muted-foreground hover:underline hover:text-blue-900">
+              Notes
+            </button>
+            <button className="text-muted-foreground hover:underline hover:text-blue-900">
+              Reviews
+            </button>
+            <button className="text-muted-foreground hover:underline hover:text-blue-900">
+              Learning tools
+            </button>
           </div>
           <p className="mt-4">
             Get started with Tailwind, a utility-first CSS framework, and master
