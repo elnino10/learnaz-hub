@@ -1,4 +1,11 @@
 import image from "../assets/images/teacher.png";
+import Tailwind from "../assets/thumbnail/tailwind.png";
+import photo from "../assets/thumbnail/photo.jpg";
+import Webdev from "../assets/thumbnail/webdev.png";
+import Design from "../assets/thumbnail/design.png";
+import Stop from "../assets/thumbnail/stop.png";
+import Edit from "../assets/thumbnail/editing.png";
+
 
 export const courses = [
   {
@@ -6,7 +13,7 @@ export const courses = [
     videoUrl:
       "https://intranet-projects-files.s3.amazonaws.com/webstack/BigBuckBunny.mp4",
     title: "Introduction to Video Animation",
-    image: "http://example.com/video-animation.jpg",
+    image: Edit,
     author: "John Doe",
     numberEnrolled: 30,
     price: "$50",
@@ -28,7 +35,7 @@ export const courses = [
     id: 2,
     videoUrl: "http://example.com/video-animation.mp4",
     title: "Introduction to Video Animation",
-    image: "http://example.com/video-animation.jpg",
+    image: Edit,
     author: "John Doe",
     numberEnrolled: 30,
     price: "$50",
@@ -45,7 +52,7 @@ export const courses = [
     id: 3,
     videoUrl: "http://example.com/video-editing.mp4",
     title: "Introduction to Video Editing",
-    image: "http://example.com/video-editing.jpg",
+    image: Edit,
     author: "Jane Smith",
     numberEnrolled: 25,
     price: "$45",
@@ -55,7 +62,7 @@ export const courses = [
     id: 4,
     videoUrl: "http://example.com/stop-motion.mp4",
     title: "Introduction to Stop Motion",
-    image: "http://example.com/stop-motion.jpg",
+    image: Stop,
     author: "Alice Brown",
     numberEnrolled: 20,
     price: "$55",
@@ -65,7 +72,7 @@ export const courses = [
     id: 5,
     videoUrl: "http://example.com/photography.mp4",
     title: "Introduction to Photography",
-    image: "http://example.com/photography.jpg",
+    image: photo,
     author: "John Doe",
     numberEnrolled: 30,
     price: "$50",
@@ -75,7 +82,7 @@ export const courses = [
     id: 6,
     videoUrl: "http://example.com/web-development.mp4",
     title: "Introduction to Web Development",
-    image: "http://example.com/web-development.jpg",
+    image: Webdev,
     author: "Emily White",
     numberEnrolled: 40,
     price: "$60",
@@ -85,11 +92,21 @@ export const courses = [
     id: 7,
     videoUrl: "http://example.com/graphic-design.mp4",
     title: "Graphic Design Basics",
-    image: "http://example.com/graphic-design.jpg",
+    image: Design,
     author: "Michael Green",
     numberEnrolled: 35,
     price: "$55",
     category: "Graphic Design",
+  },
+  {
+    id: 6,
+    videoUrl: "http://example.com/web-development.mp4",
+    title: "Tailwind CSS Mastry",
+    image: Tailwind,
+    author: "Emily White",
+    numberEnrolled: 40,
+    price: "$60",
+    category: "Web Development",
   },
 ];
 
