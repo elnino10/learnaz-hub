@@ -13,6 +13,7 @@ import {
   checkRole,
 } from "../utils/authMiddleware.js";
 import { getStudentDashboard, /*viewGrades*/ } from "../controllers/student/studentDashboard.js";
+import passport from '../utils/passport.js';
 
 const router = express.Router();
 
@@ -22,7 +23,7 @@ const router = express.Router();
 const role = ["admin", "instructor"];
 
 // course routes
-router.post("/create-course", authMiddleware, checkRole(role), createCourse);
+router.post("/create-course", passport.authenticate('jwt', { session: false }), createCourse);
 router.get("/", authMiddleware, getCourses);
 router.get('/instructor/:instructorId', authMiddleware, getCoursesByInstructor);
 router.get("/:courseId", authMiddleware, getCourseByID);

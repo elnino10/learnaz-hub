@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 const primaryButtonClass =
   "bg-primary mt-12 text-primary-foreground py-2 px-4 rounded-lg bg-gray-700 text-white hover:bg-gray-900 transition-colors";
@@ -10,18 +11,34 @@ const AddLessons = () => {
   const [lessons, setLessons] = useState([]);
   const [lessonTitle, setLessonTitle] = useState("");
   const [lessonUrl, setLessonUrl] = useState("");
-  
+
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  const apiUrl = `${baseUrl}/lessons/`;
+  const token = localStorage.getItem('token');
+  const api = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});
+
   const { course } = location.state; // Retrieve the course data passed from CreateCourse
-  
-  const handleAddLesson = () => {
+
+  const handleAddLesson = async () => {
     const newLesson = {
       title: lessonTitle,
       url: lessonUrl,
     };
-    // Update the lessons state with the new lesson
-    setLessons([...lessons, newLesson]);
-    setLessonTitle("");
-    setLessonUrl("");
+    try {
+      const res = await api.post(apiUrl, newLesson);
+      console.log(res.data);
+      // Update the lessons state with the new lesson
+      setLessons([...lessons, newLesson]);
+      setLessonTitle("");
+      setLessonUrl("");
+    } catch (error) {
+      console.error("Error adding lesson:", error);
+    }
   };
 
   // Log the lessons state whenever it changes
@@ -33,10 +50,6 @@ const AddLessons = () => {
     // Simulate submission of all lessons
     console.log("Course:", course);
     console.log("All Lessons:", lessons);
-
-    // create lessons
-    // update course by id with lesson ids in database
-
 
     // Show success message
     alert("Course created successfully!");

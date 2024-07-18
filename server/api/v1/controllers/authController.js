@@ -43,7 +43,7 @@ export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).exec();
 
     if (!user) {
       return res.status(401).json({ message: "Invalid email or password" });
@@ -54,11 +54,11 @@ export const loginUser = async (req, res) => {
     if (!validUser) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
-
+    console.log(user);
     res.status(200).json({
       status: "success",
       message: "User authenticated successfully",
-      token: generateToken(user._id, user.role),
+      token: generateToken(user.id, user.role),
     });
   } catch (error) {
     if (!res.headersSent) {

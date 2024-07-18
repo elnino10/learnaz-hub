@@ -1,21 +1,20 @@
 import Course from "../models/courseModel.js";
-import Instructor from "../models/instructormodel.js";
+import Instructor from "../models/instructorModel.js";
+import User from "../models/userModel.js";
 
 // create a new course
 export const createCourse = async (req, res) => {
+  console.log(req.user._id);
   try {
-    const newCourse = await Course.create(req.body);
-    res.status(201).json({
-      status: "success",
-      message: "course created successfully",
-      data: newCourse,
-    });
+    const newCourse = new Course({...req.body, instructorId: req.user._id });
+    const course = await newCourse.save();
+
+    res.status(201).json({ status: "success", message: "Course created successfully" });
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: "Server error", errorMessage: error.message });
+    res.status(500).json({ error: "Server error", errorMessage: error.message });
   }
 };
+
 
 //Read all courses in the database
 export const getCourses = async (req, res) => {
@@ -52,18 +51,21 @@ export const getCourseByID = async (req, res) => {
 
 // Get courses created by a particular instructor
 export const getCoursesByInstructor = async (req, res) => {
-  const { instructorId } = req.params.instructorId;
+  const { instructorId } = req.params;
 
   try {
-    const courses = await Instructor.find({ instructorId });
+    const courses = await Course.find({ instructorId });
+
     if (courses.length === 0) {
       return res.status(404).json({ status: "failed", message: "No courses found for this instructor" });
     }
+
     res.status(200).json({ status: "success", numCourses: courses.length, data: courses });
   } catch (error) {
     res.status(500).json({ error: "Server error", errorMessage: error.message });
   }
 };
+
 
 
 //Update course by ID

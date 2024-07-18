@@ -1,10 +1,11 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
+import axios from "axios";
 
-const inputFieldClass = "input-field";
+const inputFieldClass = "input-field border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-primary";
 const primaryButtonClass =
   "bg-primary mt-12 text-primary-foreground py-2 px-4 rounded-lg bg-gray-700 text-white hover:bg-gray-900 transition-colors";
- 
+
 const CreateCourse = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
@@ -13,26 +14,43 @@ const CreateCourse = () => {
   const [imageUrl, setImageUrl] = useState("");
   const [category, setCategory] = useState("programming");
 
-  const handleSubmit = (e) => {
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  const apiUrl = `${baseUrl}/courses/create-course`;
+  const token = localStorage.getItem('token');
+
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});
+  const location = useLocation();
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Default thumbnail URL if imageUrl is empty
+    const defaultImageUrl = "http://learnazHub.com/default-thumbnail.jpg";
+    const userId = location.state?.userId;
     const newCourse = {
       title,
       summary,
       description,
-      imageUrl,
+      imageUrl: imageUrl || defaultImageUrl, // Use defaultImageUrl if imageUrl is empty
       category,
+      instructorId: userId,
     };
 
-    // create course with details in database
-    // return the course id
-    // assign returned course id to newCourse object
+    try {
+      const res = await api.post(apiUrl, newCourse);
+      console.log(res.data);
+    } catch (error) {
+      console.error(error);
+    }
 
-    
     console.log("Course Created: ", newCourse);
-    // Navigate to the lesson creation page with the new course data
     navigate("/add-lessons", { state: { course: newCourse } });
   };
+
   return (
     <div className="mt-28 min-h-screen flex flex-col items-center justify-center">
       <div className="max-w-md w-full p-6 rounded-lg border-2">
@@ -60,8 +78,7 @@ const CreateCourse = () => {
             value={summary}
             onChange={(e) => setSummary(e.target.value)}
             placeholder="Enter a brief summary of the course"
-            className={inputFieldClass}
-            rows="3"
+            className={`${inputFieldClass} h-24`} // Adjust height as needed
             required
           ></textarea>
           <label htmlFor="description" className="text-2xl">
@@ -72,16 +89,15 @@ const CreateCourse = () => {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Enter the course description"
-            className={inputFieldClass}
-            rows="5"
+            className={`${inputFieldClass} h-32`} // Adjust height as needed
             required
           ></textarea>
-          <label htmlFor="title" className="text-2xl">
-            thumbnail Url
+          <label htmlFor="imageUrl" className="text-2xl">
+            Thumbnail Url
           </label>
           <input
             type="text"
-            id="title"
+            id="imageUrl"
             value={imageUrl}
             onChange={(e) => setImageUrl(e.target.value)}
             placeholder="Enter course thumbnail"
@@ -103,11 +119,12 @@ const CreateCourse = () => {
             <option value="marketing">Marketing</option>
           </select>
           <button type="submit" className={primaryButtonClass}>
-            Create Lessons
+            Create Course
           </button>
         </form>
       </div>
     </div>
   );
 };
+
 export default CreateCourse;

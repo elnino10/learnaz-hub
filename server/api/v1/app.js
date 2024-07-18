@@ -10,7 +10,7 @@ import enrollmentRouter from "./routes/enrollmentRoute.js";
 import analyticsRouter from "./routes/analyticsRoutes.js";
 import { jsonParserMiddleware } from "./utils/authMiddleware.js";
 import dbClient from "./utils/db.js";
-
+import passport from './utils/passport.js';
 const app = express();
 
 // third-party middlewares
@@ -18,7 +18,7 @@ app.use(jsonParserMiddleware);
 // app.use(express.json());
 app.use(morgan("dev"));
 app.use(cors());
-
+app.use(passport.initialize());
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/users", userRouter);
