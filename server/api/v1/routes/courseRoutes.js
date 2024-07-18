@@ -16,13 +16,13 @@ import { getStudentDashboard, /*viewGrades*/ } from "../controllers/student/stud
 
 const router = express.Router();
 
-// router.use(authMiddleware);
+router.use(authMiddleware);
 
 //Available to admin and instructor
 const role = ["admin", "instructor"];
 
 // course routes
-router.post("/create-course", authMiddleware, checkRole(role), createCourse);
+router.post("/create-course", authMiddleware, createCourse);
 router.get("/", authMiddleware, getCourses);
 router.get('/instructor/:instructorId', authMiddleware, getCoursesByInstructor);
 router.get("/:courseId", authMiddleware, getCourseByID);
