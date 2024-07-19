@@ -26,7 +26,6 @@ const AddLessons = () => {
     },
   });
 
-
   useEffect(() => {
     // course && console.log(course);
   }, [course]);
@@ -39,6 +38,7 @@ const AddLessons = () => {
       courseId: course._id,
       lessonNumber: lessonNumber || lessons.length,
     };
+    console.log(newLesson);
     try {
       const res = await api.post(apiUrl, newLesson);
       console.log(res.data.data);
@@ -115,7 +115,10 @@ const AddLessons = () => {
           <h3 className="text-xl font-bold">Lessons</h3>
           <ul className="border">
             {lessons.map((lesson, index) => (
-              <li key={index} className={`${!(lessons.length - 1) && "border-b-2"} mt-4`}>
+              <li
+                key={index}
+                className={`${!(lessons.length - 1) && "border-b-2"} mt-4`}
+              >
                 <div className="border p-2">
                   <h4 className="font-bold">{lesson.title}</h4>
                   <p>{lesson.url}</p>
