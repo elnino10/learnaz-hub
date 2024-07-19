@@ -117,7 +117,7 @@ const UserDashboard = (props) => {
         </div>
         {props.userData && props.userData.role === "instructor" && (
           <Link
-            to="/create-course"
+            to="/create-course" state={{ userId: props.userData.id }}
             className="text-blue-950 p-3 rounded-md shadow-md text-lg border hover:shadow-sm hover:text-blue-900"
             aria-label="Create a course"
           >
@@ -187,7 +187,7 @@ const UserDashboard = (props) => {
                           <p className="text-xs">{course.duration}</p>
                         </div>
                       </Link>
-                      
+
                     </div>
                   </div>
                 ))}

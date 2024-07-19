@@ -11,6 +11,7 @@ import {
   loginAdmin,
   registerAdmin,
 } from "../controllers/admin/adminController.js";
+import passport from '../utils/passport.js';
 
 const router = Router();
 
@@ -18,10 +19,10 @@ const router = Router();
 // router.get('/protected', authMiddleware, (req, res) => {
 //     res.status(200).json({ message: 'You have accessed a protected route' });
 // });
-
+router.use(passport.initialize());
 // Routes for user authentication
 router.post("/signup-user", registerUser);
-router.post("/login-user", loginUser);
+router.post("/login-user", passport.authenticate('local', { session: false }), loginUser);
 router.post("/signout", signoutUser);
 router.post("/forgot-password", forgotPassword);
 router.put("/reset-password/:token", resetPassword);
