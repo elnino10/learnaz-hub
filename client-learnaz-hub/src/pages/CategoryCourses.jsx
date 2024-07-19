@@ -1,8 +1,9 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { courses } from "../data/courseData";
 
-function CategoryCourses() {
+function CategoryCourses(props) {
   const { category } = useParams();
   const [filteredCourses, setFilteredCourses] = useState([]);
 
@@ -36,7 +37,13 @@ function CategoryCourses() {
         {filteredCourses.length > 0 ? (
           filteredCourses.map((course, index) => (
             <div key={index} className="p-4 border rounded-lg">
-              <Link to={`/course/course-content/${course.id}`}>
+              <Link
+                to={
+                  props.authUser
+                    ? `/course/course-content/${course.id}`
+                    : `/courses/preview/${course.id}`
+                }
+              >
                 <img
                   src={course.image}
                   alt={course.title}

@@ -1,27 +1,34 @@
 import Course from "../models/courseModel.js";
-import Instructor from "../models/instructorModel.js";
-import User from "../models/userModel.js";
 
 // create a new course
 export const createCourse = async (req, res) => {
-  const { title, summary, description, price, thumbnailURL, category } = req.body;
-
+  const { title, summary, description, price, thumbnailURL, category } =
+    req.body;
   try {
     // Use the logged-in user's ID for instructorId
     const instructorId = req.user._id;
     console.log(instructorId);
 
-    const course = new Course({ title, summary, description, price, thumbnailURL, category, instructorId });
+    const course = new Course({
+      title,
+      summary,
+      description,
+      price,
+      thumbnailURL,
+      category,
+      instructorId,
+    });
     await course.save();
 
-    res.status(201).json({ status: "success", message: "Course created successfully" });
+    res
+      .status(201)
+      .json({ status: "success", message: "Course created successfully" });
   } catch (error) {
-    res.status(500).json({ error: "Server error", errorMessage: error.message });
+    res
+      .status(500)
+      .json({ error: "Server error", errorMessage: error.message });
   }
 };
-
-
-
 
 //Read all courses in the database
 export const getCourses = async (req, res) => {
@@ -64,16 +71,23 @@ export const getCoursesByInstructor = async (req, res) => {
     const courses = await Course.find({ instructorId });
 
     if (courses.length === 0) {
-      return res.status(404).json({ status: "failed", message: "No courses found for this instructor" });
+      return res
+        .status(404)
+        .json({
+          status: "failed",
+          message: "No courses found for this instructor",
+        });
     }
 
-    res.status(200).json({ status: "success", numCourses: courses.length, data: courses });
+    res
+      .status(200)
+      .json({ status: "success", numCourses: courses.length, data: courses });
   } catch (error) {
-    res.status(500).json({ error: "Server error", errorMessage: error.message });
+    res
+      .status(500)
+      .json({ error: "Server error", errorMessage: error.message });
   }
 };
-
-
 
 //Update course by ID
 export const updateCourse = async (req, res) => {

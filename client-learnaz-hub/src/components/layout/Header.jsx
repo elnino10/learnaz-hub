@@ -90,7 +90,7 @@ function Header(props) {
               alt="Learnaz-Hub Logo"
               className="block md:hidden h-16 rounded-full"
             />
-            <div className="hidden md:block text-xl font-bold">Learnaz-Hub</div>
+            <div className="hidden md:block text-xl font-bold">Learnaz Hub</div>
           </Link>
           {/* course category */}
           <div className="relative ml-20 flex flex-col">
@@ -135,10 +135,9 @@ function Header(props) {
             md:text-base md:w-full md:h-full"
             >
               <li className="text-gray-600 hover:text-gray-900">
-                <div className="flex">
+                <div className="flex" onClick={toggleDrpdwn}>
                   <div ref={dropdownRef} className="">
                     <div
-                      onClick={toggleDrpdwn}
                       className={`${
                         props.activePage === "category" ? "text-gray-900" : ""
                       } text-gray-600 hover:text-gray-900 focus:outline-none`}
@@ -193,6 +192,11 @@ function Header(props) {
                   <Link to="/course-creator">Become a Creator</Link>
                 </li>
               )}
+              {props.authUser && props.authUser.role === "instructor" && (
+                <li>
+                  <Link to="/home/created-courses">Created Courses</Link>
+                </li>
+              )}
               <li
                 className="border rounded-md text-sm p-2 transition
               ease-in-out delay-150 bg-gray-800 text-white hover:-translate-y-1
@@ -206,9 +210,11 @@ function Header(props) {
                   <Link to="/login">Log in</Link>
                 )}
               </li>
-              <li className="border rounded-md text-sm p-2 transition ease-in-out delay-150 bg-gray-800 text-white hover:-translate-y-1 hover:scale-110 duration-300">
-                <Link to="/signup">Sign Up</Link>
-              </li>
+              {!props.authUser && (
+                <li className="border rounded-md text-sm p-2 transition ease-in-out delay-150 bg-gray-800 text-white hover:-translate-y-1 hover:scale-110 duration-300">
+                  <Link to="/signup">Sign Up</Link>
+                </li>
+              )}
             </ul>
           </nav>
         </div>
