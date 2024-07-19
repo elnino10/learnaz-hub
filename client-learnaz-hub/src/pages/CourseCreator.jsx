@@ -67,15 +67,21 @@ const CourseCreator = (props) => {
     <div
       className={`mt-20 ${sharedClasses.primaryBg} ${sharedClasses.primaryFg} min-h-screen`}
     >
-      <section className="text-gray-700 bg-gray-100 w-[100%] mx-auto py-5 px-10 flex items-center justify-between flex-col md:flex-row">
+      <section className="text-gray-700 bg-gray-100 w-[100%] mx-auto py-5 px-36 flex items-center justify-between flex-col md:flex-row">
         <div>
-          <img src={student} className="h-[20rem] object-cover" />
+          <img src={student} className="h-[20rem] w-[30rem] object-cover" />
         </div>
-        <div className="w-50 my-10 text-center">
+        <div className="max-w-50 my-10 text-center">
           <h2 className="text-4xl font-bold">Come Teach With Us</h2>
-          <p className="text-xl">
+          <p className="text-lg">
             Become an instructor and change lives — including your own
           </p>
+          <button
+            onClick={applyInstructorHandler}
+            className={`px-6 mt-5 rounded-lg bg-gray-700 text-white hover:bg-gray-900 ${sharedClasses.secondaryFg} ${sharedClasses.buttonPadding} ${sharedClasses.buttonRounded}`}
+          >
+            Apply Now
+          </button>
         </div>
       </section>
       <section className={sharedClasses.sectionPadding}>
