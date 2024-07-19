@@ -2,31 +2,35 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 
-const inputFieldClass = "input-field border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-primary";
+const inputFieldClass =
+  "input-field border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-primary";
 const primaryButtonClass =
   "bg-primary mt-12 text-primary-foreground py-2 px-4 rounded-lg bg-gray-700 text-white hover:bg-gray-900 transition-colors";
 
 const CreateCourse = () => {
-  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
   const [description, setDescription] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [category, setCategory] = useState("programming");
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
-  const apiUrl = `${baseUrl}/courses/create-course`;
-  const token = localStorage.getItem('token');
+  const endPoint = "/courses/create-course";
+  const token = localStorage.getItem("token");
 
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
-  headers: {
-    Authorization: `Bearer ${token}`,
-  },
-});
-  const location = useLocation();
+  // create a header with the token
+  const api = axios.create({
+    baseURL: baseUrl,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    let courseData = {};
 
     // Default thumbnail URL if imageUrl is empty
     const defaultImageUrl = "http://learnazHub.com/default-thumbnail.jpg";
@@ -41,14 +45,14 @@ const api = axios.create({
     };
 
     try {
-      const res = await api.post(apiUrl, newCourse);
-      console.log(res.data);
-      console.log("Course Created: ", newCourse);
-        navigate("/add-lessons", { state: { course: newCourse, courseId: res.data.data._id } });
+      const res = await api.post(endPoint, newCourse);
+      courseData = res.data.data;
     } catch (error) {
       console.error(error);
     }
-};
+
+    navigate("/add-lessons", { state: { course: courseData } });
+  };
 
   return (
     <div className="mt-28 min-h-screen flex flex-col items-center justify-center">

@@ -4,22 +4,26 @@ import Course from "../models/courseModel.js";
 // Create a new lesson for a specific course
 export const createLesson = async (req, res) => {
   try {
-    const { title, contentUrl, courseId } = req.body;
-    // console.log(title, contentUrl, courseId);
+    const { title, contentUrl, courseId, lessonNumber } = req.body;
     // Find the course
     const course = await Course.findById(courseId);
     if (!course) {
       return res.status(404).json({ message: "Course not found" });
     }
 
-    const newLesson = new Lesson({ title, contentUrl, courseId });
+    const newLesson = new Lesson({ title, contentUrl, courseId, lessonNumber });
     const savedLesson = await newLesson.save();
 
-    // Push lesson to the lessons array in course collection
-    course.lessons.push(savedLesson._id);
-    await course.save();
+    // Find the course and update its lessons field
+    await Course.findByIdAndUpdate(courseId, {
+      $push: { lessons: savedLesson._id },
+    });
 
-    res.status(201).json({ status: "Lesson created", data: savedLesson });
+    res.status(201).json({
+      status: "success",
+      message: "Lesson created successfully",
+      data: savedLesson,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -36,7 +40,7 @@ export const getAllLessonsByCourse = async (req, res) => {
     res.status(200).json({
       status: "success",
       numLessons: course.lessons.length,
-      data: course.lessons
+      data: course.lessons,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -92,7 +96,9 @@ export const deleteLessonById = async (req, res) => {
       return res.status(404).json({ message: "Lesson not found" });
     }
 
-    res.status(200).json({ status: "Done", message: "Lesson deleted successfully" });
+    res
+      .status(200)
+      .json({ status: "Done", message: "Lesson deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

@@ -6,54 +6,53 @@ const primaryButtonClass =
   "bg-primary mt-12 text-primary-foreground py-2 px-4 rounded-lg bg-gray-700 text-white hover:bg-gray-900 transition-colors";
 
 const AddLessons = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
   const [lessons, setLessons] = useState([]);
   const [lessonTitle, setLessonTitle] = useState("");
   const [lessonUrl, setLessonUrl] = useState("");
+  const [lessonNumber, setLessonNumber] = useState(1);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const token = localStorage.getItem("token");
+  const { course } = location.state; // Retrieve the course data passed from CreateCourse
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
-  const apiUrl = `${baseUrl}/lessons/`;
-  const token = localStorage.getItem('token');
-  const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
-  headers: {
-    Authorization: `Bearer ${token}`,
-  },
-});
+  const apiUrl = `${baseUrl}/lessons/${course._id}/lesson`;
 
-  const { course, courseId } = location.state;
-  console.log(location.state); // Add this line
-  console.log("Course ID:", courseId);
-  const handleAddLesson = async () => {
+  const api = axios.create({
+    baseURL: import.meta.env.VITE_API_BASE_URL,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  useEffect(() => {
+    // course && console.log(course);
+  }, [course]);
+
+  // Function to add a new lesson
+  const addLessonHandler = async () => {
     const newLesson = {
       title: lessonTitle,
       contentUrl: lessonUrl,
-      courseId: courseId,
+      courseId: course._id,
+      lessonNumber: lessonNumber || lessons.length,
     };
     console.log(newLesson);
     try {
       const res = await api.post(apiUrl, newLesson);
-      console.log(res.data);
+      console.log(res.data.data);
       // Update the lessons state with the new lesson
       setLessons([...lessons, newLesson]);
       setLessonTitle("");
       setLessonUrl("");
+      setLessonNumber(lessonNumber + 1);
     } catch (error) {
       console.error("Error adding lesson:", error);
     }
   };
 
-  // Log the lessons state whenever it changes
-  useEffect(() => {
-    console.log("Lessons: ", lessons);
-  }, [lessons]);
-
-  const handleSubmit = () => {
-    // Simulate submission of all lessons
-    console.log("Course:", course);
-    console.log("All Lessons:", lessons);
-
+  const submitAllLessons = async () => {
     // Show success message
     alert("Course created successfully!");
 
@@ -92,9 +91,21 @@ const AddLessons = () => {
             className="input-field"
             required
           />
+          <label htmlFor="lessonUrl" className="text-2xl">
+            Lesson Number
+          </label>
+          <input
+            type="number"
+            id="lessonNumber"
+            value={+lessonNumber}
+            onChange={(e) => setLessonNumber(e.target.value)}
+            placeholder="Enter the lesson number"
+            className="input-field"
+            required
+          />
           <button
             type="button"
-            onClick={handleAddLesson}
+            onClick={addLessonHandler}
             className={primaryButtonClass}
           >
             Add Lesson
@@ -102,9 +113,12 @@ const AddLessons = () => {
         </form>
         <div className="mt-4">
           <h3 className="text-xl font-bold">Lessons</h3>
-          <ul>
+          <ul className="border">
             {lessons.map((lesson, index) => (
-              <li key={index} className="mt-2">
+              <li
+                key={index}
+                className={`${!(lessons.length - 1) && "border-b-2"} mt-4`}
+              >
                 <div className="border p-2">
                   <h4 className="font-bold">{lesson.title}</h4>
                   <p>{lesson.url}</p>
@@ -115,10 +129,10 @@ const AddLessons = () => {
         </div>
         <button
           type="button"
-          onClick={handleSubmit}
+          onClick={submitAllLessons}
           className={primaryButtonClass}
         >
-          Submit All Lessons
+          Done
         </button>
       </div>
     </div>
