@@ -17,6 +17,7 @@ import {
   CategoryCourse,
   CreatedCourses,
   CourseCreator,
+  CoursePreviewPage,
 } from "./pages";
 import {
   Footer,
@@ -128,10 +129,14 @@ const MainLayout = (props) => (
         element={<CourseCreator authUser={props.authUser} />}
       />
       <Route
+        path="/courses/preview/:courseId"
+        element={<CoursePreviewPage authUser={props.authUser} />}
+      />
+      <Route
         path="/course/course-content/:courseId"
         element={<CourseContentPage />}
       />
-      <Route path="/category/:category" element={<CategoryCourse />} />
+      <Route path="/category/:category" element={<CategoryCourse authUser={props.authUser} />} />
       {/* based on the instructor id course is created */}
       <Route path="/create-course" element={<CreateCourse />} />
       <Route path="/home/created-courses" element={<CreatedCourses />} />
