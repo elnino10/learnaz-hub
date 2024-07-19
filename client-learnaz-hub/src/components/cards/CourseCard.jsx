@@ -9,7 +9,13 @@ function CourseCard(props) {
           .filter((course) => course.category === props.selectedCategory)
           .map((course, index) => (
             <div key={index} className="p-4 border rounded-lg">
-              <Link to={`/course/course-content/${course.id}`}>
+              <Link
+                to={
+                  props.authUser
+                    ? `/course/course-content/${course.id}`
+                    : `/courses/preview/${course.id}`
+                }
+              >
                 <img
                   src={course.image}
                   alt={course.title}
