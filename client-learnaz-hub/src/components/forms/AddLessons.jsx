@@ -22,13 +22,16 @@ const AddLessons = () => {
   },
 });
 
-  const { course } = location.state; // Retrieve the course data passed from CreateCourse
-
+  const { course, courseId } = location.state;
+  console.log(location.state); // Add this line
+  console.log("Course ID:", courseId);
   const handleAddLesson = async () => {
     const newLesson = {
       title: lessonTitle,
-      url: lessonUrl,
+      contentUrl: lessonUrl,
+      courseId: courseId,
     };
+    console.log(newLesson);
     try {
       const res = await api.post(apiUrl, newLesson);
       console.log(res.data);
