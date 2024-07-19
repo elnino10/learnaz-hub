@@ -27,7 +27,10 @@ const UserDashboard = (props) => {
   const id = location.state && location.state.id;
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
-  const apiUrl = id && `${baseUrl}/users/${id}`;
+  let apiUrl = "";
+  if (id) {
+    apiUrl = id && `${baseUrl}/users/${id}`;
+  }
 
   // fetch courses user enrolled for from database
   useEffect(() => {
@@ -59,14 +62,20 @@ const UserDashboard = (props) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        // fetch user from database
         const res = await axios.get(apiUrl);
         const foundUser = res.data.data;
-        props.setUserData(foundUser);
+        if (foundUser) props.setUserData(foundUser);
 
-        // fetch courses created by user if they are an instructor
-        if (foundUser.role === "instructor") {
+        // fetch courses created by user if user is an instructor
+        // or the courses enrolled by user if user is a student
+        if (foundUser?.role === "instructor") {
+          const res = await axios.get(`${baseUrl}/courses/instructor/${id}`);
+          console.log(res.data.data);
           setCreatedCourse(createdCourses);
+        } else if (foundUser?.role === "student") {
+          const res = await axios.get(`${baseUrl}/courses/student/${id}`);
+          console.log(res.data.data);
+          setEnrolledCourse([]);
         }
       } catch (error) {
         console.log("Error fetching user: ", error);
@@ -117,7 +126,8 @@ const UserDashboard = (props) => {
         </div>
         {props.userData && props.userData.role === "instructor" && (
           <Link
-            to="/create-course" state={{ userId: props.userData.id }}
+            to="/create-course"
+            state={{ userId: props.userData.id }}
             className="text-white bg-gray-900 p-3 rounded-md shadow-md text-lg border hover:shadow-sm hover:text-blue-900"
             aria-label="Create a course"
           >
@@ -187,7 +197,6 @@ const UserDashboard = (props) => {
                           <p className="text-xs">{course.duration}</p>
                         </div>
                       </Link>
-
                     </div>
                   </div>
                 ))}

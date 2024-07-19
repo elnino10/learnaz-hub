@@ -1,21 +1,7 @@
 import Course from "../models/courseModel.js";
 
-// create a new course
-export const createCourse = async (req, res) => {
-  try {
-    const newCourse = new Course({...req.body, instructorId: req.user._id });
-    const course = await newCourse.save();
-    res
-      .status(201)
-      .json({ status: "success", message: "Course created successfully", data: course });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ error: "Server error", errorMessage: error.message });
-  }
-};
 
-//Read all courses in the database
+//Get all courses in the database
 export const getCourses = async (req, res) => {
   try {
     const courses = await Course.find();
@@ -29,7 +15,7 @@ export const getCourses = async (req, res) => {
   }
 };
 
-//Read or Get a course by ID
+//Get a course by ID
 export const getCourseByID = async (req, res) => {
   try {
     const course = await Course.findById(req.params.courseId);
@@ -41,32 +27,6 @@ export const getCourseByID = async (req, res) => {
     res
       .status(200)
       .json({ status: "success", message: "course found", data: course });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ error: "Server error", errorMessage: error.message });
-  }
-};
-
-// Get courses created by a particular instructor
-export const getCoursesByInstructor = async (req, res) => {
-  const { instructorId } = req.params;
-
-  try {
-    const courses = await Course.find({ instructorId });
-
-    if (courses.length === 0) {
-      return res
-        .status(404)
-        .json({
-          status: "failed",
-          message: "No courses found for this instructor",
-        });
-    }
-
-    res
-      .status(200)
-      .json({ status: "success", numCourses: courses.length, data: courses });
   } catch (error) {
     res
       .status(500)
@@ -120,32 +80,121 @@ export const deleteCourse = async (req, res) => {
   }
 };
 
-// Submit an assignment
-// export const submitAssignment = async (
-//   studentId,
-//   courseId,
-//   assignmentId,
-//   submission
-// ) => {
-//   try {
-//     const course = await Course.findById(courseId);
-//     if (!course) {
-//       throw new Error("Course not found");
-//     }
+////////////////////////////////  COURSE CREATION  //////////////////////////////////
 
-//     const assignment = course.assignments.id(assignmentId);
-//     if (!assignment) {
-//       throw new Error("Assignment not found");
-//     }
+// create a new course
+export const createCourse = async (req, res) => {
+  try {
+    const newCourse = new Course({ ...req.body, instructorId: req.user._id });
+    const course = await newCourse.save();
 
-//     assignment.submissions.push({ studentId, submission });
-//     await course.save();
+    // update user's coursesCreated array
+    req.user.coursesCreated.push(course._id);
+    await req.user.save();
 
-//     return { message: "Assignment submitted successfully" };
-//   } catch (error) {
-//     throw error;
-//   }
-// };
+    res
+      .status(201)
+      .json({
+        status: "success",
+        message: "Course created successfully",
+        data: course,
+      });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Server error", errorMessage: error.message });
+  }
+};
+
+
+// Get courses created by a particular instructor
+export const getCreatedCourses = async (req, res) => {
+  const { instructorId } = req.params;
+
+  try {
+    const courses = await Course.find({ instructorId });
+
+    if (courses.length === 0) {
+      return res.status(404).json({
+        status: "failed",
+        message: "No courses found for this instructor",
+      });
+    }
+    res
+      .status(200)
+      .json({ status: "success", numCourses: courses.length, data: courses });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Server error", errorMessage: error.message });
+  }
+};
+
+//////////////////////////////// COURSE ENROLLMENT  //////////////////////////////////
+
+// Enroll in a course
+export const enrollInCourse = async (req, res) => {
+  try {
+    const { studentId, courseId } = req.body;
+
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+
+    const student = await User.findById(studentId);
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    if (!course.studentsEnrolled.includes(studentId)) {
+      course.studentsEnrolled.push(studentId);
+      await course.save();
+
+      student.coursesEnrolled.push(courseId);
+      await student.save();
+
+      res.status(200).json({
+        status: "success",
+        courseTitle: course.title,
+        message: "Enrolled in course successfully"
+      });
+    } else {
+      res.status(400).json({
+        status: "failed",
+        courseTitle: course.title,
+        message: "Already enrolled in this course"
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Get courses enrolled by a particular student
+export const getEnrolledCourses = async (req, res) => {
+  const { studentId } = req.params;
+
+  try {
+    const courses = await Course.find({ students: studentId });
+
+    if (courses.length === 0) {
+      return res.status(404).json({
+        status: "failed",
+        message: "No courses found for this student",
+      });
+    }
+    res
+      .status(200)
+      .json({ status: "success", numCourses: courses.length, data: courses });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Server error", errorMessage: error.message });
+  }
+};
+
+/////////////////////////////// COURSE REVIEW  //////////////////////////////////
 
 // Leave a course review
 export const courseReview = async (req, res) => {
@@ -166,6 +215,8 @@ export const courseReview = async (req, res) => {
       .json({ error: "Server error", errorMessage: error.message });
   }
 };
+
+/////////////////////////////// COURSE SEARCH  //////////////////////////////////
 
 // filter courses by search query
 export const manageCourses = async (req, res) => {

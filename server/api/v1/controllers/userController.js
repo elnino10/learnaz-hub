@@ -49,13 +49,11 @@ export const getUsersByRole = async (req, res) => {
 
     // Check if the role exists in the database
     if (!roles.includes(role)) {
-      return res
-        .status(400)
-        .json({
-          status: "fail",
-          message: "Invalid role parameter",
-          availableRoles: roles,
-        });
+      return res.status(400).json({
+        status: "fail",
+        message: "Invalid role parameter",
+        availableRoles: roles,
+      });
     }
 
     const users = await User.find({ role: role });

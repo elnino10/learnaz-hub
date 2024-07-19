@@ -205,7 +205,7 @@ function Header(props) {
                   onClick={() => props.setActivePage("profile")}
                 >
                   <Link
-                    to="/profile"
+                    to="/user/profile"
                     className={`${
                       props.activePage === "profile" ? "text-gray-900" : ""
                     } flex items-center md:hidden`}
@@ -213,7 +213,7 @@ function Header(props) {
                     Profile
                   </Link>
                   <Link
-                    to={`/profile/`}
+                    to={`/user/profile`}
                     className={`${
                       props.activePage === "profile" ? "text-gray-900" : ""
                     } hidden md:flex`}

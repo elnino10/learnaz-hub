@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
-import { Route, Routes } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Route, Routes, useLocation } from "react-router-dom";
 
 import {
   Sidebar,
@@ -36,9 +36,16 @@ import {
 const App = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [showImageMenu, setShowImageMenu] = useState(false);
+  const [editClicked, setEditClicked] = useState(false);
   const [activePage, setActivePage] = useState("");
   const [authUser, setAuthUser] = useState(null);
   const [userData, setUserData] = useState({});
+
+  const {pathname} = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname])
 
   const clickAwayHandler = () => {
     setMenuVisible(false);
@@ -65,6 +72,8 @@ const App = () => {
               setAuthUser={setAuthUser}
               setUserData={setUserData}
               userData={userData}
+              editClicked={editClicked}
+              setEditClicked={setEditClicked}
             />
           }
         />
@@ -126,12 +135,12 @@ const MainLayout = (props) => (
         }
       />
       <Route
-        path="/profile/"
+        path="/user/profile/"
         element={
           <ProfileEdit
-            authUser={props.authUser}
             userData={props.userData}
-            setUserData={props.setUserData}
+            editClicked={props.editClicked}
+            setEditClicked={props.setEditClicked}
           />
         }
       />

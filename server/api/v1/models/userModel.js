@@ -34,6 +34,20 @@ const userSchema = new mongoose.Schema({
       default: [],
     },
   ],
+  coursesCreated: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Course",
+      default: [],
+    },
+  ],
+  twitterUsername: String,
+  twitterURL: String,
+  facebookUsername: String,
+  facebookURL: String,
+  linkedInResourceId: String,
+  linkedInURL: String,
+  biography: String,
   createdAt: {
     type: Date,
     default: Date.now(),
