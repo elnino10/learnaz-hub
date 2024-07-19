@@ -129,14 +129,14 @@ function Header(props) {
           {/* <nav> */}
           <nav className={`${!props.menuVisible && "hidden"} md:flex`}>
             <ul
-              className="rounded-l-sm text-sm bg-gray-200 px-2 py-3 cursor-pointer absolute
+              className="rounded-l-sm text-sm bg-gray-200 px-2 py-3 absolute
             translate-y-[1.7rem] translate-x-[-5rem] w-36 h-[13rem] flex flex-col
             justify-between items-start md:relative md:px-0 md:py-0 md:translate-x-0
             md:translate-y-0 md:flex-row md:items-center md:bg-inherit
             md:text-base md:w-full md:h-full"
             >
               <li className="text-gray-600 hover:text-gray-900">
-                <div className="flex" onClick={toggleDrpdwn}>
+                <div className="flex cursor-pointer" onClick={toggleDrpdwn}>
                   <div ref={dropdownRef} className="">
                     <div
                       className={`${

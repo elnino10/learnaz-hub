@@ -14,6 +14,10 @@ const lessonSchema = new mongoose.Schema({
     ref: "Course",
     required: true,
   },
+  lessonNumber: {
+    type: Number,
+    required: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now(),
