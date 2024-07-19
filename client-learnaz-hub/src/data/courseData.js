@@ -6,7 +6,6 @@ import Design from "../assets/thumbnail/design.png";
 import Stop from "../assets/thumbnail/stop.png";
 import Edit from "../assets/thumbnail/editing.png";
 
-
 export const courses = [
   {
     id: 1,
@@ -18,6 +17,8 @@ export const courses = [
     numberEnrolled: 30,
     price: "$50",
     category: "Video Animation",
+    description:
+      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Placeat doloribus aliquid quas accusamus rerum quae, ab id eius iure recusandae numquam consequatur fuga omnis veniam eos illo excepturi minus ipsum",
     lessons: [
       {
         title: "Lesson 1",
@@ -30,6 +31,8 @@ export const courses = [
         videoUrl: "https://www.youtube.com/watch?v=iZMqQLWRQEU",
       },
     ],
+    updatedAt: "",
+    createdAt: "2024-03-10T12:34:56Z",
   },
   {
     id: 2,
@@ -40,6 +43,8 @@ export const courses = [
     numberEnrolled: 30,
     price: "$50",
     category: "Video Animation",
+    description:
+      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Placeat doloribus aliquid quas accusamus rerum quae, ab id eius iure recusandae numquam consequatur fuga omnis veniam eos illo excepturi minus ipsum",
     lessons: [
       {
         title: "Lesson 1",
@@ -47,6 +52,7 @@ export const courses = [
         videoUrl: "https://www.youtube.com/watch?v=lH3ZkwbVp5E",
       },
     ],
+    updatedAt: "2023-12-25T00:00:00Z",
   },
   {
     id: 3,
@@ -57,6 +63,9 @@ export const courses = [
     numberEnrolled: 25,
     price: "$45",
     category: "Video Editing",
+    updatedAt: "2022-01-01T09:30:00Z",
+    description:
+      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Placeat doloribus aliquid quas accusamus rerum quae, ab id eius iure recusandae numquam consequatur fuga omnis veniam eos illo excepturi minus ipsum",
   },
   {
     id: 4,
@@ -67,6 +76,9 @@ export const courses = [
     numberEnrolled: 20,
     price: "$55",
     category: "Stop Motion",
+    updatedAt: "2024-03-15T16:45:30Z",
+    description:
+      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Placeat doloribus aliquid quas accusamus rerum quae, ab id eius iure recusandae numquam consequatur fuga omnis veniam eos illo excepturi minus ipsum",
   },
   {
     id: 5,
@@ -77,6 +89,9 @@ export const courses = [
     numberEnrolled: 30,
     price: "$50",
     category: "Photography",
+    updatedAt: "2023-08-10T14:20:00Z",
+    description:
+      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Placeat doloribus aliquid quas accusamus rerum quae, ab id eius iure recusandae numquam consequatur fuga omnis veniam eos illo excepturi minus ipsum",
   },
   {
     id: 6,
@@ -87,6 +102,9 @@ export const courses = [
     numberEnrolled: 40,
     price: "$60",
     category: "Web Development",
+    updatedAt: "2023-12-25T00:00:00Z",
+    description:
+      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Placeat doloribus aliquid quas accusamus rerum quae, ab id eius iure recusandae numquam consequatur fuga omnis veniam eos illo excepturi minus ipsum",
   },
   {
     id: 7,
@@ -97,9 +115,12 @@ export const courses = [
     numberEnrolled: 35,
     price: "$55",
     category: "Graphic Design",
+    updatedAt: "2024-07-18T12:34:56Z",
+    description:
+      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Placeat doloribus aliquid quas accusamus rerum quae, ab id eius iure recusandae numquam consequatur fuga omnis veniam eos illo excepturi minus ipsum",
   },
   {
-    id: 6,
+    id: 8,
     videoUrl: "http://example.com/web-development.mp4",
     title: "Tailwind CSS Mastry",
     image: Tailwind,
@@ -107,6 +128,9 @@ export const courses = [
     numberEnrolled: 40,
     price: "$60",
     category: "Web Development",
+    updatedAt: "2024-07-18T12:34:56Z",
+    description:
+      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Placeat doloribus aliquid quas accusamus rerum quae, ab id eius iure recusandae numquam consequatur fuga omnis veniam eos illo excepturi minus ipsum",
   },
 ];
 
@@ -264,5 +288,3 @@ export const suggestedCourses = [
     duration: "2 hours",
   },
 ];
-
-
