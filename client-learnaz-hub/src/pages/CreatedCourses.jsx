@@ -1,22 +1,44 @@
 import { useEffect, useState } from "react";
-
-import { createdCourses } from "../data/courseData";
+import axios from "axios";
 
 function CreatedCourses() {
   const [myCourses, setMyCourses] = useState([]);
 
-  // fetch instructors created courses from database
+  // Retrieve the instructor ID from local storage
+  const instructorId = localStorage.getItem('instructorId');
+
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        // fetch courses from database
-        setMyCourses(createdCourses);
+        const token = localStorage.getItem('token');
+        const api = axios.create({
+          baseURL: import.meta.env.VITE_API_BASE_URL,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const res = await api.get(`/courses/instructor/${instructorId}`);
+        setMyCourses(res.data.data);
       } catch (error) {
         console.error("Error fetching courses: ", error);
       }
     };
-    fetchCourses();
-  }, []);
+
+    // Fetch courses initially
+    if (instructorId) {
+      fetchCourses();
+    }
+
+    // Set up polling to fetch courses every 30 seconds
+    const intervalId = setInterval(() => {
+      if (instructorId) {
+        fetchCourses();
+      }
+    }, 30000); // 30 seconds
+
+    // Clean up interval on component unmount
+    return () => clearInterval(intervalId);
+  }, [instructorId]);
 
   return (
     <div className="mt-20">
