@@ -38,10 +38,10 @@ const AddLessons = () => {
       courseId: course._id,
       lessonNumber: lessonNumber || lessons.length,
     };
-    console.log(newLesson);
     try {
       const res = await api.post(apiUrl, newLesson);
-      console.log(res.data.data);
+      const lessonData = res.data.data;
+      console.log(lessonData);
       // Update the lessons state with the new lesson
       setLessons([...lessons, newLesson]);
       setLessonTitle("");
@@ -52,19 +52,19 @@ const AddLessons = () => {
     }
   };
 
-  const submitAllLessons = async () => {
+  const submitAllLessons = () => {
     // Show success message
     alert("Course created successfully!");
 
     // Navigate back to the dashboard
-    navigate("/home");
+    navigate("/home/created-courses");
   };
 
   return (
     <div className="mt-20 min-h-screen flex flex-col items-center justify-center">
       <div className="max-w-md w-full p-6 rounded-lg border-2">
-        <h2 className="text-2xl text-gray-800 font-bold mb-4">
-          Add Lessons to {course.title}
+        <h2 className="text-2xl text-gray-800 mb-4">
+          Add Lessons to <i className="font-bold">{course.title}</i>
         </h2>
         <form className="flex flex-col space-y-4">
           <label htmlFor="lessonTitle" className="text-2xl">
@@ -117,11 +117,11 @@ const AddLessons = () => {
             {lessons.map((lesson, index) => (
               <li
                 key={index}
-                className={`${!(lessons.length - 1) && "border-b-2"} mt-4`}
+                className={`${!(lessons.length - 1) && "border-b-2"}`}
               >
                 <div className="border p-2">
                   <h4 className="font-bold">{lesson.title}</h4>
-                  <p>{lesson.url}</p>
+                  <p>{lesson.contentUrl}</p>
                 </div>
               </li>
             ))}
