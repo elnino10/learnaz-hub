@@ -5,7 +5,7 @@ import Course from "../models/courseModel.js";
 export const createLesson = async (req, res) => {
   try {
     const { title, contentUrl, courseId } = req.body;
-    console.log(title, contentUrl, courseId);
+    // console.log(title, contentUrl, courseId);
     // Find the course
     const course = await Course.findById(courseId);
     if (!course) {

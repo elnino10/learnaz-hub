@@ -43,13 +43,12 @@ const api = axios.create({
     try {
       const res = await api.post(apiUrl, newCourse);
       console.log(res.data);
+      console.log("Course Created: ", newCourse);
+        navigate("/add-lessons", { state: { course: newCourse, courseId: res.data.data._id } });
     } catch (error) {
       console.error(error);
     }
-
-    console.log("Course Created: ", newCourse);
-    navigate("/add-lessons", { state: { course: newCourse } });
-  };
+};
 
   return (
     <div className="mt-28 min-h-screen flex flex-col items-center justify-center">
