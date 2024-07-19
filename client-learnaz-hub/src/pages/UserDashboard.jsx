@@ -83,8 +83,8 @@ const UserDashboard = (props) => {
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
+          slidesToShow: 4,
+          slidesToScroll: 4,
           infinite: true,
         },
       },
@@ -118,7 +118,7 @@ const UserDashboard = (props) => {
         {props.userData && props.userData.role === "instructor" && (
           <Link
             to="/create-course" state={{ userId: props.userData.id }}
-            className="text-blue-950 p-3 rounded-md shadow-md text-lg border hover:shadow-sm hover:text-blue-900"
+            className="text-white bg-gray-900 p-3 rounded-md shadow-md text-lg border hover:shadow-sm hover:text-blue-900"
             aria-label="Create a course"
           >
             Create a Course

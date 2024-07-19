@@ -8,6 +8,7 @@ import { MenuOpen } from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 import { courses } from "../../data/courseData";
 // import { icon } from "@fortawesome/fontawesome-svg-core";
@@ -197,6 +198,30 @@ function Header(props) {
                   <Link to="/home/created-courses">Created Courses</Link>
                 </li>
               )}
+
+              {props.authUser && (
+                <li
+                  className="text-gray-900 hover:text-gray-900"
+                  onClick={() => props.setActivePage("profile")}
+                >
+                  <Link
+                    to="/profile"
+                    className={`${
+                      props.activePage === "profile" ? "text-gray-900" : ""
+                    } flex items-center md:hidden`}
+                  >
+                    Profile
+                  </Link>
+                  <Link
+                    to={`/profile/`}
+                    className={`${
+                      props.activePage === "profile" ? "text-gray-900" : ""
+                    } hidden md:flex`}
+                  >
+                    <AccountCircleIcon fontSize="large" />
+                  </Link>
+                </li>
+              )}
               <li
                 className="border rounded-md text-sm p-2 transition
               ease-in-out delay-150 bg-gray-800 text-white hover:-translate-y-1
@@ -210,6 +235,7 @@ function Header(props) {
                   <Link to="/login">Log in</Link>
                 )}
               </li>
+
               {!props.authUser && (
                 <li className="border rounded-md text-sm p-2 transition ease-in-out delay-150 bg-gray-800 text-white hover:-translate-y-1 hover:scale-110 duration-300">
                   <Link to="/signup">Sign Up</Link>

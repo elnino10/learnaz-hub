@@ -6,6 +6,7 @@ import CategoryCourse from "./CategoryCourses";
 import CreatedCourses from "./CreatedCourses";
 import CourseCreator from "./CourseCreator";
 import CoursePreviewPage from "./CoursePreviewPage";
+import ProfileEdit from "./ProfileEdit";
 export {
   CourseCreator,
   CreatedCourses,
@@ -15,4 +16,5 @@ export {
   UserDashboard,
   CourseContentPage,
   CoursePreviewPage,
+  ProfileEdit
 };

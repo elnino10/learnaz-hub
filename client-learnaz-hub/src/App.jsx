@@ -18,6 +18,7 @@ import {
   CreatedCourses,
   CourseCreator,
   CoursePreviewPage,
+  ProfileEdit
 } from "./pages";
 import {
   Footer,
@@ -123,6 +124,16 @@ const MainLayout = (props) => (
           />
         }
       />
+      <Route
+        path="/profile/"
+        element={
+          <ProfileEdit
+            authUser={props.authUser}
+            userData={props.userData}
+            setUserData={props.setUserData}
+          />
+        }
+      />
       {/* <Route path="/course/:courseTitle" element={<CourseContentPage />} /> */}
       <Route
         path="/course-creator"
@@ -136,7 +147,10 @@ const MainLayout = (props) => (
         path="/course/course-content/:courseId"
         element={<CourseContentPage />}
       />
-      <Route path="/category/:category" element={<CategoryCourse authUser={props.authUser} />} />
+      <Route
+        path="/category/:category"
+        element={<CategoryCourse authUser={props.authUser} />}
+      />
       {/* based on the instructor id course is created */}
       <Route path="/create-course" element={<CreateCourse />} />
       <Route path="/home/created-courses" element={<CreatedCourses />} />
