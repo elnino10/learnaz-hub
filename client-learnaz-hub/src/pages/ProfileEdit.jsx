@@ -61,6 +61,7 @@ const ProfileEdit = (props) => {
 
     try {
       const res = await axios.patch(apiUrl, updatedData);
+      console.log(res.data);
     } catch (error) {
       console.log("Error updating user data: ", error);
     }

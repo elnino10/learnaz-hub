@@ -47,7 +47,9 @@ function LoginForm(props) {
 
       const decoded = KJUR.jws.JWS.parse(token);
       decoded && props.setAuthUser(decoded.payloadObj);
-      navigate("/home", { state: { id: decoded.payloadObj.id } });
+      navigate("/home", {
+        state: { id: decoded.payloadObj.id, role: decoded.payloadObj.role },
+      });
     } catch (error) {
       setErrMsg(error.response.data.message);
     }

@@ -31,7 +31,7 @@ router.post(
 );
 router.get("/enroll/:courseId", authMiddleware, enrollInCourse);
 router.get("/", authMiddleware, getCourses);
-router.get("/instructor/:instructorId", authMiddleware, getCreatedCourses);
+router.get("/instructor/:instructorId/", authMiddleware, getCreatedCourses);
 router.get("/student/:studentId", authMiddleware, getEnrolledCourses);
 router.get("/:courseId", authMiddleware, getCourseByID);
 router.patch("/:courseId", authMiddleware, checkRole(role), updateCourse);

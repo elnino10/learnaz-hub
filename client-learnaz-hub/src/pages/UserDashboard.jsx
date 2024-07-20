@@ -7,50 +7,48 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import {
-  enrolledCourses,
-  // allUsers,
-  suggestedCourses,
-  createdCourses,
-} from "../data/courseData";
 
 import axios from "axios";
 
 const UserDashboard = (props) => {
-  const [enrolledCourse, setEnrolledCourse] = useState([]);
-  const [suggestedCourse, setSuggestedCourse] = useState([]);
-  const [createdCourse, setCreatedCourse] = useState([]);
+  const [suggestedCourses, setSuggestedCourses] = useState([]);
+  const [courses, setCourses] = useState([]);
 
   const location = useLocation();
 
   // get user id from login
   const id = location.state && location.state.id;
+  const role = location.state && location.state.role;
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
-  let apiUrl = "";
-  if (id) {
-    apiUrl = id && `${baseUrl}/users/${id}`;
-  }
 
-  // fetch courses user enrolled for from database
+  const axiosInstance = axios.create({
+    baseURL: baseUrl,
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+
+  // get user data from database
   useEffect(() => {
-    const fetchAllCourses = async () => {
+    const fetchUserData = async () => {
       try {
-        // fetch courses from database
-        setEnrolledCourse(enrolledCourses);
+        const res = await axiosInstance.get(`/users/${id}`);
+        props.authUser && props.setUserData(res.data.data);
       } catch (error) {
-        console.log("Error fetching courses: ", error);
+        console.log("Error fetching user data: ", error);
       }
     };
-    fetchAllCourses();
+    fetchUserData();
   }, []);
 
-  // fetch suggested courses from database
+  // get all courses as suggested courses from database (for now)
   useEffect(() => {
     const fetchSuggestedCourses = async () => {
       try {
         // fetch courses from database
-        setSuggestedCourse(suggestedCourses);
+        const res = await axiosInstance.get("/courses");
+        setSuggestedCourses(res.data.data);
       } catch (error) {
         console.log("Error fetching courses: ", error);
       }
@@ -58,30 +56,18 @@ const UserDashboard = (props) => {
     fetchSuggestedCourses();
   }, []);
 
-  // fetch user data from database
+  // fetch courses created by user if user is an instructor
+  // or the courses enrolled by user if user is a student
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchCourses = async () => {
       try {
-        const res = await axios.get(apiUrl);
-        const foundUser = res.data.data;
-        if (foundUser) props.setUserData(foundUser);
-
-        // fetch courses created by user if user is an instructor
-        // or the courses enrolled by user if user is a student
-        if (foundUser?.role === "instructor") {
-          const res = await axios.get(`${baseUrl}/courses/instructor/${id}`);
-          console.log(res.data.data);
-          setCreatedCourse(createdCourses);
-        } else if (foundUser?.role === "student") {
-          const res = await axios.get(`${baseUrl}/courses/student/${id}`);
-          console.log(res.data.data);
-          setEnrolledCourse([]);
-        }
+        const res = await axiosInstance.get(`/courses/${role}/${id}`);
+        setCourses(res.data.data);
       } catch (error) {
-        console.log("Error fetching user: ", error);
+        console.log("Error fetching courses: ", error);
       }
     };
-    fetchUser();
+    fetchCourses();
   }, []);
 
   const settings = {
@@ -122,7 +108,7 @@ const UserDashboard = (props) => {
         className="flex items-center justify-between p-16 pl-4"
       >
         <div className="text-4xl text-gray-700 font-bold pl-12">
-          Welcome back, {props.userData && props.userData.firstName}
+          Welcome back, {props.userData?.firstName}
         </div>
         {props.userData && props.userData.role === "instructor" && (
           <Link
@@ -143,7 +129,7 @@ const UserDashboard = (props) => {
             alt="Animated student studying online"
           />
         </div>
-        {props.userData && props.userData.role === "instructor" ? (
+        {props.userData?.role === "instructor" ? (
           <div className="w-50 my-10 text-center">
             <h2 className="text-4xl font-bold">
               Impact the World Through Teaching
@@ -162,8 +148,8 @@ const UserDashboard = (props) => {
           </div>
         )}
       </div>
-      {props.userData && props.userData.role === "instructor" ? (
-        createdCourse.length > 0 ? (
+      {props.userData?.role === "instructor" ? (
+        courses.length > 0 ? (
           <>
             <div className="flex items-center justify-between px-16 mt-5 mb-3 md:px-32">
               <h3 className="pl-4 text-2xl text-gray-700 font-bold">
@@ -181,7 +167,7 @@ const UserDashboard = (props) => {
             </div>
             <div className="md:w-[70%] md:mx-auto">
               <Slider {...settings}>
-                {createdCourse.map((course) => (
+                {courses.map((course) => (
                   <div key={course.id} className="max-w-48">
                     <div className="flex flex-col bg-gray-100 border h-40 w-100 overflow-hidden">
                       <Link to={`/course/course-content/${course.id}`}>
@@ -208,7 +194,7 @@ const UserDashboard = (props) => {
             You haven&apos;t created any courses yet.
           </div>
         )
-      ) : enrolledCourse.length > 0 ? (
+      ) : courses.length > 0 ? (
         <>
           <div className="flex items-center justify-between px-16 mt-5 mb-3 md:px-32">
             <h3 className="pl-4 text-2xl text-gray-700 font-bold">
@@ -226,7 +212,7 @@ const UserDashboard = (props) => {
           </div>
           <div className="md:w-[70%] md:mx-auto">
             <Slider {...settings}>
-              {enrolledCourse.map((course) => (
+              {courses.map((course) => (
                 <div key={course.id} className="max-w-48">
                   <div className="flex flex-col bg-gray-100 border h-40 w-100 overflow-hidden">
                     <Link to={`/course/course-content/${course.id}`}>
@@ -262,7 +248,7 @@ const UserDashboard = (props) => {
           </div>
           <div className="md:w-[70%] md:mx-auto">
             <Slider {...settings}>
-              {suggestedCourse.map((course) => (
+              {suggestedCourses.map((course) => (
                 <div key={course.id} className="max-w-52 max-h-52">
                   <div className="flex flex-col bg-white border h-40 w-100 overflow-hidden">
                     <Link to={`/course/course-content/${course.id}`}>
