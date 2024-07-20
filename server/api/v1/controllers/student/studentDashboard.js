@@ -1,7 +1,7 @@
 import Course from "../../models/courseModel.js";
 import User from "../../models/userModel.js";
-import { getCourseByID } from "../courseController.js";
-import { getEnrolledCourses } from "../enrollmentController.js";
+// import { getCourseByID } from "../courseController.js";
+// import { getEnrolledCourses } from "../enrollmentController.js";
 
 // view student's grades
 // export const viewGrades = async (studentId) => {

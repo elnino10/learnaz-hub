@@ -6,7 +6,7 @@ import {
   deleteUser,
   manageUsers,
   applyInstructor,
-  getUsersByRole
+  getUsersByRole,
 } from "../controllers/userController.js";
 
 const router = express.Router();

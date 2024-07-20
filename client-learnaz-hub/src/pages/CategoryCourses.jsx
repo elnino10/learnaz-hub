@@ -36,7 +36,10 @@ function CategoryCourses(props) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-5 px-28">
         {filteredCourses.length > 0 ? (
           filteredCourses.map((course, index) => (
-            <div key={index} className="p-4 border rounded-lg">
+            <div
+              key={index}
+              className="p-4 border rounded-lg bg-gray-200 shadow-md"
+            >
               <Link
                 to={
                   props.authUser
@@ -52,16 +55,12 @@ function CategoryCourses(props) {
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">
                   {course.title}
                 </h3>
-                <p className="text-gray-700 mb-2">Author: {course.author}</p>
-                <p className="text-gray-700 mb-2">
+                <p className="text-gray-700 mb-2 font-serif">
+                  Author: {course.author}
+                </p>
+                <p className="text-gray-700 mb-2 font-serif">
                   Number Enrolled: {course.numberEnrolled}
                 </p>
-                {/* <p className="text-gray-700 font-bold">{course.price}</p> */}
-                <div className="flex justify-end w-80%">
-                  <button className="bg-gray-900 rounded text-white px-3 py-2 hover:text-gray-400">
-                    Enroll
-                  </button>
-                </div>
               </Link>
             </div>
           ))
