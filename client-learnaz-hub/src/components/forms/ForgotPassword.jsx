@@ -5,16 +5,41 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import axios from "axios";
 
 const defaultTheme = createTheme();
 
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
+const endPoint = "/auth/forgot-password";
+const token = localStorage.getItem("token");
+
+  // create a header with the token
+const api = axios.create({
+  baseURL: baseUrl,
+  headers: {
+    Authorization: `Bearer ${token}`,
+    },
+})
 function ForgotPassword() {
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-    });
+    const email = event.target.email.value;
+
+    try {
+      api.post(endPoint, { email })
+        .then((response) => {
+          if (response.status === 200) {
+            console.log(response.data);
+          } else {
+            console.error(response.data);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
