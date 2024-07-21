@@ -1,54 +1,53 @@
 /* eslint-disable react/prop-types */
-import { Link, useNavigate } from "react-router-dom";
-import { FiSearch } from "react-icons/fi";
 import { useState, useEffect, useRef } from "react";
-import Logo from "../../assets/images/LH2.png";
+import { Link, useNavigate } from "react-router-dom";
 
+import { FiSearch } from "react-icons/fi";
+import Logo from "../../assets/images/LH2.png";
 import { MenuOpen } from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
-import { courses } from "../../data/courseData";
+import axios from "axios";
 // import { icon } from "@fortawesome/fontawesome-svg-core";
 
 function Header(props) {
+  const [courses, setCourses] = useState([]);
   const [drpdwn, setDrpdwn] = useState(false);
   const [courseCategories, setCourseCategories] = useState([]);
-
   const [searchedCourses, setSearchedCourses] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        // fetch data from the backend
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  const apiUrl = `${baseUrl}/courses`;
 
-        const categories = [];
-        courses.map((course) => {
-          if (!categories.includes(course.category)) {
-            categories.push(course.category);
-          }
-        });
-        setCourseCategories(categories);
+  // Get all courses data from the backend
+  useEffect(() => {
+    const fetchCourseData = async () => {
+      try {
+        const res = await axios.get(apiUrl);
+        setCourses(res.data.data);
       } catch (error) {
         error && console.log("Error fetching course categories: ", error);
       }
     };
-    fetchCategories();
+    fetchCourseData();
   }, []);
 
-  const toggleDrpdwn = (e) => {
-    e.stopPropagation();
-    setDrpdwn(!drpdwn);
-    props.setActivePage((prev) => (prev === "category" ? "" : "category"));
-  };
-
-  const handleCategoryClick = () => {
-    setDrpdwn(false);
-  };
+  // get categories of courses in database
+  useEffect(() => {
+    const categories = [];
+    courses.forEach((course) => {
+      if (!categories.includes(course.category)) {
+        categories.push(course.category);
+      }
+    });
+    setCourseCategories(categories);
+  }, [courses]);
 
   useEffect(() => {
     const clickOutside = (event) => {
@@ -60,19 +59,30 @@ function Header(props) {
     // return () => document.removeEventListener("mousedown", clickOutside);
   }, [dropdownRef]);
 
-  const toggleMenuHandler = (e) => {
-    e.stopPropagation();
-    props.setMenuVisible(!props.menuVisible);
-  };
   // search handler
   useEffect(() => {
     const search = courses.filter((course) =>
       course.title.toLowerCase().includes(searchValue.toLowerCase())
     );
     setSearchedCourses(search);
-  }, [searchValue]);
+  }, [searchValue, courses]);
 
-  // log out handler
+  const toggleDrpdwn = (e) => {
+    e.stopPropagation();
+    setDrpdwn(!drpdwn);
+    props.setActivePage((prev) => (prev === "category" ? "" : "category"));
+  };
+
+  const handleCategoryClick = () => {
+    setDrpdwn(false);
+    props.setMenuVisible(false);
+  };
+
+  const toggleMenuHandler = (e) => {
+    e.stopPropagation();
+    props.setMenuVisible(!props.menuVisible);
+  };
+
   const logOutHandler = () => {
     localStorage.removeItem("token");
     props.setAuthUser(null);
@@ -128,14 +138,14 @@ function Header(props) {
           {/* <nav> */}
           <nav className={`${!props.menuVisible && "hidden"} md:flex`}>
             <ul
-              className="rounded-l-sm text-sm bg-gray-200 px-2 py-3 cursor-pointer absolute
+              className="rounded-l-sm text-sm bg-gray-200 px-2 py-3 absolute
             translate-y-[1.7rem] translate-x-[-5rem] w-36 h-[13rem] flex flex-col
             justify-between items-start md:relative md:px-0 md:py-0 md:translate-x-0
             md:translate-y-0 md:flex-row md:items-center md:bg-inherit
             md:text-base md:w-full md:h-full"
             >
               <li className="text-gray-600 hover:text-gray-900">
-                <div className="flex" onClick={toggleDrpdwn}>
+                <div className="flex cursor-pointer" onClick={toggleDrpdwn}>
                   <div ref={dropdownRef} className="">
                     <div
                       className={`${
@@ -197,6 +207,30 @@ function Header(props) {
                   <Link to="/home/created-courses">Created Courses</Link>
                 </li>
               )}
+
+              {props.authUser && (
+                <li
+                  className="text-gray-900 hover:text-gray-900"
+                  onClick={() => props.setActivePage("profile")}
+                >
+                  <Link
+                    to="/user/profile"
+                    className={`${
+                      props.activePage === "profile" ? "text-gray-900" : ""
+                    } flex items-center md:hidden`}
+                  >
+                    Profile
+                  </Link>
+                  <Link
+                    to={`/user/profile`}
+                    className={`${
+                      props.activePage === "profile" ? "text-gray-900" : ""
+                    } hidden md:flex`}
+                  >
+                    <AccountCircleIcon fontSize="large" />
+                  </Link>
+                </li>
+              )}
               <li
                 className="border rounded-md text-sm p-2 transition
               ease-in-out delay-150 bg-gray-800 text-white hover:-translate-y-1
@@ -210,6 +244,7 @@ function Header(props) {
                   <Link to="/login">Log in</Link>
                 )}
               </li>
+
               {!props.authUser && (
                 <li className="border rounded-md text-sm p-2 transition ease-in-out delay-150 bg-gray-800 text-white hover:-translate-y-1 hover:scale-110 duration-300">
                   <Link to="/signup">Sign Up</Link>

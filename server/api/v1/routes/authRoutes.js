@@ -22,7 +22,7 @@ const router = Router();
 router.use(passport.initialize());
 // Routes for user authentication
 router.post("/signup-user", registerUser);
-router.post("/login-user", passport.authenticate('local', { session: false }), loginUser);
+router.post("/login-user", loginUser);
 router.post("/signout", signoutUser);
 router.post("/forgot-password", forgotPassword);
 router.put("/reset-password/:token", resetPassword);

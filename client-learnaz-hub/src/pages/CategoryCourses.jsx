@@ -1,26 +1,28 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { courses } from "../data/courseData";
+
+import axios from "axios";
 
 function CategoryCourses(props) {
+  const [courses, setCourses] = useState([]);
   const { category } = useParams();
-  const [filteredCourses, setFilteredCourses] = useState([]);
+
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  const apiUrl = `${baseUrl}/courses/category/${category}`;
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        // Filter courses based on the selected category
-        const categoryCourses = courses.filter(
-          (course) => course.category === category
-        );
-        setFilteredCourses(categoryCourses);
+        // get all courses based on the selected category
+        const res = await axios.get(apiUrl);
+        setCourses(res.data.data);
       } catch (error) {
         console.error("Error fetching courses: ", error);
       }
     };
     fetchCourses();
-  }, [category]);
+  }, [apiUrl]);
 
   return (
     <div className="mt-20">
@@ -34,34 +36,33 @@ function CategoryCourses(props) {
         </p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-5 px-28">
-        {filteredCourses.length > 0 ? (
-          filteredCourses.map((course, index) => (
-            <div key={index} className="p-4 border rounded-lg">
+        {courses?.length > 0 ? (
+          courses?.map((course, index) => (
+            <div
+              key={index}
+              className="p-4 border rounded-lg bg-gray-200 shadow-md"
+            >
               <Link
                 to={
-                  props.authUser
-                    ? `/course/course-content/${course.id}`
-                    : `/courses/preview/${course.id}`
+                  course?.studentsEnrolled?.includes(props.userData._id)
+                    ? `/course/course-content/${course._id}`
+                    : `/courses/preview/${course._id}`
                 }
               >
                 <img
-                  src={course.image}
+                  src={course.thumbnailURL}
                   alt={course.title}
                   className="w-full h-48 object-cover mb-4"
                 />
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">
                   {course.title}
                 </h3>
-                <p className="text-gray-700 mb-2">Author: {course.author}</p>
-                <p className="text-gray-700 mb-2">
+                <p className="text-gray-700 mb-2 font-serif">
+                  Author: {course.author}
+                </p>
+                <p className="text-gray-700 mb-2 font-serif">
                   Number Enrolled: {course.numberEnrolled}
                 </p>
-                {/* <p className="text-gray-700 font-bold">{course.price}</p> */}
-                <div className="flex justify-end w-80%">
-                  <button className="bg-gray-900 rounded text-white px-3 py-2 hover:text-gray-400">
-                    Enroll
-                  </button>
-                </div>
               </Link>
             </div>
           ))

@@ -5,7 +5,7 @@ const enrollmentSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Course",
   },
-  userId: {
+  studentId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },

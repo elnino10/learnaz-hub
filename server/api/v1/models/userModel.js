@@ -34,6 +34,20 @@ const userSchema = new mongoose.Schema({
       default: [],
     },
   ],
+  coursesCreated: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Course",
+      default: [],
+    },
+  ],
+  twitterUsername: String,
+  twitterURL: String,
+  facebookUsername: String,
+  facebookURL: String,
+  linkedInResourceId: String,
+  linkedInURL: String,
+  biography: String,
   createdAt: {
     type: Date,
     default: Date.now(),
@@ -55,6 +69,15 @@ userSchema.pre("save", async function (next) {
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
+
+// get user's full name
+userSchema.virtual("fullName").get(function () {
+  return `${this.firstName} ${this.lastName || ""}`;
+});
+
+// Ensure virtual fields are serialized
+userSchema.set("toJSON", { virtuals: true });
+userSchema.set("toObject", { virtuals: true });
 
 const User = mongoose.model("User", userSchema);
 

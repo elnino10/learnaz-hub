@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
-import { Route, Routes } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Route, Routes, useLocation } from "react-router-dom";
 
 import {
   Sidebar,
@@ -18,6 +18,7 @@ import {
   CreatedCourses,
   CourseCreator,
   CoursePreviewPage,
+  ProfileEdit,
 } from "./pages";
 import {
   Footer,
@@ -34,9 +35,16 @@ import {
 const App = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [showImageMenu, setShowImageMenu] = useState(false);
+  const [editClicked, setEditClicked] = useState(false);
   const [activePage, setActivePage] = useState("");
   const [authUser, setAuthUser] = useState(null);
   const [userData, setUserData] = useState({});
+
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   const clickAwayHandler = () => {
     setMenuVisible(false);
@@ -63,6 +71,8 @@ const App = () => {
               setAuthUser={setAuthUser}
               setUserData={setUserData}
               userData={userData}
+              editClicked={editClicked}
+              setEditClicked={setEditClicked}
             />
           }
         />
@@ -123,24 +133,43 @@ const MainLayout = (props) => (
           />
         }
       />
+      <Route
+        path="/user/profile/"
+        element={
+          <ProfileEdit
+            userData={props.userData}
+            editClicked={props.editClicked}
+            setEditClicked={props.setEditClicked}
+          />
+        }
+      />
       {/* <Route path="/course/:courseTitle" element={<CourseContentPage />} /> */}
       <Route
         path="/course-creator"
         element={<CourseCreator authUser={props.authUser} />}
       />
       <Route
-        path="/courses/preview/:courseId"
-        element={<CoursePreviewPage authUser={props.authUser} />}
-      />
-      <Route
         path="/course/course-content/:courseId"
         element={<CourseContentPage />}
       />
-      <Route path="/category/:category" element={<CategoryCourse authUser={props.authUser} />} />
+      <Route
+        path="/category/:category"
+        element={
+          <CategoryCourse
+            userData={props.userData}
+            setUserData={props.setUserData}
+          />
+        }
+      />
+
       {/* based on the instructor id course is created */}
       <Route path="/create-course" element={<CreateCourse />} />
-      <Route path="/home/created-courses" element={<CreatedCourses />} />
+      <Route path="/home/created-courses" element={<CreatedCourses userData={props.userData} />} />
       <Route path="/add-lessons" element={<AddLessons />} />
+      <Route
+        path="/courses/preview/:courseId"
+        element={<CoursePreviewPage userData={props.userData} />}
+      />
       <Route path="*" element={<h1>Not Found</h1>} />
     </Routes>
     <Footer />
