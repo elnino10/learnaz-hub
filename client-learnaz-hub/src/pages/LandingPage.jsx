@@ -1,8 +1,11 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+
 import Learn from "../assets/images/study.png";
 import Teacher from "../assets/images/teacher2.png";
-import { Link } from "react-router-dom";
+import { CourseCard } from "../components";
+
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // Import carousel styles
 import { Carousel } from "react-responsive-carousel";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,8 +15,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 // data for courses
-import { courses, reviews } from "../data/courseData";
-import { CourseCard } from "../components";
+import { reviews } from "../data/courseData";
+import axios from "axios";
 
 function LandingPage(props) {
   const [allCourses, setAllCourses] = useState([]);
@@ -21,12 +24,15 @@ function LandingPage(props) {
   const [categories, setCategories] = useState([]);
   const [activeCategory, setActiveCategory] = useState("");
 
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  const apiUrl = `${baseUrl}/courses`;
+
   // fetch all courses from database
   useEffect(() => {
     const fetchAllCourses = async () => {
       try {
-        // fetch courses from database
-        setAllCourses(courses);
+        const res = await axios.get(apiUrl);
+        setAllCourses(res.data.data);
       } catch (error) {
         console.log("Error fetching courses: ", error);
       }
@@ -37,20 +43,26 @@ function LandingPage(props) {
   // create an array of all the categories in dataset
   useEffect(() => {
     let courseCategories = [];
-    setSelectedCategory(courses[0].category);
-    setActiveCategory(courses[0].category);
-    courses &&
-      courses.map((course) => {
+    setSelectedCategory(allCourses[0]?.category);
+    setActiveCategory(allCourses[0]?.category);
+    allCourses &&
+      allCourses.forEach((course) => {
         if (!courseCategories.includes(course.category)) {
           courseCategories.push(course.category);
         }
       });
     setCategories(courseCategories);
-  }, []);
+  }, [allCourses]);
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
   };
+
+  // capitalize the first letter of a string
+  function capitalizeFirstLetter(string) {
+    if (!string) return ""; // Handle empty or null string
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
   return (
     <div className="m-0 p-0 min-h-screen scroll">
@@ -92,7 +104,7 @@ function LandingPage(props) {
           </p>
           <div className="text-gray-700 text-lg md:text-xl flex flex-wrap gap-4 pt-6">
             {categories.map((category, index) => (
-              <div key={index}>
+              <div key={index} className="text-2xl font-serif">
                 <button
                   onClick={() => {
                     handleCategoryClick(category);
@@ -103,7 +115,7 @@ function LandingPage(props) {
                   } hover:underline hover:text-gray-900`}
                   aria-label={`Select ${category} category`}
                 >
-                  {category}
+                  {capitalizeFirstLetter(category)}
                 </button>
               </div>
             ))}
@@ -112,7 +124,7 @@ function LandingPage(props) {
           {selectedCategory && (
             <div className="pt-6">
               <h3 className="text-2xl md:text-3xl text-gray-900 font-bold mb-4">
-                {selectedCategory} Courses
+                {capitalizeFirstLetter(selectedCategory)} Courses
               </h3>
               <CourseCard
                 selectedCategory={selectedCategory}
@@ -184,7 +196,9 @@ function LandingPage(props) {
             <div className="w-full md:w-1/2 text-center md:text-left">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-600 md:mt-0">
                 {!props.authUser ||
-              (props.authUser && props.authUser.role !== "instructor") ? "Become a Course Creator" : "Create Your Course"}
+                (props.authUser && props.authUser.role !== "instructor")
+                  ? "Become a Course Creator"
+                  : "Create Your Course"}
               </h2>
               <p className="text-lg md:text-lg text-gray-700 mb-8">
                 Share your expertise with learners from around the world. Join

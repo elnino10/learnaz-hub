@@ -29,13 +29,16 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   createCourse
 );
-router.get("/enroll/:courseId", authMiddleware, enrollInCourse);
-router.get("/", authMiddleware, getCourses);
-router.get("/instructor/:instructorId/", authMiddleware, getCreatedCourses);
-router.get("/student/:studentId", authMiddleware, getEnrolledCourses);
+router.get("/", getCourses);
 router.get("/:courseId", authMiddleware, getCourseByID);
 router.patch("/:courseId", authMiddleware, checkRole(role), updateCourse);
 router.delete("/:courseId", authMiddleware, checkRole(role), deleteCourse);
+
+router.get("/category/:category", getCourses); // Get courses by category
+
+router.post("/enroll/:courseId", authMiddleware, enrollInCourse);  // Enroll in a course
+router.get("/instructor/:instructorId/", authMiddleware, getCreatedCourses);  // Get courses created by a particular instructor
+router.get("/student/:studentId", authMiddleware, getEnrolledCourses);  // Get courses enrolled by a student
 
 // Student's course interaction routes
 router.get("/dashboard", getStudentDashboard);
