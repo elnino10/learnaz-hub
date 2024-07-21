@@ -69,8 +69,8 @@ function CoursePreviewPage(props) {
                 (25 ratings)
               </a>
               <span className="ml-2 text-muted-foreground">
-                {course?.studentsEnrolled.length || 0}{" "}
-                {course?.studentsEnrolled.length === 1 ? "student" : "students"}
+                {course?.studentsEnrolled?.length || 0}{" "}
+                {course?.studentsEnrolled?.length === 1 ? "student" : "students"}
               </span>
             </div>
             <p className={`${TEXT_MUTED_FOREGROUND} mb-4`}>
