@@ -69,8 +69,8 @@ function CoursePreviewPage(props) {
                 (25 ratings)
               </a>
               <span className="ml-2 text-muted-foreground">
-                {course?.numberEnrolled || 0}{" "}
-                {course?.numberEnrolled === 1 ? "student" : "students"}
+                {course?.studentsEnrolled.length || 0}{" "}
+                {course?.studentsEnrolled.length === 1 ? "student" : "students"}
               </span>
             </div>
             <p className={`${TEXT_MUTED_FOREGROUND} mb-4`}>
@@ -100,7 +100,7 @@ function CoursePreviewPage(props) {
           </div>
           <div className="absolute bg-white text-gray-800 mt-20 md:ml-[50rem] lg:w-1/3 bg-card p-4 rounded-md shadow-lg">
             <img
-              src={course?.image}
+              src={course?.thumbnailURL}
               alt="Course preview image"
               className="w-full h-64 rounded mb-4"
             />
