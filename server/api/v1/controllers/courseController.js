@@ -1,10 +1,17 @@
 import Course from "../models/courseModel.js";
-
+import Enrollment from "../models/enrollmentModel.js";
 
 //Get all courses in the database
 export const getCourses = async (req, res) => {
+  const category = req.params.category;
+
   try {
-    const courses = await Course.find();
+    let courses = "";
+    if (category) {
+      courses = await Course.find({ category: category });
+    } else {
+      courses = await Course.find();
+    }
     res
       .status(200)
       .json({ status: "success", numCourses: courses.length, data: courses });
@@ -24,9 +31,12 @@ export const getCourseByID = async (req, res) => {
         .status(404)
         .json({ status: "failed", message: "Course not found" });
     }
-    res
-      .status(200)
-      .json({ status: "success", message: "course found", data: course });
+
+    res.status(200).json({
+      status: "success",
+      message: "course found",
+      data: course,
+    });
   } catch (error) {
     res
       .status(500)
@@ -85,27 +95,28 @@ export const deleteCourse = async (req, res) => {
 // create a new course
 export const createCourse = async (req, res) => {
   try {
-    const newCourse = new Course({ ...req.body, instructorId: req.user._id });
+    const newCourse = new Course({
+      ...req.body,
+      instructorId: req.user._id,
+      author: `${req.user.firstName} ${req.user.lastName || ""}`,
+    });
     const course = await newCourse.save();
 
     // update user's coursesCreated array
     req.user.coursesCreated.push(course._id);
     await req.user.save();
 
-    res
-      .status(201)
-      .json({
-        status: "success",
-        message: "Course created successfully",
-        data: course,
-      });
+    res.status(201).json({
+      status: "success",
+      message: "Course created successfully",
+      data: course,
+    });
   } catch (error) {
     res
       .status(500)
       .json({ error: "Server error", errorMessage: error.message });
   }
 };
-
 
 // Get courses created by a particular instructor
 export const getCreatedCourses = async (req, res) => {
@@ -135,7 +146,8 @@ export const getCreatedCourses = async (req, res) => {
 // Enroll in a course
 export const enrollInCourse = async (req, res) => {
   try {
-    const { studentId, courseId } = req.body;
+    const studentId = req.user.id;
+    const courseId = req.params.courseId;
 
     const course = await Course.findById(courseId);
     if (!course) {
@@ -154,20 +166,25 @@ export const enrollInCourse = async (req, res) => {
       student.coursesEnrolled.push(courseId);
       await student.save();
 
+      const enrollment = new Enrollment({ courseId, studentId });
+      const newEnrollment = await enrollment.save();
+
       res.status(200).json({
         status: "success",
-        courseTitle: course.title,
-        message: "Enrolled in course successfully"
+        message: "Enrolled in course successfully",
+        data: newEnrollment,
       });
     } else {
       res.status(400).json({
         status: "failed",
         courseTitle: course.title,
-        message: "Already enrolled in this course"
+        message: "Already enrolled in this course",
       });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res
+      .status(500)
+      .json({ error: "Server error", errorMessage: error.message });
   }
 };
 
@@ -176,7 +193,7 @@ export const getEnrolledCourses = async (req, res) => {
   const { studentId } = req.params;
 
   try {
-    const courses = await Course.find({ students: studentId });
+    const courses = await Course.find({ studentsEnrolled: studentId });
 
     if (courses.length === 0) {
       return res.status(404).json({

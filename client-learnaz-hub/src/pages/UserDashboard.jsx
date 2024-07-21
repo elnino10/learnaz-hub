@@ -13,6 +13,7 @@ import axios from "axios";
 const UserDashboard = (props) => {
   const [suggestedCourses, setSuggestedCourses] = useState([]);
   const [courses, setCourses] = useState([]);
+  const [enrolledCourses, setEnrolledCourses] = useState([]);
 
   const location = useLocation();
 
@@ -58,9 +59,14 @@ const UserDashboard = (props) => {
 
   // fetch courses created by user if user is an instructor
   // or the courses enrolled by user if user is a student
+  // an instructor may also be enrolled in courses
   useEffect(() => {
     const fetchCourses = async () => {
       try {
+        if (role === "instructor") {
+          const response = await axiosInstance.get(`/student/${id}`);
+          setEnrolledCourses(response.data.data);
+        }
         const res = await axiosInstance.get(`/courses/${role}/${id}`);
         setCourses(res.data.data);
       } catch (error) {
@@ -251,7 +257,13 @@ const UserDashboard = (props) => {
               {suggestedCourses.map((course) => (
                 <div key={course.id} className="max-w-52 max-h-52">
                   <div className="flex flex-col bg-white border h-40 w-100 overflow-hidden">
-                    <Link to={`/course/course-content/${course.id}`}>
+                    <Link
+                      to={
+                        props.userData.coursesEnrolled.includes(course.id)
+                          ? `/course/course-content/${course._id}`
+                          : `/courses/preview/${course._id}`
+                      }
+                    >
                       <div>
                         <img
                           src={course.imageurl}

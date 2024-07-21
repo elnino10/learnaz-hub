@@ -18,8 +18,7 @@ import {
   CreatedCourses,
   CourseCreator,
   CoursePreviewPage,
-  ProfileEdit
-
+  ProfileEdit,
 } from "./pages";
 import {
   Footer,
@@ -41,11 +40,11 @@ const App = () => {
   const [authUser, setAuthUser] = useState(null);
   const [userData, setUserData] = useState({});
 
-  const {pathname} = useLocation();
+  const { pathname } = useLocation();
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [pathname])
+  }, [pathname]);
 
   const clickAwayHandler = () => {
     setMenuVisible(false);
@@ -155,7 +154,7 @@ const MainLayout = (props) => (
       />
       <Route
         path="/category/:category"
-        element={<CategoryCourse authUser={props.authUser} />}
+        element={<CategoryCourse userData={props.userData} />}
       />
 
       <Route path="/category/:category" element={<CategoryCourse />} />
@@ -163,6 +162,10 @@ const MainLayout = (props) => (
       <Route path="/create-course" element={<CreateCourse />} />
       <Route path="/home/created-courses" element={<CreatedCourses />} />
       <Route path="/add-lessons" element={<AddLessons />} />
+      <Route
+        path="/courses/preview/:courseId"
+        element={<CoursePreviewPage userData={props.userData} />}
+      />
       <Route path="*" element={<h1>Not Found</h1>} />
     </Routes>
     <Footer />
