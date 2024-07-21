@@ -1,5 +1,6 @@
 import Course from "../models/courseModel.js";
 import Enrollment from "../models/enrollmentModel.js";
+import User from "../models/userModel.js";
 
 //Get all courses in the database
 export const getCourses = async (req, res) => {
@@ -146,8 +147,7 @@ export const getCreatedCourses = async (req, res) => {
 // Enroll in a course
 export const enrollInCourse = async (req, res) => {
   try {
-    const studentId = req.user.id;
-    const courseId = req.params.courseId;
+    const { courseId, studentId } = req.body;
 
     const course = await Course.findById(courseId);
     if (!course) {

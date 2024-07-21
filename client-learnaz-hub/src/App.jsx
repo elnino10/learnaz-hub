@@ -154,13 +154,17 @@ const MainLayout = (props) => (
       />
       <Route
         path="/category/:category"
-        element={<CategoryCourse userData={props.userData} />}
+        element={
+          <CategoryCourse
+            userData={props.userData}
+            setUserData={props.setUserData}
+          />
+        }
       />
 
-      <Route path="/category/:category" element={<CategoryCourse />} />
       {/* based on the instructor id course is created */}
       <Route path="/create-course" element={<CreateCourse />} />
-      <Route path="/home/created-courses" element={<CreatedCourses />} />
+      <Route path="/home/created-courses" element={<CreatedCourses userData={props.userData} />} />
       <Route path="/add-lessons" element={<AddLessons />} />
       <Route
         path="/courses/preview/:courseId"

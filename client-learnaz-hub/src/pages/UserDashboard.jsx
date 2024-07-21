@@ -18,8 +18,8 @@ const UserDashboard = (props) => {
   const location = useLocation();
 
   // get user id from login
-  const id = location.state && location.state.id;
-  const role = location.state && location.state.role;
+  const id = location?.state.id;
+  const role = location.state?.role;
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -120,7 +120,7 @@ const UserDashboard = (props) => {
           <Link
             to="/create-course"
             state={{ userId: props.userData.id }}
-            className="text-white bg-gray-900 p-3 rounded-md shadow-md text-lg border hover:shadow-sm hover:text-blue-900"
+            className="text-white bg-gray-900 p-3 rounded-md shadow-md text-lg border hover:shadow-sm hover:text-gray-300"
             aria-label="Create a course"
           >
             Create a Course
@@ -218,7 +218,7 @@ const UserDashboard = (props) => {
           </div>
           <div className="md:w-[70%] md:mx-auto">
             <Slider {...settings}>
-              {courses.map((course) => (
+              {courses?.map((course) => (
                 <div key={course.id} className="max-w-48">
                   <div className="flex flex-col bg-gray-100 border h-40 w-100 overflow-hidden">
                     <Link to={`/course/course-content/${course.id}`}>
@@ -259,7 +259,7 @@ const UserDashboard = (props) => {
                   <div className="flex flex-col bg-white border h-40 w-100 overflow-hidden">
                     <Link
                       to={
-                        props.userData.coursesEnrolled.includes(course.id)
+                        props.userData.coursesEnrolled?.includes(course.id)
                           ? `/course/course-content/${course._id}`
                           : `/courses/preview/${course._id}`
                       }

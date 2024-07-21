@@ -41,14 +41,17 @@ function CoursePreviewPage(props) {
       courseId: courseId,
       studentId: props.userData._id,
     };
-    const res = await axiosInstance.post(
-      `/courses/enroll/${courseId}`,
-      enrollmentData
-    );
+    try {
+      const res = await axiosInstance.post(
+        `/courses/enroll/${courseId}`,
+        enrollmentData
+      );
 
-    console.log(res.data);
-    // if (res.data.status === "success") alert("Enrolled for course successfully!")
-    // navigate(`/course/course-content/${courseId}`);
+      if (res.data.status === "success") alert("Enrolled for course successfully!")
+      navigate(`/course/course-content/${courseId}`);
+    } catch (error) {
+      alert("Error enrolling in course", error);
+    }
   };
 
   return (

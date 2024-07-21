@@ -6,7 +6,6 @@ import axios from "axios";
 
 function CategoryCourses(props) {
   const [courses, setCourses] = useState([]);
-  // const [filteredCourses, setFilteredCourses] = useState([]);
   const { category } = useParams();
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
@@ -15,14 +14,9 @@ function CategoryCourses(props) {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        // Filter courses based on the selected category
+        // get all courses based on the selected category
         const res = await axios.get(apiUrl);
         setCourses(res.data.data);
-
-        // const categoryCourses = courses.filter(
-        //   (course) => course.category === category
-        // );
-        // setFilteredCourses(categoryCourses);
       } catch (error) {
         console.error("Error fetching courses: ", error);
       }
@@ -50,13 +44,13 @@ function CategoryCourses(props) {
             >
               <Link
                 to={
-                  props.userData.coursesEnrolled.includes(course.id)
+                  course?.studentsEnrolled?.includes(props.userData._id)
                     ? `/course/course-content/${course._id}`
                     : `/courses/preview/${course._id}`
                 }
               >
                 <img
-                  src={course.image}
+                  src={course.thumbnailURL}
                   alt={course.title}
                   className="w-full h-48 object-cover mb-4"
                 />
