@@ -87,7 +87,7 @@ export const forgotPassword = async (req, res) => {
       from: process.env.EMAIL_USER,
       email: user.email,
       subject: "Password Reset",
-      content: `You requested to set your password.
+      content: `You requested to reset your password.
       Click on this link to reset your password: ${resetUrl}`,
     };
 
