@@ -118,7 +118,10 @@ const MainLayout = (props) => (
         element={<LoginForm setAuthUser={props.setAuthUser} />}
       />
       <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/password-recovery" element={<PasswordRecoveryForm />} />
+      <Route
+        path="/password-recovery/:resetToken"
+        element={<PasswordRecoveryForm />}
+      />
       <Route
         path="/home/my-courses/learning"
         element={<EnrolledCoursesPage />}
@@ -164,7 +167,10 @@ const MainLayout = (props) => (
 
       {/* based on the instructor id course is created */}
       <Route path="/create-course" element={<CreateCourse />} />
-      <Route path="/home/created-courses" element={<CreatedCourses userData={props.userData} />} />
+      <Route
+        path="/home/created-courses"
+        element={<CreatedCourses userData={props.userData} />}
+      />
       <Route path="/add-lessons" element={<AddLessons />} />
       <Route
         path="/courses/preview/:courseId"
