@@ -9,7 +9,7 @@ import lessonRouter from "./routes/lessonRoutes.js";
 import analyticsRouter from "./routes/analyticsRoutes.js";
 import { jsonParserMiddleware } from "./utils/authMiddleware.js";
 import dbClient from "./utils/db.js";
-import passport from './utils/passport.js';
+import passport from "./utils/passport.js";
 const app = express();
 
 // third-party middlewares

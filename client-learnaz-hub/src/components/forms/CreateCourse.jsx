@@ -39,7 +39,7 @@ const CreateCourse = () => {
       title,
       summary,
       description,
-      imageUrl: imageUrl || defaultImageUrl, // Use defaultImageUrl if imageUrl is empty
+      thumbnailURL: imageUrl || defaultImageUrl, // Use defaultImageUrl if imageUrl is empty
       category,
       instructorId: userId,
     };

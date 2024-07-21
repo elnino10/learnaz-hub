@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -6,15 +8,27 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
+import axios from "axios";
+
 const defaultTheme = createTheme();
 
 function ForgotPassword() {
-  const handleSubmit = (event) => {
+  const [errMsg, setErrMsg] = useState("");
+
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  const resetUrl = `${baseUrl}/auth/forgot-password`;
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-    });
+    const userEmail = { email: data.get("email") };
+
+    try {
+      await axios.post(resetUrl, userEmail);
+      alert("Password reset link sent to your email");
+    } catch (error) {
+      setErrMsg(error.response.data.message);
+    }
   };
 
   return (
@@ -33,6 +47,9 @@ function ForgotPassword() {
             <Typography component="h1" variant="h5">
               Forgot Password
             </Typography>
+            <div className={`${!errMsg && "invisible"} text-red-400 h-5`}>
+              <p>{errMsg}</p>
+            </div>
             <Box
               component="form"
               onSubmit={handleSubmit}
@@ -48,6 +65,7 @@ function ForgotPassword() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                onChange={() => setErrMsg("")}
               />
 
               <Button

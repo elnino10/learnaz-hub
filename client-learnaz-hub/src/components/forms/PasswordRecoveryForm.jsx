@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -8,17 +11,32 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
+import axios from "axios";
+
 const defaultTheme = createTheme();
 
 function PasswordRecoveryForm() {
-  const handleSubmit = (event) => {
+  const [errMsg, setErrMsg] = useState("");
+  const { resetToken } = useParams();
+  const navigate = useNavigate();
+
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  const apiUrl = `${baseUrl}/auth/reset-password/${resetToken}`;
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      oldPassword: data.get("oldPassword"),
-      newPassword: data.get("newPassword"),
+    const passwordResetData = {
+      password: data.get("newPassword"),
       confirmPassword: data.get("confirmPassword"),
-    });
+    };
+    try {
+      await axios.put(apiUrl, passwordResetData);
+      alert("Password reset successful!");
+      navigate("/login");
+    } catch (error) {
+      setErrMsg(error.response.data.message);
+    }
   };
 
   return (
@@ -38,8 +56,11 @@ function PasswordRecoveryForm() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign in
+              Reset Password
             </Typography>
+            <div className={`${!errMsg && "invisible"} text-red-400 h-5`}>
+              <p>{errMsg}</p>
+            </div>
             <Box
               component="form"
               onSubmit={handleSubmit}
@@ -51,20 +72,22 @@ function PasswordRecoveryForm() {
                 required
                 fullWidth
                 name="newPassword"
-                label="NewPassword"
+                label="Enter new password"
                 type="password"
                 id="newPassword"
                 autoComplete="new-password"
+                onChange={() => setErrMsg("")}
               />
               <TextField
                 margin="normal"
                 required
                 fullWidth
                 name="confirmPassword"
-                label="Password"
+                label="Confirm password"
                 type="password"
                 id="confirmPassword"
                 autoComplete="confirm-password"
+                onChange={() => setErrMsg("")}
               />
               <Button
                 type="submit"
