@@ -40,10 +40,9 @@ const AddLessons = () => {
     };
     try {
       const res = await api.post(apiUrl, newLesson);
-      const lessonData = res.data.data;
-      console.log(lessonData);
+
       // Update the lessons state with the new lesson
-      setLessons([...lessons, newLesson]);
+      setLessons([...lessons, res.data.data]);
       setLessonTitle("");
       setLessonUrl("");
       setLessonNumber(lessonNumber + 1);

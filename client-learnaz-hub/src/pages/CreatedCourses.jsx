@@ -1,44 +1,33 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-function CreatedCourses() {
+function CreatedCourses(props) {
   const [myCourses, setMyCourses] = useState([]);
 
-  // Retrieve the instructor ID from local storage
-  const instructorId = localStorage.getItem('instructorId');
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  const token = localStorage.getItem("token");
+
+  const axiosInstance = axios.create({
+    baseURL: baseUrl,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const api = axios.create({
-          baseURL: import.meta.env.VITE_API_BASE_URL,
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const res = await api.get(`/courses/instructor/${instructorId}`);
+        const res = await axiosInstance.get(
+          `/courses/instructor/${props.userData.id}`
+        );
         setMyCourses(res.data.data);
       } catch (error) {
         console.error("Error fetching courses: ", error);
       }
     };
-
-    // Fetch courses initially
-    if (instructorId) {
-      fetchCourses();
-    }
-
-    // Set up polling to fetch courses every 30 seconds
-    const intervalId = setInterval(() => {
-      if (instructorId) {
-        fetchCourses();
-      }
-    }, 30000); // 30 seconds
-
-    // Clean up interval on component unmount
-    return () => clearInterval(intervalId);
-  }, [instructorId]);
+    fetchCourses();
+  }, []);
 
   return (
     <div className="mt-20">
@@ -62,7 +51,7 @@ function CreatedCourses() {
           myCourses.map((course, index) => (
             <div key={index} className="p-4 border rounded-lg">
               <img
-                src={course.image}
+                src={course.thumbnailURL}
                 alt={course.title}
                 className="w-full h-48 object-cover mb-4"
               />

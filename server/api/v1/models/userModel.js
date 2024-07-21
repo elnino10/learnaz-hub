@@ -70,6 +70,15 @@ userSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
+// get user's full name
+userSchema.virtual("fullName").get(function () {
+  return `${this.firstName} ${this.lastName || ""}`;
+});
+
+// Ensure virtual fields are serialized
+userSchema.set("toJSON", { virtuals: true });
+userSchema.set("toObject", { virtuals: true });
+
 const User = mongoose.model("User", userSchema);
 
 export default User;

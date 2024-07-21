@@ -13,12 +13,13 @@ import axios from "axios";
 const UserDashboard = (props) => {
   const [suggestedCourses, setSuggestedCourses] = useState([]);
   const [courses, setCourses] = useState([]);
+  const [enrolledCourses, setEnrolledCourses] = useState([]);
 
   const location = useLocation();
 
   // get user id from login
-  const id = location.state && location.state.id;
-  const role = location.state && location.state.role;
+  const id = location?.state.id;
+  const role = location.state?.role;
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -58,9 +59,14 @@ const UserDashboard = (props) => {
 
   // fetch courses created by user if user is an instructor
   // or the courses enrolled by user if user is a student
+  // an instructor may also be enrolled in courses
   useEffect(() => {
     const fetchCourses = async () => {
       try {
+        if (role === "instructor") {
+          const response = await axiosInstance.get(`/student/${id}`);
+          setEnrolledCourses(response.data.data);
+        }
         const res = await axiosInstance.get(`/courses/${role}/${id}`);
         setCourses(res.data.data);
       } catch (error) {
@@ -114,7 +120,7 @@ const UserDashboard = (props) => {
           <Link
             to="/create-course"
             state={{ userId: props.userData.id }}
-            className="text-white bg-gray-900 p-3 rounded-md shadow-md text-lg border hover:shadow-sm hover:text-blue-900"
+            className="text-white bg-gray-900 p-3 rounded-md shadow-md text-lg border hover:shadow-sm hover:text-gray-300"
             aria-label="Create a course"
           >
             Create a Course
@@ -212,7 +218,7 @@ const UserDashboard = (props) => {
           </div>
           <div className="md:w-[70%] md:mx-auto">
             <Slider {...settings}>
-              {courses.map((course) => (
+              {courses?.map((course) => (
                 <div key={course.id} className="max-w-48">
                   <div className="flex flex-col bg-gray-100 border h-40 w-100 overflow-hidden">
                     <Link to={`/course/course-content/${course.id}`}>
@@ -251,7 +257,13 @@ const UserDashboard = (props) => {
               {suggestedCourses.map((course) => (
                 <div key={course.id} className="max-w-52 max-h-52">
                   <div className="flex flex-col bg-white border h-40 w-100 overflow-hidden">
-                    <Link to={`/course/course-content/${course.id}`}>
+                    <Link
+                      to={
+                        props.userData.coursesEnrolled?.includes(course.id)
+                          ? `/course/course-content/${course._id}`
+                          : `/courses/preview/${course._id}`
+                      }
+                    >
                       <div>
                         <img
                           src={course.imageurl}
