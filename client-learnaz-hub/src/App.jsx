@@ -174,7 +174,7 @@ const MainLayout = (props) => (
       <Route path="/add-lessons" element={<AddLessons />} />
       <Route
         path="/courses/preview/:courseId"
-        element={<CoursePreviewPage userData={props.userData} />}
+        element={<CoursePreviewPage userData={props.userData} authData={props.authData} />}
       />
       <Route path="*" element={<h1>Not Found</h1>} />
     </Routes>
