@@ -62,7 +62,7 @@ function CoursePreviewPage(props) {
           <div className="pt-7 lg:w-2/3">
             <h1 className="text-3xl font-bold mb-2">{course?.title}</h1>
             <p className={`${TEXT_MUTED_FOREGROUND} mb-4 px-5`}>
-              {course?.description}
+              {course?.summary}
             </p>
             <div className="flex items-center mb-4">
               <span className="text-yellow-500 mr-2">★★★★★</span>
