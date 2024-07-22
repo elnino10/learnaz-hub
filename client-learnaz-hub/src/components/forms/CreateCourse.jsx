@@ -12,6 +12,7 @@ const CreateCourse = () => {
   const [summary, setSummary] = useState("");
   const [description, setDescription] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [price, setPrice] = useState("");
   const [category, setCategory] = useState("programming");
   const navigate = useNavigate();
   const location = useLocation();
@@ -40,6 +41,7 @@ const CreateCourse = () => {
       summary,
       description,
       thumbnailURL: imageUrl || defaultImageUrl, // Use defaultImageUrl if imageUrl is empty
+      price,
       category,
       instructorId: userId,
     };
@@ -96,14 +98,26 @@ const CreateCourse = () => {
             required
           ></textarea>
           <label htmlFor="imageUrl" className="text-2xl">
-            Thumbnail Url
+            Thumbnail URL
           </label>
           <input
             type="text"
             id="imageUrl"
             value={imageUrl}
             onChange={(e) => setImageUrl(e.target.value)}
-            placeholder="Enter course thumbnail"
+            placeholder="Enter course thumbnail URL"
+            className={inputFieldClass}
+            required
+          />
+          <label htmlFor="price" className="text-2xl">
+            Price
+          </label>
+          <input
+            type="number"
+            id="price"
+            value={price}
+            onChange={(e) => setPrice(Number(e.target.value))}
+            placeholder="Enter course price"
             className={inputFieldClass}
             required
           />

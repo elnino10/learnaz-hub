@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import student from "../assets/images/student5ani.gif";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -13,6 +13,11 @@ import axios from "axios";
 const UserDashboard = (props) => {
   const [suggestedCourses, setSuggestedCourses] = useState([]);
   const [courses, setCourses] = useState([]);
+
+  // eslint-disable-next-line no-unused-vars
+  const [enrolledCourses, setEnrolledCourses] = useState([]);
+
+  const location = useLocation();
 
   // get user id from login
   const id = props.authUser?.id;
@@ -147,9 +152,14 @@ const UserDashboard = (props) => {
           </div>
         ) : (
           <div className="w-50 my-10 text-center">
-            <h2 className="text-4xl font-bold">Learning that Gets You</h2>
-            <p className="text-xl">
-              Acquire skills for your present and future. Keep Learning.
+            <h2 className="text-4xl font-bold">Unlock Your Potential</h2>
+            <p className="text-xl max-w-3xl mx-auto">
+              Gain the skills to shape your future and achieve your dreams.
+              Embrace the journey of lifelong learning and unlock new
+              opportunities every step of the way. Whether {`you're`} starting a
+              new career, enhancing your current path, or simply exploring your
+              passions, {`we're`} here to support you. Keep pushing forward,
+              keep learning, and let your knowledge shine.
             </p>
           </div>
         )}
@@ -232,9 +242,9 @@ const UserDashboard = (props) => {
       ) : courses.length > 0 ? (
         <>
           <div className="flex items-center justify-between px-16 mt-5 mb-3 md:px-32">
-            <h3 className="pl-4 text-2xl text-gray-700 font-bold">
-              Continue Learning
-            </h3>
+            <div className="mb-3 text-2xl text-gray-700 font-bold">
+              <h2>Continue Learning</h2>
+            </div>
             <div>
               <Link
                 to="/home/my-courses/learning"
@@ -286,10 +296,12 @@ const UserDashboard = (props) => {
       )}
       {props.userData && props.userData.role !== "instructor" && (
         <div className="mt-10 mx-20">
-          <div className="border mb-5"></div>
-          <div className="mb-3 text-2xl text-gray-700 font-bold">
-            <h2>Suggested Courses</h2>
+          <div className="mt-5 mb-3 md:px-32">
+            <div className="mb-3 text-2xl text-gray-700 font-bold">
+              <h2>Suggested Courses</h2>
+            </div>
           </div>
+
           <div className="md:w-[70%] md:mx-auto">
             <Slider {...settings}>
               {suggestedCourses.map((course) => (
