@@ -8,7 +8,7 @@ function CourseCard(props) {
       {props.courses
         ?.filter((course) => course.category === props.selectedCategory)
         .map((course, index) => (
-          <div key={index} className="p-4 border rounded-lg">
+          <div key={index} className="p-4 border rounded-lg shadow-md">
             <Link
               to={
                 props.authUser
