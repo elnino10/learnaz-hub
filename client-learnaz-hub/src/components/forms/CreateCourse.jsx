@@ -134,7 +134,7 @@ const CreateCourse = () => {
             <option value="design">Design</option>
             <option value="business">Business</option>
             <option value="marketing">Marketing</option>
-            <option value="artificial-intelligence">Artificial Intelligence</option>
+            <option value="artificial intelligence">Artficial Intelligence</option>
           </select>
           <button type="submit" className={primaryButtonClass}>
             Create Course

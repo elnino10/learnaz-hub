@@ -1,21 +1,25 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlayCircle } from "@fortawesome/free-solid-svg-icons";
 
-
 // Shared Tailwind CSS classes
 const buttonClasses = "px-2 py-1 rounded";
 const mutedButtonClasses = "bg-muted text-muted-foreground " + buttonClasses;
 const cardClasses = "bg-card text-card-foreground p-2 rounded-lg";
 
-const CourseContentPage = () => {
-  const videoRef = useRef(null);
+const CourseContentPage = (props) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [course, setCourse] = useState(null);
   const [currentLesson, setCurrentLesson] = useState(null);
+  
+  const videoRef = useRef(null);
   const { courseId } = useParams();
+
+  // get this course content from database
+  // display it's list of lessons
 
   console.log("courseId from useParams:", courseId);
 
@@ -58,6 +62,16 @@ const CourseContentPage = () => {
     setIsPlaying(!isPlaying);
   };
 
+  // const lessonSelectHandler = (url) => {
+  //   videoRef.current.src = url;
+  //   videoRef.current.play();
+  //   setIsPlaying(true);
+  // };
+
+  console.log(
+    props.userData?.coursesEnrolled?.map((course) => course.thumbnailURL)
+  );
+
   const handleLessonClick = (lesson) => {
     setCurrentLesson(lesson);
     setIsPlaying(false);
@@ -85,6 +99,7 @@ const CourseContentPage = () => {
       </header>
       <main className="flex flex-col md:flex-row">
         <div className="flex-1 p-4">
+
           {currentLesson && (
             <div
               className="relative bg-black aspect-w-16 aspect-h-9"

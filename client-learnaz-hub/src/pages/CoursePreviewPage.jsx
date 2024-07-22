@@ -14,6 +14,7 @@ function CoursePreviewPage(props) {
   const navigate = useNavigate();
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  const apiUrl = `${baseUrl}/courses/${courseId}`;
 
   const axiosInstance = axios.create({
     baseURL: baseUrl,
@@ -26,7 +27,7 @@ function CoursePreviewPage(props) {
     // fetch course data from database
     const fetchCourse = async () => {
       try {
-        const response = await axiosInstance.get(`/courses/${courseId}`);
+        const response = await axios.get(apiUrl);
         setCourse(response.data.data);
       } catch (error) {
         console.error(error);
@@ -46,12 +47,17 @@ function CoursePreviewPage(props) {
         `/courses/enroll/${courseId}`,
         enrollmentData
       );
+      if (!props.authData) {
+        throw new Error("Please login to enroll in a course");
+      }
 
       if (res.data.status === "success")
         alert("Enrolled for course successfully!");
       navigate(`/course/course-content/${courseId}`);
     } catch (error) {
-      alert("Error enrolling in course", error);
+      console.log(error);
+      alert(error.message || "Error enrolling in course");
+      // alert("Error enrolling in course: sign in to enroll");
     }
   };
 
