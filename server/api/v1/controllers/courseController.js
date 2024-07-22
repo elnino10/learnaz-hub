@@ -26,7 +26,9 @@ export const getCourses = async (req, res) => {
 //Get a course by ID
 export const getCourseByID = async (req, res) => {
   try {
-    const course = await Course.findById(req.params.courseId);
+    const course = await Course.findById(req.params.courseId).populate(
+      "lessons"
+    );
     if (!course) {
       return res
         .status(404)
