@@ -98,9 +98,11 @@ function Header(props) {
             <img
               src={Logo}
               alt="Learnaz-Hub Logo"
-              className="block md:hidden h-16 rounded-full"
+              className="block h-16 rounded-full md:hidden"
             />
-            <div className="hidden md:block text-xl font-bold">Learnaz Hub</div>
+            <div className="hidden text-xl font-bold md:block md:">
+              Learnaz Hub
+            </div>
           </Link>
           {/* course category */}
           <div className="relative ml-20 flex flex-col">
@@ -150,7 +152,7 @@ function Header(props) {
                     <div
                       className={`${
                         props.activePage === "category" ? "text-gray-900" : ""
-                      } text-gray-600 hover:text-gray-900 focus:outline-none`}
+                      } text-gray-600 hover:text-gray-900 focus:outline-none md:ml-8`}
                     >
                       Category
                     </div>
