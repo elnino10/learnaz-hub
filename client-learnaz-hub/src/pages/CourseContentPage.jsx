@@ -3,25 +3,25 @@ import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlayCircle } from "@fortawesome/free-solid-svg-icons";
+import { faPause, faPlayCircle } from "@fortawesome/free-solid-svg-icons";
+
+import ReactPlayer from "react-player";
 
 // Shared Tailwind CSS classes
 const buttonClasses = "px-2 py-1 rounded";
 const mutedButtonClasses = "bg-muted text-muted-foreground " + buttonClasses;
 const cardClasses = "bg-card text-card-foreground p-2 rounded-lg";
 
-const CourseContentPage = (props) => {
-  const [isPlaying, setIsPlaying] = useState(false);
+const CourseContentPage = () => {
+  const [isPlaying, setIsPlaying] = useState(true);
   const [course, setCourse] = useState(null);
-  const [currentLesson, setCurrentLesson] = useState(null);
-  
+  const [lessonUrl, setLessonUrl] = useState("");
+
   const videoRef = useRef(null);
   const { courseId } = useParams();
 
   // get this course content from database
   // display it's list of lessons
-
-  console.log("courseId from useParams:", courseId);
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
   const axiosInstance = axios.create({
@@ -31,55 +31,43 @@ const CourseContentPage = (props) => {
     },
   });
 
+  // fetch course data from database
   useEffect(() => {
-    // fetch course data from database
     const fetchCourse = async () => {
-      if (!courseId) {
-        console.error("No courseId found");
-        return;
-      }
       try {
         const response = await axiosInstance.get(`/courses/${courseId}`);
         const courseData = response.data.data;
         setCourse(courseData);
-        // set the first lesson as the current lesson to start with
-        if (courseData.lessons && courseData.lessons.length > 0) {
-          setCurrentLesson(courseData.lessons[0]);
-        }
       } catch (error) {
         console.error(error);
       }
     };
     fetchCourse();
-  }, [courseId]);
+  }, []);
+
+  // set first lesson as the default first lesson
+  useEffect(() => {
+    if (course?.lessons?.length > 0) {
+      setLessonUrl(course.lessons[0].contentUrl);
+    }
+  }, [course?.lessons]);
 
   const handlePlayPause = () => {
-    if (isPlaying) {
-      videoRef.current.pause();
-    } else {
-      videoRef.current.play();
-    }
-    setIsPlaying(!isPlaying);
+    setIsPlaying(prev => !prev);
   };
 
-  // const lessonSelectHandler = (url) => {
-  //   videoRef.current.src = url;
-  //   videoRef.current.play();
-  //   setIsPlaying(true);
-  // };
-
-  console.log(
-    props.userData?.coursesEnrolled?.map((course) => course.thumbnailURL)
-  );
-
-  const handleLessonClick = (lesson) => {
-    setCurrentLesson(lesson);
-    setIsPlaying(false);
+  const handleLessonClick = (url) => {
+    if (lessonUrl === url) {
+      setIsPlaying(prev => !prev);
+    } else {
+      setLessonUrl(url);
+      setIsPlaying(true);
+    }
   };
 
   return (
     <div className="min-h-screen pt-24 bg-background text-foreground">
-      <header className="flex items-center justify-between p-4 border-b border-border">
+      <div className="w-[52rem] text-lg flex items-center justify-between p-4 border-b border-border md:w-full">
         <div className="flex items-center space-x-2">
           <img
             src="https://placehold.co/24x24?text=LU"
@@ -94,42 +82,32 @@ const CourseContentPage = (props) => {
           <button className="bg-secondary text-secondary-foreground px-4 py-2 rounded-lg">
             Your progress
           </button>
-          <button className={mutedButtonClasses}>...</button>
+          <button className={mutedButtonClasses}>•••</button>
         </div>
-      </header>
-      <main className="flex flex-col md:flex-row">
-        <div className="flex-1 p-4">
-
-          {currentLesson && (
-            <div
-              className="relative bg-black aspect-w-16 aspect-h-9"
+      </div>
+      <div className="flex flex-col md:flex-row">
+        <div className="flex-1">
+          {/* {currentLesson && ( */}
+          <div className="relative" onClick={handlePlayPause}>
+            <ReactPlayer
+              ref={videoRef}
+              url={lessonUrl}
+              playing={isPlaying}
+              controls
+              heigth="500px"
+              width="850px"
+              light={true}
               onClick={handlePlayPause}
-            >
-              <video
-                ref={videoRef}
-                className="inset-0 w-full h-full object-cover"
-                height={200}
-                // controls
-                loop
-                poster={currentLesson.thumbnailURL}
-              >
-                <source src={currentLesson.contentUrl} type="video/mp4" />
-                Sorry, your browser doesn&apos;t support HTML5 video
-              </video>
-              {!isPlaying && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <button
-                    className="text-black text-4xl"
-                    onClick={handlePlayPause}
-                  >
-                    ▶
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
+            />
+            {!isPlaying && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <button className="text-black text-4xl">▶</button>
+              </div>
+            )}
+          </div>
+          {/* )} */}
           <div className="flex items-center justify-between mt-2"></div>
-          <div className="pt-6 flex space-x-4 mt-4 border-b border-border">
+          <div className="pt-6 flex items-center justify-between w-[50rem] px-16 space-x-4 mt-4 border-b border-border">
             <button className="text-primary-foreground">Overview</button>
             <button className="text-muted-foreground hover:underline hover:text-blue-900">
               Q&A
@@ -144,32 +122,41 @@ const CourseContentPage = (props) => {
               Learning tools
             </button>
           </div>
-          {currentLesson && <p className="mt-4 text-xl thin">{course.description}</p>}
+          <div className="flex w-[50rem] ml-5 items-center">
+            <p className="mt-4 text-xl thin">{course?.description}</p>
+          </div>
         </div>
-        <aside className="md:w-1/3 p-4 border-t md:border-t-0 md:border-l border-border">
+        <aside className="md:w-1/3 p-5 border-t md:border-t-0 md:border-l border">
           <h2 className="text-lg font-semibold mb-4">Course content</h2>
           <ul className="space-y-2">
             {course?.lessons?.map((lesson) => (
               <li key={lesson._id} className={cardClasses}>
                 <button
                   className="flex items-center justify-between w-full"
-                  onClick={() => handleLessonClick(lesson)}
+                  onClick={handleLessonClick.bind(this, lesson.contentUrl)}
                 >
                   <div className="flex items-center">
-                    <FontAwesomeIcon
-                      icon={faPlayCircle}
-                      className="text-muted-foreground mr-2"
-                    />
-                    <a href={lesson.contentUrl} className="ml-2 underline hover:text-blue-500 text-xl md:text-sm">
+                    {isPlaying ? (
+                      <FontAwesomeIcon
+                        icon={faPause}
+                        className="text-muted-foreground mr-[1rem]"
+                      />
+                    ) : (
+                      <FontAwesomeIcon
+                        icon={faPlayCircle}
+                        className="text-muted-foreground mr-2"
+                      />
+                    )}
+                    <div className="ml-2 underline hover:text-blue-500 text-xl md:text-sm">
                       {lesson.title}
-                    </a>
+                    </div>
                   </div>
                 </button>
               </li>
             ))}
           </ul>
         </aside>
-      </main>
+      </div>
     </div>
   );
 };
