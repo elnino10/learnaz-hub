@@ -189,7 +189,7 @@ const UserDashboard = (props) => {
                       <Link to={`/course/course-content/${course.id}`}>
                         <div>
                           <img
-                            src={course.imageurl}
+                            src={course.thumbnailURL}
                             alt={course.title}
                             className="object-fill w-full h-20"
                           />
