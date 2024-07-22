@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useRef, useState } from "react";
 
 // Shared Tailwind CSS classes
@@ -5,9 +6,12 @@ const buttonClasses = "px-2 py-1 rounded";
 const mutedButtonClasses = "bg-muted text-muted-foreground " + buttonClasses;
 const cardClasses = "bg-card text-card-foreground p-2 rounded-lg";
 
-const CourseContentPage = () => {
-  const videoRef = useRef(null);
+const CourseContentPage = (props) => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef(null);
+
+  // get this course content from database
+  // display it's list of lessons
 
   const handlePlayPause = () => {
     if (isPlaying) {
@@ -18,6 +22,15 @@ const CourseContentPage = () => {
     setIsPlaying(!isPlaying);
   };
 
+  const lessonSelectHandler = (url) => {
+    videoRef.current.src = url;
+    videoRef.current.play();
+    setIsPlaying(true);
+  };
+
+  console.log(
+    props.userData?.coursesEnrolled?.map((course) => course.thumbnailURL)
+  );
   return (
     <div className="min-h-screen pt-24 bg-background text-foreground">
       <header className="flex items-center justify-between p-4 border-b border-border">
@@ -50,10 +63,14 @@ const CourseContentPage = () => {
               height={200}
               // controls
               loop
-              poster="https://intranet-projects-files.s3.amazonaws.com/webstack/thumbnail.jpg"
+              poster={props.userData?.coursesEnrolled?.map(
+                (course) => course.thumbnailURL
+              )}
             >
               <source
-                src="https://intranet-projects-files.s3.amazonaws.com/webstack/BigBuckBunny.mp4"
+                // src={videoRef.current?.src}
+                src="https://www.youtube.com/watch?v=gEJBFKDkqTE"
+                // src="https://intranet-projects-files.s3.amazonaws.com/webstack/BigBuckBunny.mp4"
                 type="video/mp4"
               />
               Sorry, your browser doesn&apos;t support HTML5 video
@@ -103,7 +120,24 @@ const CourseContentPage = () => {
         <aside className="hidden md:block w-1/3 p-4 border-l border-border">
           <h2 className="text-lg font-semibold mb-4">Course content</h2>
           <ul className="space-y-2">
-            <li className={cardClasses}>
+            {props.userData?.coursesEnrolled?.map((course) =>
+              course.lessons?.map((lesson, index) => (
+                <li
+                  key={index}
+                  className={cardClasses}
+                  onClick={lessonSelectHandler.bind(this, lesson.contentUrl)}
+                >
+                  <button className="flex items-center justify-between w-full">
+                    <span>
+                      {lesson.lessonNumber}. {lesson.title}
+                    </span>
+                    {/* <span className="text-muted-foreground">3min</span> */}
+                  </button>
+                </li>
+              ))
+            )}
+
+            {/* <li className={cardClasses}>
               <button className="flex items-center justify-between w-full">
                 <span>1. Introduction to TailwindCSS</span>
                 <span className="text-muted-foreground">3min</span>
@@ -144,7 +178,7 @@ const CourseContentPage = () => {
                 <span>Section 6: Project</span>
                 <span className="text-muted-foreground">20min</span>
               </button>
-            </li>
+            </li> */}
           </ul>
         </aside>
       </main>
