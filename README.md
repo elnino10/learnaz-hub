@@ -1,4 +1,4 @@
-# LearnAZ Hub
+# Learnaz Hub
 
 Learnaz-Hub is an e-learning platform designed for users of all ages to learn new skills and gain knowledge in various fields. Our platform offers a wide range of courses, from technical skills to creative arts, that will be delivered by industry experts. The goal is to make education accessible, engaging, and effective for everyone
 
