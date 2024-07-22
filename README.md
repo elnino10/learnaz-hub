@@ -82,5 +82,5 @@ For any questions or feedback, please contact us at:
 - **GitHub**: [Joe Egboka](https://github.com/elnino10)
 
 ```bash
-Thank you for using LearnAZ Hub! We hope it enhances your learning experience.
+Thank you for using Learnaz Hub! We hope it enhances your learning experience.
 ```
