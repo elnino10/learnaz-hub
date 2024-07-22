@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { FiSearch } from "react-icons/fi";
-import Logo from "../../assets/images/LH2.png";
+import Logo from "../../assets/images/logomain.png";
 import { MenuOpen } from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -101,7 +101,7 @@ function Header(props) {
               className="block h-16 rounded-full md:hidden"
             />
             <div className="hidden text-xl font-bold md:block md:">
-              Learnaz Hub
+              LearnazHub
             </div>
           </Link>
           {/* course category */}
