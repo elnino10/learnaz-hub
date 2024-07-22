@@ -1,17 +1,32 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 
 import { courses } from "../data/courseData";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
-function EnrolledCoursesPage() {
+function EnrolledCoursesPage(props) {
   const [myCourses, setMyCourses] = useState([]);
+
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  const userId = props.userData.id;
+
+  const axiosInstance = axios.create({
+    baseUrl: baseUrl,
+    Headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
 
   // fetch user's enrolled courses from database
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        // fetch courses from database
-        setMyCourses(courses);
+        const res = await axiosInstance.get(
+          `/courses/student/${userId}`
+        );
+        console.log(res.data.data);
+        // setMyCourses(res.data.data);
       } catch (error) {
         console.error("Error fetching courses: ", error);
       }

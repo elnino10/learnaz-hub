@@ -13,12 +13,11 @@ import axios from "axios";
 const UserDashboard = (props) => {
   const [suggestedCourses, setSuggestedCourses] = useState([]);
   const [courses, setCourses] = useState([]);
-  const [enrolledCourses, setEnrolledCourses] = useState([]);
 
   const location = useLocation();
 
   // get user id from login
-  const id = location?.state.id;
+  const id = location?.state?.id;
   const role = location.state?.role;
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
@@ -63,10 +62,10 @@ const UserDashboard = (props) => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        if (role === "instructor") {
-          const response = await axiosInstance.get(`/student/${id}`);
-          setEnrolledCourses(response.data.data);
-        }
+        // if (role === "instructor") {
+        //   const response = await axiosInstance.get(`/student/${id}`);
+        //   setEnrolledCourses(response.data.data);
+        // }
         const res = await axiosInstance.get(`/courses/${role}/${id}`);
         setCourses(res.data.data);
       } catch (error) {
@@ -217,27 +216,53 @@ const UserDashboard = (props) => {
             </div>
           </div>
           <div className="md:w-[70%] md:mx-auto">
-            <Slider {...settings}>
-              {courses?.map((course) => (
-                <div key={course.id} className="max-w-48">
-                  <div className="flex flex-col bg-gray-100 border h-40 w-100 overflow-hidden">
-                    <Link to={`/course/course-content/${course.id}`}>
-                      <div>
-                        <img
-                          src={course.imageurl}
-                          alt={course.title}
-                          className="object-fill w-full h-20"
-                        />
-                      </div>
-                      <div className="text-sm px-2 pt-3">
-                        <h3 className="font-semibold">{course.title}</h3>
-                        <p className="text-xs">{course.duration}</p>
-                      </div>
-                    </Link>
+            {courses?.length < 3 ? (
+              <div>
+                {courses?.map((course) => (
+                  <div key={course._id} className="max-w-48">
+                    <div className="flex flex-col justify-center bg-gray-100 border h-40 w-100 overflow-hidden">
+                      <Link to={`/course/course-content/${course._id}`}>
+                        <div>
+                          <img
+                            src={course.thumbnailURL}
+                            alt={course.title}
+                            className="object-fill w-full h-20"
+                          />
+                        </div>
+                        <div className="text-sm px-2 pt-3">
+                          <h3 className="font-semibold">{course.title}</h3>
+                          <p className="text-xs">{course.duration}</p>
+                        </div>
+                      </Link>
+                    </div>
                   </div>
+                ))}
+              </div>
+            ) : (
+              <Slider {...settings}>
+                <div>
+                  {courses?.map((course) => (
+                    <div key={course._id} className="max-w-48">
+                      <div className="flex flex-col bg-gray-100 border h-40 w-100 overflow-hidden">
+                        <Link to={`/course/course-content/${course._id}`}>
+                          <div>
+                            <img
+                              src={course.thumbnailURL}
+                              alt={course.title}
+                              className="object-fill w-full h-20"
+                            />
+                          </div>
+                          <div className="text-sm px-2 pt-3">
+                            <h3 className="font-semibold">{course.title}</h3>
+                            <p className="text-xs">{course.duration}</p>
+                          </div>
+                        </Link>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </Slider>
+              </Slider>
+            )}
           </div>
         </>
       ) : (
@@ -259,14 +284,13 @@ const UserDashboard = (props) => {
                   <div className="flex flex-col bg-white border h-40 w-100 overflow-hidden">
                     <Link
                       to={
-                        props.userData.coursesEnrolled?.includes(course.id)
-                          ? `/course/course-content/${course._id}`
-                          : `/courses/preview/${course._id}`
+                        !props.userData.coursesEnrolled?.includes(course._id) &&
+                        `/courses/preview/${course._id}`
                       }
                     >
                       <div>
                         <img
-                          src={course.imageurl}
+                          src={course.thumbnailURL}
                           alt={course.title}
                           className="object-fill w-full h-20"
                         />

@@ -124,7 +124,7 @@ const MainLayout = (props) => (
       />
       <Route
         path="/home/my-courses/learning"
-        element={<EnrolledCoursesPage />}
+        element={<EnrolledCoursesPage userData={props.userData} />}
       />
       <Route
         path="/home"
