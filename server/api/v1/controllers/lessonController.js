@@ -52,7 +52,7 @@ export const getLessonById = async (req, res) => {
   try {
     const { lessonId } = req.params;
 
-    const lesson = await Lesson.findById(lessonId);
+    const lesson = await Lesson.findById(lessonId).populate("courseId");
 
     if (!lesson) {
       return res.status(404).json({ message: "Lesson not found" });

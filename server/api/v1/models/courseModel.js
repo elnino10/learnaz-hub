@@ -57,7 +57,7 @@ const courseSchema = new mongoose.Schema({
       },
       message: (props) => `${props.value} is not a valid URL!`,
     },
-    default: 'http://learnazHub.com/default-thumbnail.jpg',
+    default: "http://learnazHub.com/default-thumbnail.jpg",
   },
   category: {
     type: String,
@@ -65,13 +65,6 @@ const courseSchema = new mongoose.Schema({
   },
   review: String,
 });
-
-// courseSchema.pre('save', async function (next) {
-//     if (!this.instructorId) {
-//         this.instructorId = req.user._id; // Assuming user info is available in request object
-//     }
-//     next();
-// });
 
 const Course = mongoose.model("Course", courseSchema);
 
