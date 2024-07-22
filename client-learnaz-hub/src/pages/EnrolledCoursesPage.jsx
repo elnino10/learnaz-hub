@@ -1,24 +1,7 @@
-import { useEffect, useState } from "react";
-
-import { courses } from "../data/courseData";
+/* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
 
-function EnrolledCoursesPage() {
-  const [myCourses, setMyCourses] = useState([]);
-
-  // fetch user's enrolled courses from database
-  useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        // fetch courses from database
-        setMyCourses(courses);
-      } catch (error) {
-        console.error("Error fetching courses: ", error);
-      }
-    };
-    fetchCourses();
-  }, []);
-
+function EnrolledCoursesPage(props) {
   return (
     <div className="mt-20">
       <div className="bg-gray-800 text-white flex justify-center items-center h-40">
@@ -37,12 +20,12 @@ function EnrolledCoursesPage() {
         </p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-5 px-28">
-        {myCourses &&
-          myCourses.map((course, index) => (
+        {props.userData?.coursesEnrolled ? (
+          props.userData?.coursesEnrolled?.map((course, index) => (
             <div key={index} className="p-4 border rounded-lg">
               <Link to={`/course/course-content/${course.id}`}>
                 <img
-                  src={course.image}
+                  src={course.thumbnailURL}
                   alt={course.title}
                   className="w-full h-48 object-cover mb-4"
                 />
@@ -51,12 +34,19 @@ function EnrolledCoursesPage() {
                 </h3>
                 <p className="text-gray-700 mb-2">Author: {course.author}</p>
                 <p className="text-gray-700 mb-2">
-                  Number Enrolled: {course.numberEnrolled}
+                  Students Enrolled: {course.studentsEnrolled?.length}
                 </p>
-                <p className="text-gray-700 font-bold">{course.price}</p>
+                <p className="text-gray-700 font-bold">
+                  {course.price === 0 ? "Free course" : course.price}
+                </p>
               </Link>
             </div>
-          ))}
+          ))
+        ) : (
+          <h1 className="text-2xl font-bold text-center">
+            You have not enrolled in any course yet
+          </h1>
+        )}
       </div>
     </div>
   );

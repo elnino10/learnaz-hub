@@ -13,14 +13,15 @@ import axios from "axios";
 const UserDashboard = (props) => {
   const [suggestedCourses, setSuggestedCourses] = useState([]);
   const [courses, setCourses] = useState([]);
+
   // eslint-disable-next-line no-unused-vars
   const [enrolledCourses, setEnrolledCourses] = useState([]);
 
   const location = useLocation();
 
   // get user id from login
-  const id = location?.state.id;
-  const role = location.state?.role;
+  const id = props.authUser?.id;
+  const role = props.authUser?.role;
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -50,7 +51,14 @@ const UserDashboard = (props) => {
       try {
         // fetch courses from database
         const res = await axiosInstance.get("/courses");
-        setSuggestedCourses(res.data.data);
+        const courses = res.data.data;
+        const myCourseSuggestion = [];
+        courses.forEach((course) => {
+          if (!course.studentsEnrolled?.includes(id)) {
+            myCourseSuggestion.push(course);
+          }
+        });
+        setSuggestedCourses(myCourseSuggestion);
       } catch (error) {
         console.log("Error fetching courses: ", error);
       }
@@ -64,10 +72,6 @@ const UserDashboard = (props) => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        if (role === "instructor") {
-          const response = await axiosInstance.get(`/student/${id}`);
-          setEnrolledCourses(response.data.data);
-        }
         const res = await axiosInstance.get(`/courses/${role}/${id}`);
         setCourses(res.data.data);
       } catch (error) {
@@ -224,10 +228,15 @@ const UserDashboard = (props) => {
           </div>
           <div className="md:w-[70%] md:mx-auto">
             <Slider {...settings}>
-              {courses?.map((course) => (
-                <div key={course.id} className="max-w-48">
-                  <div className="flex flex-col bg-gray-100 border h-40 w-100 overflow-hidden">
-                    <Link to={`/course/course-content/${course.id}`}>
+              {courses.map((course) => (
+                <div key={course.id} className="max-w-52 max-h-52">
+                  <div className="flex flex-col bg-white border h-40 w-100 overflow-hidden">
+                    <Link
+                      to={
+                        !props.userData.coursesEnrolled?.includes(course._id) &&
+                        `/courses/preview/${course._id}`
+                      }
+                    >
                       <div>
                         <img
                           src={course.thumbnailURL}
@@ -244,6 +253,7 @@ const UserDashboard = (props) => {
                 </div>
               ))}
             </Slider>
+            {/* )} */}
           </div>
         </>
       ) : (
@@ -267,9 +277,8 @@ const UserDashboard = (props) => {
                   <div className="flex flex-col bg-white border h-40 w-100 overflow-hidden">
                     <Link
                       to={
-                        props.userData.coursesEnrolled?.includes(course.id)
-                          ? `/course/course-content/${course._id}`
-                          : `/courses/preview/${course._id}`
+                        !props.userData.coursesEnrolled?.includes(course._id) &&
+                        `/courses/preview/${course._id}`
                       }
                     >
                       <div>
