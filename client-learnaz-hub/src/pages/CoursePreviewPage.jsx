@@ -64,8 +64,8 @@ function CoursePreviewPage(props) {
   return (
     <>
       <div className="min-h-screen relative max-w-7xl mx-auto bg-background text-foreground mt-20">
-        <div className="flex flex-col px-4 justify-between items-start bg-gray-800 text-white lg:flex-row lg:items-center">
-          <div className="pt-7 lg:w-2/3">
+        <div className="relative flex flex-col px-4 justify-between items-start bg-gray-800 text-white md:flex-row lg:items-center">
+          <div className="pt-7 md:w-[70%] lg:w-2/3">
             <h1 className="text-3xl font-bold mb-2">{course?.title}</h1>
             <p className={`${TEXT_MUTED_FOREGROUND} mb-4 px-5`}>
               {course?.summary}
@@ -107,7 +107,7 @@ function CoursePreviewPage(props) {
               <span>English</span>
             </div>
           </div>
-          <div className="bg-white text-gray-800 p-4 rounded-md shadow-lg mt-8 lg:w-1/3 lg:mt-0 lg:ml-8">
+          <div className="absolute bg-white text-gray-800 p-4 rounded-md shadow-lg mt-8 lg:w-1/3 lg:mt-0 lg:ml-8">
             <img
               src={course?.thumbnailURL}
               alt="Course preview image"

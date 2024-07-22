@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import student from "../assets/images/student5ani.gif";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -13,11 +13,6 @@ import axios from "axios";
 const UserDashboard = (props) => {
   const [suggestedCourses, setSuggestedCourses] = useState([]);
   const [courses, setCourses] = useState([]);
-
-  // eslint-disable-next-line no-unused-vars
-  const [enrolledCourses, setEnrolledCourses] = useState([]);
-
-  const location = useLocation();
 
   // get user id from login
   const id = props.authUser?.id;
@@ -182,30 +177,9 @@ const UserDashboard = (props) => {
               </div>
             </div>
             <div className="md:w-[70%] md:mx-auto">
-              {/* <Slider {...settings}>
-                {courses.map((course) => (
-                  <div key={course.id} className="max-w-48">
-                    <div className="flex flex-col bg-gray-100 border h-40 w-100 overflow-hidden">
-                      <Link to={`/course/course-content/${course.id}`}>
-                        <div>
-                          <img
-                            src={course.imageurl}
-                            alt={course.title}
-                            className="object-fill w-full h-20"
-                          />
-                        </div>
-                        <div className="text-sm px-2 pt-3">
-                          <h3 className="font-semibold">{course.title}</h3>
-                          <p className="text-xs">{course.duration}</p>
-                        </div>
-                      </Link>
-                    </div>
-                  </div>
-                ))}
-              </Slider> */}
               <Slider {...settings}>
                 {courses.map((course) => (
-                  <div key={course.id} className="max-w-52 max-h-52">
+                  <div key={course._id} className="max-w-52 max-h-52">
                     <div className="flex flex-col bg-white border h-40 w-100 overflow-hidden">
                       <Link
                         to={
@@ -258,7 +232,7 @@ const UserDashboard = (props) => {
           <div className="md:w-[70%] md:mx-auto">
             <Slider {...settings}>
               {courses.map((course) => (
-                <div key={course.id} className="max-w-52 max-h-52">
+                <div key={course._id} className="max-w-52 max-h-52">
                   <div className="flex flex-col bg-white border h-40 w-100 overflow-hidden">
                     <Link
                       to={
@@ -301,11 +275,10 @@ const UserDashboard = (props) => {
               <h2>Suggested Courses</h2>
             </div>
           </div>
-
           <div className="md:w-[70%] md:mx-auto">
             <Slider {...settings}>
               {suggestedCourses.map((course) => (
-                <div key={course.id} className="max-w-52 max-h-52">
+                <div key={course._id} className="max-w-52 max-h-52">
                   <div className="flex flex-col bg-white border h-40 w-100 overflow-hidden">
                     <Link
                       to={
