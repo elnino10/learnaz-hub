@@ -47,7 +47,8 @@ function CoursePreviewPage(props) {
         enrollmentData
       );
 
-      if (res.data.status === "success") alert("Enrolled for course successfully!")
+      if (res.data.status === "success")
+        alert("Enrolled for course successfully!");
       navigate(`/course/course-content/${courseId}`);
     } catch (error) {
       alert("Error enrolling in course", error);
@@ -56,8 +57,8 @@ function CoursePreviewPage(props) {
 
   return (
     <>
-      <div className="relative max-w-7xl mx-auto bg-background text-foreground mt-20">
-        <div className="flex flex-col px-4 h-[25rem] lg:flex-row justify-between items-start bg-gray-800 text-white lg:items-center">
+      <div className="min-h-screen relative max-w-7xl mx-auto bg-background text-foreground mt-20">
+        <div className="flex flex-col px-4 justify-between items-start bg-gray-800 text-white lg:flex-row lg:items-center">
           <div className="pt-7 lg:w-2/3">
             <h1 className="text-3xl font-bold mb-2">{course?.title}</h1>
             <p className={`${TEXT_MUTED_FOREGROUND} mb-4 px-5`}>
@@ -70,7 +71,9 @@ function CoursePreviewPage(props) {
               </a>
               <span className="ml-2 text-muted-foreground">
                 {course?.studentsEnrolled?.length || 0}{" "}
-                {course?.studentsEnrolled?.length === 1 ? "student" : "students"}
+                {course?.studentsEnrolled?.length === 1
+                  ? "student"
+                  : "students"}
               </span>
             </div>
             <p className={`${TEXT_MUTED_FOREGROUND} mb-4`}>
@@ -98,7 +101,7 @@ function CoursePreviewPage(props) {
               <span>English</span>
             </div>
           </div>
-          <div className="absolute bg-white text-gray-800 mt-20 md:ml-[50rem] lg:w-1/3 bg-card p-4 rounded-md shadow-lg">
+          <div className="bg-white text-gray-800 p-4 rounded-md shadow-lg mt-8 lg:w-1/3 lg:mt-0 lg:ml-8">
             <img
               src={course?.thumbnailURL}
               alt="Course preview image"
@@ -114,9 +117,25 @@ function CoursePreviewPage(props) {
           </div>
         </div>
 
-        <div className="bg-card p-4 rounded-lg shadow-lg mt-8">
+        <div className="bg-card p-4 rounded-lg mt-8">
           <h2 className="text-2xl font-bold mb-4">Course Description</h2>
           {course?.description}
+        </div>
+        <div className="mt-8 ml-4">
+          <h2 className="text-2xl font-bold mb-4">{`What you'll learn`}</h2>
+          {course?.lessons?.map((lesson) => (
+            <div key={lesson._id}>
+              <li>{lesson.title}</li>
+            </div>
+          ))}
+        </div>
+        <div className="mt-8 ml-4">
+          <h2 className="text-2xl font-bold mb-4">Requirements Students</h2>
+          <li>
+            {`Don't`} Need Prior Coding Skills to Enroll in This Course. Anyone
+            Can Take This Course.
+          </li>
+          <li>Students Require a Computer or Laptop to Write Code.</li>
         </div>
       </div>
     </>
