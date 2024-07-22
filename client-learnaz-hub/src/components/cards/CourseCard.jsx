@@ -29,7 +29,7 @@ function CourseCard(props) {
                 Number Enrolled: {course.studentsEnrolled.length}
               </p>
               <p className="text-gray-700 font-bold">
-                {course.price === 0 ? "Free course" : course.price}
+                {course.price === 0 ? "Free course" : `$${course.price}`}
               </p>
             </Link>
           </div>

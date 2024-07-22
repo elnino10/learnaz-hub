@@ -1,4 +1,6 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 // Shared Tailwind CSS classes
 const buttonClasses = "px-2 py-1 rounded";
@@ -8,6 +10,41 @@ const cardClasses = "bg-card text-card-foreground p-2 rounded-lg";
 const CourseContentPage = () => {
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [course, setCourse] = useState(null);
+  const [currentLesson, setCurrentLesson] = useState(null);
+  const { courseId } = useParams();
+
+  console.log("courseId from useParams:", courseId);
+
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  const axiosInstance = axios.create({
+    baseURL: baseUrl,
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+
+  useEffect(() => {
+    // fetch course data from database
+    const fetchCourse = async () => {
+      if (!courseId) {
+        console.error("No courseId found");
+        return;
+      }
+      try {
+        const response = await axiosInstance.get(`/courses/${courseId}`);
+        const courseData = response.data.data;
+        setCourse(courseData);
+        // set the first lesson as the current lesson to start with
+        if (courseData.lessons && courseData.lessons.length > 0) {
+          setCurrentLesson(courseData.lessons[0]);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchCourse();
+  }, [courseId]);
 
   const handlePlayPause = () => {
     if (isPlaying) {
@@ -16,6 +53,11 @@ const CourseContentPage = () => {
       videoRef.current.play();
     }
     setIsPlaying(!isPlaying);
+  };
+
+  const handleLessonClick = (lesson) => {
+    setCurrentLesson(lesson);
+    setIsPlaying(false);
   };
 
   return (
@@ -28,7 +70,7 @@ const CourseContentPage = () => {
             className="h-6 w-6"
           />
           <span className="font-semibold">
-            TailwindCSS from A to Z: Master TailwindCSS Quickly
+            {course ? course.title : "Loading..."}
           </span>
         </div>
         <div className="flex items-center space-x-4">
@@ -38,49 +80,38 @@ const CourseContentPage = () => {
           <button className={mutedButtonClasses}>...</button>
         </div>
       </header>
-      <main className="flex">
+      <main className="flex flex-col md:flex-row">
         <div className="flex-1 p-4">
-          <div
-            className="relative bg-black aspect-w-16 aspect-h-9"
-            onClick={handlePlayPause}
-          >
-            <video
-              ref={videoRef}
-              className="inset-0 w-full h-full object-cover"
-              height={200}
-              // controls
-              loop
-              poster="https://intranet-projects-files.s3.amazonaws.com/webstack/thumbnail.jpg"
+          {currentLesson && (
+            <div
+              className="relative bg-black aspect-w-16 aspect-h-9"
+              onClick={handlePlayPause}
             >
-              <source
-                src="https://intranet-projects-files.s3.amazonaws.com/webstack/BigBuckBunny.mp4"
-                type="video/mp4"
-              />
-              Sorry, your browser doesn&apos;t support HTML5 video
-            </video>
-            {!isPlaying && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <button
-                  className="text-black text-4xl"
-                  onClick={handlePlayPause}
-                >
-                  ▶
-                </button>
-              </div>
-            )}
-          </div>
-          <div className="flex items-center justify-between mt-2">
-            {/* <div className="flex items-center space-x-2">
-              <button className={mutedButtonClasses}>1x</button>
-              <span className="text-muted-foreground">0:00 / 0:00</span>
-            </div> */}
-            {/* <div className="flex items-center space-x-2">
-              <button className={mutedButtonClasses}>⚙</button>
-              <button className={mutedButtonClasses}>🔄</button>
-              <button className={mutedButtonClasses}>⛶</button>
-            </div> */}
-          </div>
-          <div className="pt=6  flex space-x-4 mt-4 border-b border-border">
+              <video
+                ref={videoRef}
+                className="inset-0 w-full h-full object-cover"
+                height={200}
+                // controls
+                loop
+                poster={currentLesson.thumbnailURL}
+              >
+                <source src={currentLesson.contentUrl} type="video/mp4" />
+                Sorry, your browser doesn&apos;t support HTML5 video
+              </video>
+              {!isPlaying && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <button
+                    className="text-black text-4xl"
+                    onClick={handlePlayPause}
+                  >
+                    ▶
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+          <div className="flex items-center justify-between mt-2"></div>
+          <div className="pt-6 flex space-x-4 mt-4 border-b border-border">
             <button className="text-primary-foreground">Overview</button>
             <button className="text-muted-foreground hover:underline hover:text-blue-900">
               Q&A
@@ -95,56 +126,26 @@ const CourseContentPage = () => {
               Learning tools
             </button>
           </div>
-          <p className="mt-4">
-            Get started with Tailwind, a utility-first CSS framework, and master
-            its directives, modules, and code reusability.
-          </p>
+          {currentLesson && <p className="mt-4">{course.description}</p>}
         </div>
-        <aside className="hidden md:block w-1/3 p-4 border-l border-border">
+        <aside className="md:w-1/3 p-4 border-t md:border-t-0 md:border-l border-border">
           <h2 className="text-lg font-semibold mb-4">Course content</h2>
           <ul className="space-y-2">
-            <li className={cardClasses}>
-              <button className="flex items-center justify-between w-full">
-                <span>1. Introduction to TailwindCSS</span>
-                <span className="text-muted-foreground">3min</span>
-              </button>
-            </li>
-            <li className={cardClasses}>
-              <button className="flex items-center justify-between w-full">
-                <span>2. Overview of TailwindCSS</span>
-                <span className="text-muted-foreground">4min</span>
-              </button>
-            </li>
-            <li className={cardClasses}>
-              <button className="flex items-center justify-between w-full">
-                <span>Section 2: Installation of TailwindCSS</span>
-                <span className="text-muted-foreground">6min</span>
-              </button>
-            </li>
-            <li className={cardClasses}>
-              <button className="flex items-center justify-between w-full">
-                <span>Section 3: Typography</span>
-                <span className="text-muted-foreground">24min</span>
-              </button>
-            </li>
-            <li className={cardClasses}>
-              <button className="flex items-center justify-between w-full">
-                <span>Section 4: Border in TailwindCSS</span>
-                <span className="text-muted-foreground">10min</span>
-              </button>
-            </li>
-            <li className={cardClasses}>
-              <button className="flex items-center justify-between w-full">
-                <span>Section 5: Layout</span>
-                <span className="text-muted-foreground">15min</span>
-              </button>
-            </li>
-            <li className={cardClasses}>
-              <button className="flex items-center justify-between w-full">
-                <span>Section 6: Project</span>
-                <span className="text-muted-foreground">20min</span>
-              </button>
-            </li>
+            {course?.lessons?.map((lesson) => (
+              <li key={lesson._id} className={cardClasses}>
+                <button
+                  className="flex items-center justify-between w-full"
+                  onClick={() => handleLessonClick(lesson)}
+                >
+                  <a href={lesson.contentUrl}>
+                    <span>{lesson.title}</span>
+                  </a>
+                  <span className="text-muted-foreground">
+                    {lesson.duration}min
+                  </span>
+                </button>
+              </li>
+            ))}
           </ul>
         </aside>
       </main>
