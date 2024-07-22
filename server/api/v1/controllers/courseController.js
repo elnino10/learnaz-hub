@@ -26,7 +26,10 @@ export const getCourses = async (req, res) => {
 //Get a course by ID
 export const getCourseByID = async (req, res) => {
   try {
-    const course = await Course.findById(req.params.courseId);
+    const course = await Course.findById(req.params.courseId)
+      .populate("lessons")
+      .populate("studentsEnrolled")
+      .populate("instructorId");
     if (!course) {
       return res
         .status(404)
@@ -193,7 +196,9 @@ export const getEnrolledCourses = async (req, res) => {
   const { studentId } = req.params;
 
   try {
-    const courses = await Course.find({ studentsEnrolled: studentId });
+    const courses = await Course.find({ studentsEnrolled: studentId })
+      .populate("instructorId")
+      .populate("studentsEnrolled");
 
     if (courses.length === 0) {
       return res.status(404).json({
