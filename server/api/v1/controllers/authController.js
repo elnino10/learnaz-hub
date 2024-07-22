@@ -20,7 +20,7 @@ export const registerUser = async (req, res) => {
       lastName,
       email,
       password,
-      role
+      role,
     });
 
     if (user) {
@@ -76,24 +76,27 @@ export const forgotPassword = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res
+        .status(404)
+        .json({ status: "failed", message: "User not found" });
     }
 
     const resetToken = generateToken(user._id, user.role, { expiresIn: "1h" });
-
-    const resetUrl = `${process.env.RESET_PWD_URL} ${resetToken}`;
+    const resetUrl = `${process.env.RESET_PWD_URL}/${resetToken}`;
 
     const emailOptions = {
       from: process.env.EMAIL_USER,
       email: user.email,
       subject: "Password Reset",
-      content: `You requested to reset your password.
-      Click on this link to reset your password: ${resetUrl}`,
+      content: `<p>You requested to reset your password. Click this link to reset your password:</p> <a href="${resetUrl}">${resetUrl}</a>`,
     };
 
     await sendEmail(emailOptions);
 
-    res.status(200).json({ message: "Password reset email sent successfully" });
+    res.status(200).json({
+      status: "success",
+      message: "Password reset email sent successfully",
+    });
   } catch (error) {
     res
       .status(500)

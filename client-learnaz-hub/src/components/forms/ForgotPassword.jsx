@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -9,36 +11,23 @@ import axios from "axios";
 
 const defaultTheme = createTheme();
 
-const baseUrl = import.meta.env.VITE_API_BASE_URL;
-const endPoint = "/auth/forgot-password";
-const token = localStorage.getItem("token");
 
-  // create a header with the token
-const api = axios.create({
-  baseURL: baseUrl,
-  headers: {
-    Authorization: `Bearer ${token}`,
-    },
-})
 function ForgotPassword() {
-  const handleSubmit = (event) => {
+  const [errMsg, setErrMsg] = useState("");
+
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  const resetUrl = `${baseUrl}/auth/forgot-password`;
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const email = event.target.email.value;
+    const data = new FormData(event.currentTarget);
+    const userEmail = { email: data.get("email") };
 
     try {
-      api.post(endPoint, { email })
-        .then((response) => {
-          if (response.status === 200) {
-            console.log(response.data);
-          } else {
-            console.error(response.data);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      await axios.post(resetUrl, userEmail);
+      alert("Password reset link sent to your email");
     } catch (error) {
-      console.error(error);
+      setErrMsg(error.response.data.message);
     }
   };
 
@@ -58,6 +47,9 @@ function ForgotPassword() {
             <Typography component="h1" variant="h5">
               Forgot Password
             </Typography>
+            <div className={`${!errMsg && "invisible"} text-red-400 h-5`}>
+              <p>{errMsg}</p>
+            </div>
             <Box
               component="form"
               onSubmit={handleSubmit}
@@ -73,6 +65,7 @@ function ForgotPassword() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                onChange={() => setErrMsg("")}
               />
 
               <Button
