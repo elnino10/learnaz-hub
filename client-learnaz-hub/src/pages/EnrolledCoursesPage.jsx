@@ -1,10 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
 
-
 function EnrolledCoursesPage(props) {
-
-   
   return (
     <div className="mt-20">
       <div className="bg-gray-800 text-white flex justify-center items-center h-40">

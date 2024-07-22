@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlayCircle } from "@fortawesome/free-solid-svg-icons";
+
 
 // Shared Tailwind CSS classes
 const buttonClasses = "px-2 py-1 rounded";
@@ -126,7 +129,7 @@ const CourseContentPage = () => {
               Learning tools
             </button>
           </div>
-          {currentLesson && <p className="mt-4">{course.description}</p>}
+          {currentLesson && <p className="mt-4 text-xl thin">{course.description}</p>}
         </div>
         <aside className="md:w-1/3 p-4 border-t md:border-t-0 md:border-l border-border">
           <h2 className="text-lg font-semibold mb-4">Course content</h2>
@@ -137,12 +140,15 @@ const CourseContentPage = () => {
                   className="flex items-center justify-between w-full"
                   onClick={() => handleLessonClick(lesson)}
                 >
-                  <a href={lesson.contentUrl}>
-                    <span>{lesson.title}</span>
-                  </a>
-                  <span className="text-muted-foreground">
-                    {lesson.duration}min
-                  </span>
+                  <div className="flex items-center">
+                    <FontAwesomeIcon
+                      icon={faPlayCircle}
+                      className="text-muted-foreground mr-2"
+                    />
+                    <a href={lesson.contentUrl} className="ml-2 underline hover:text-blue-500 text-xl md:text-sm">
+                      {lesson.title}
+                    </a>
+                  </div>
                 </button>
               </li>
             ))}
