@@ -23,6 +23,8 @@ function CoursePreviewPage(props) {
     },
   });
 
+  console.log(props.userData);
+
   useEffect(() => {
     // fetch course data from database
     const fetchCourse = async () => {
@@ -40,24 +42,23 @@ function CoursePreviewPage(props) {
   const enrollmentHandler = async () => {
     const enrollmentData = {
       courseId: courseId,
-      studentId: props.userData._id,
+      studentId: props.userData?._id,
     };
     try {
       const res = await axiosInstance.post(
         `/courses/enroll/${courseId}`,
         enrollmentData
       );
-      if (!props.userData._id) {
+      if (!props.userData?._id) {
         throw new Error("Please login to enroll in a course");
       }
 
-      if (res.data.status === "success")
+      if (res.data.status === "success") {
         alert("Enrolled for course successfully!");
-      navigate(`/course/course-content/${courseId}`);
+        navigate(`/course/course-content/${courseId}`);
+      }
     } catch (error) {
-      console.log(error);
-      alert(error.message || "Error enrolling in course");
-      // alert("Error enrolling in course: sign in to enroll");
+      alert("Error enrolling in course");
     }
   };
 
