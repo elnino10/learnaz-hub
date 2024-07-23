@@ -108,6 +108,7 @@ const MainLayout = (props) => (
       setActivePage={props.setActivePage}
       setAuthUser={props.setAuthUser}
       authUser={props.authUser}
+      setUserData={props.setUserData}
     />
     <Routes>
       <Route path="/" element={<LandingPage authUser={props.authUser} />} />

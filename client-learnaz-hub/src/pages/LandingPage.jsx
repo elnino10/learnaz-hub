@@ -67,7 +67,7 @@ function LandingPage(props) {
   return (
     <div className="m-0 p-0 min-h-screen scroll">
       {/* Main Content */}
-      <main className="w-full">
+      <main className="w-[53rem] p-4 sm:w-full">
         {/* Text Content */}
         <section className="pt-32 text-gray-700 bg-gray-100 w-[100%] mx-auto py-5 px-10 flex items-center justify-between flex-col md:flex-row">
           <img
