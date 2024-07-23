@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import Learn from "../assets/images/study.png";
+import Learn from "../assets/images/studentStu.png";
 import Teacher from "../assets/images/teacher2.png";
 import { CourseCard } from "../components";
 
