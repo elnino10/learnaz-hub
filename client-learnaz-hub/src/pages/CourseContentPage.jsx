@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPause, faPlayCircle } from "@fortawesome/free-solid-svg-icons";
 
 import ReactPlayer from "react-player";
+import { RotatingLines } from "react-loader-spinner";
 
 // Shared Tailwind CSS classes
 const buttonClasses = "px-2 py-1 rounded";
@@ -16,6 +17,7 @@ const CourseContentPage = () => {
   const [isPlaying, setIsPlaying] = useState(true);
   const [course, setCourse] = useState(null);
   const [lessonUrl, setLessonUrl] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const videoRef = useRef(null);
   const { courseId } = useParams();
@@ -40,6 +42,8 @@ const CourseContentPage = () => {
         setCourse(courseData);
       } catch (error) {
         console.error(error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchCourse();
@@ -65,12 +69,28 @@ const CourseContentPage = () => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <RotatingLines
+          height="80"
+          width="80"
+          strokeWidth="5"
+          animationDuration="0.75"
+          strokeColor="#848884"
+          ariaLabel="rotating-lines-loading"
+          visible={true}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen pt-24 bg-background text-foreground">
       <div className="w-[52rem] text-lg flex items-center justify-between p-4 border-b border-border md:w-full">
         <div className="flex items-center space-x-2">
           <img
-            src="https://placehold.co/24x24?text=LU"
+            src="https://placehold.co/24x24?text=LH"
             alt="logo"
             className="h-6 w-6"
           />
@@ -99,11 +119,6 @@ const CourseContentPage = () => {
               light={true}
               onClick={handlePlayPause}
             />
-            {!isPlaying && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <button className="text-black text-4xl">▶</button>
-              </div>
-            )}
           </div>
           {/* )} */}
           <div className="flex items-center justify-between mt-2"></div>
