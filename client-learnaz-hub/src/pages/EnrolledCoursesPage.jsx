@@ -23,7 +23,7 @@ function EnrolledCoursesPage(props) {
         {props.userData?.coursesEnrolled ? (
           props.userData?.coursesEnrolled?.map((course, index) => (
             <div key={index} className="p-4 border rounded-lg">
-              <Link to={`/course/course-content/${course.id}`}>
+              <Link to={`/course/course-content/${course._id}`}>
                 <img
                   src={course.thumbnailURL}
                   alt={course.title}

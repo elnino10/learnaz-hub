@@ -10,18 +10,16 @@ import ReactPlayer from "react-player";
 // Shared Tailwind CSS classes
 const buttonClasses = "px-2 py-1 rounded";
 const mutedButtonClasses = "bg-muted text-muted-foreground " + buttonClasses;
-const cardClasses = "bg-card text-card-foreground p-2 rounded-lg";
+const cardClasses =
+  "bg-card text-card-foreground p-2 rounded-lg cursor-pointer";
 
 const CourseContentPage = () => {
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [course, setCourse] = useState(null);
   const [lessonUrl, setLessonUrl] = useState("");
 
-  const videoRef = useRef(null);
+  const videoRef = useRef();
   const { courseId } = useParams();
-
-  // get this course content from database
-  // display it's list of lessons
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
   const axiosInstance = axios.create({
@@ -49,21 +47,20 @@ const CourseContentPage = () => {
   useEffect(() => {
     if (course?.lessons?.length > 0) {
       setLessonUrl(course.lessons[0].contentUrl);
+      
     }
   }, [course?.lessons]);
 
-  const handlePlayPause = () => {
-    setIsPlaying(prev => !prev);
-  };
-
-  const handleLessonClick = (url) => {
+  const handleLessonClick = async (url) => {
     if (lessonUrl === url) {
-      setIsPlaying(prev => !prev);
+      setIsPlaying(!isPlaying);
     } else {
       setLessonUrl(url);
       setIsPlaying(true);
     }
   };
+
+  // console.log(videoRef.current.props);
 
   return (
     <div className="min-h-screen pt-24 bg-background text-foreground">
@@ -88,7 +85,10 @@ const CourseContentPage = () => {
       <div className="flex flex-col md:flex-row">
         <div className="flex-1">
           {/* {currentLesson && ( */}
-          <div className="relative" onClick={handlePlayPause}>
+          <div className="relative">
+            {/* <video ref={videoRef} width="850" height="500">
+              <source src={lessonUrl} />
+            </video> */}
             <ReactPlayer
               ref={videoRef}
               url={lessonUrl}
@@ -97,7 +97,7 @@ const CourseContentPage = () => {
               heigth="500px"
               width="850px"
               light={true}
-              onClick={handlePlayPause}
+              onClick={() => setIsPlaying(!isPlaying)}
             />
             {!isPlaying && (
               <div className="absolute inset-0 flex items-center justify-center">
@@ -136,7 +136,7 @@ const CourseContentPage = () => {
                   onClick={handleLessonClick.bind(this, lesson.contentUrl)}
                 >
                   <div className="flex items-center">
-                    {isPlaying ? (
+                    {isPlaying && lesson.contentUrl === lessonUrl ? (
                       <FontAwesomeIcon
                         icon={faPause}
                         className="text-muted-foreground mr-[1rem]"
