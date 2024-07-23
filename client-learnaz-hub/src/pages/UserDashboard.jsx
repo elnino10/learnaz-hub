@@ -177,7 +177,7 @@ const UserDashboard = (props) => {
               </div>
             </div>
             <div className="md:w-[70%] md:mx-auto">
-<<<<<<< HEAD
+
               {/* <Slider {...settings}>
                 {courses.map((course) => (
                   <div key={course.id} className="max-w-48">
@@ -199,8 +199,6 @@ const UserDashboard = (props) => {
                   </div>
                 ))}
               </Slider> */}
-=======
->>>>>>> 209423a87dd320bc9d0ad50b965de6a4765e3887
               <Slider {...settings}>
                 {courses.map((course) => (
                   <div key={course._id} className="max-w-52 max-h-52">
