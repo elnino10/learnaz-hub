@@ -7,7 +7,7 @@ function Footer() {
       className="text-white w-[53rem] bg-gray-900 mt-10 pl-10 md:w-full"
     >
       {/* correct routing */}
-      <div className="grid grid-cols-2 pt-7 mb-5 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-2 pt-7 mb-5 sm:w-[52rem] md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Link to="/signup">Teach On Learnaz-Hub</Link>
         <Link to="/signup">About Learnaz-Hub</Link>
         <Link to="/signup">Contact us</Link>

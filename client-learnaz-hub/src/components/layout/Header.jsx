@@ -86,12 +86,13 @@ function Header(props) {
   const logOutHandler = () => {
     localStorage.removeItem("token");
     props.setAuthUser(null);
+    props.setUserData({});
     navigate("/");
   };
 
   return (
     <>
-      <header className="px-2 py-3 bg-white shadow-md top-0 z-20 fixed w-full flex justify-between items-center sm:px-4 sm:h-20 md:h-24">
+      <header className="px-2 py-3 bg-white shadow-md top-0 z-20 fixed w-full h-16 flex justify-between items-center sm:px-4 sm:w-[52rem] sm:h-20 md:w-full md:h-24">
         {/* Logo */}
         <Link to="/" onClick={() => props.setActivePage("home")}>
           <img
@@ -117,7 +118,9 @@ function Header(props) {
               {searchedCourses.map((course, index) => (
                 <div
                   onClick={() => {
-                    navigate(`/course/course-content/${course.id}`);
+                    props.authUser
+                      ? navigate(`/course/course-content/${course._id}`)
+                      : navigate(`/courses/preview/${course._id}`);
                     setSearchValue("");
                   }}
                   key={index}
