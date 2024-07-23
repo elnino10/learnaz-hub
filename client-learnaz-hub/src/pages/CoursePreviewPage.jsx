@@ -14,6 +14,7 @@ function CoursePreviewPage(props) {
   const navigate = useNavigate();
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  const apiUrl = `${baseUrl}/courses/${courseId}`;
 
   const axiosInstance = axios.create({
     baseURL: baseUrl,
@@ -26,7 +27,7 @@ function CoursePreviewPage(props) {
     // fetch course data from database
     const fetchCourse = async () => {
       try {
-        const response = await axiosInstance.get(`/courses/${courseId}`);
+        const response = await axios.get(apiUrl);
         setCourse(response.data.data);
       } catch (error) {
         console.error(error);
@@ -46,20 +47,25 @@ function CoursePreviewPage(props) {
         `/courses/enroll/${courseId}`,
         enrollmentData
       );
+      if (!props.authData) {
+        throw new Error("Please login to enroll in a course");
+      }
 
       if (res.data.status === "success")
         alert("Enrolled for course successfully!");
       navigate(`/course/course-content/${courseId}`);
     } catch (error) {
-      alert("Error enrolling in course", error);
+      console.log(error);
+      alert(error.message || "Error enrolling in course");
+      // alert("Error enrolling in course: sign in to enroll");
     }
   };
 
   return (
     <>
       <div className="min-h-screen relative max-w-7xl mx-auto bg-background text-foreground mt-20">
-        <div className="flex flex-col px-4 justify-between items-start bg-gray-800 text-white lg:flex-row lg:items-center">
-          <div className="pt-7 lg:w-2/3">
+        <div className="relative flex flex-col px-4 justify-between items-start bg-gray-800 text-white md:flex-row lg:items-center">
+          <div className="pt-7 md:w-[70%] lg:w-2/3">
             <h1 className="text-3xl font-bold mb-2">{course?.title}</h1>
             <p className={`${TEXT_MUTED_FOREGROUND} mb-4 px-5`}>
               {course?.summary}
@@ -101,7 +107,7 @@ function CoursePreviewPage(props) {
               <span>English</span>
             </div>
           </div>
-          <div className="bg-white text-gray-800 p-4 rounded-md shadow-lg mt-8 lg:w-1/3 lg:mt-0 lg:ml-8">
+          <div className="absolute bg-white text-gray-800 p-4 rounded-md shadow-lg mt-8 lg:w-1/3 lg:mt-0 lg:ml-8">
             <img
               src={course?.thumbnailURL}
               alt="Course preview image"

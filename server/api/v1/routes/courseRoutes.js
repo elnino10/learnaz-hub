@@ -30,7 +30,7 @@ router.post(
   createCourse
 );
 router.get("/", getCourses);
-router.get("/:courseId", authMiddleware, getCourseByID);
+router.get("/:courseId", getCourseByID);
 router.patch("/:courseId", authMiddleware, checkRole(role), updateCourse);
 router.delete("/:courseId", authMiddleware, checkRole(role), deleteCourse);
 

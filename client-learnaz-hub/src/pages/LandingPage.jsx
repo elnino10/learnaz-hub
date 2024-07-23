@@ -84,13 +84,15 @@ function LandingPage(props) {
               career and personal growth. Our diverse range of courses offers
               something for everyone.
             </p>
-            <Link
-              to="/signup"
-              className="bg-gray-900 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded"
-              aria-label="Sign up for free"
-            >
-              Get Started for Free
-            </Link>
+            {!props.authUser && (
+              <Link
+                to="/signup"
+                className="bg-gray-900 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded"
+                aria-label="Sign up for free"
+              >
+                Get Started for Free
+              </Link>
+            )}
           </div>
         </section>
         {/* Courses Section */}

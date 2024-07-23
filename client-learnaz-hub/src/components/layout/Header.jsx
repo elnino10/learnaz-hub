@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { FiSearch } from "react-icons/fi";
-import Logo from "../../assets/images/LH2.png";
+import Logo from "../../assets/images/logomain.png";
 import { MenuOpen } from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -91,48 +91,44 @@ function Header(props) {
 
   return (
     <>
-      <header className="h-20 bg-white shadow-md top-0 z-20 fixed w-full flex justify-between items-center px-10">
+      <header className="px-2 py-3 bg-white shadow-md top-0 z-20 fixed w-full flex justify-between items-center sm:px-4 sm:h-20 md:h-24">
         {/* Logo */}
-        <div className="flex items-center justify-between">
-          <Link to="/" onClick={() => props.setActivePage("home")}>
-            <img
-              src={Logo}
-              alt="Learnaz-Hub Logo"
-              className="block h-16 rounded-full md:hidden"
-            />
-            <div className="hidden text-xl font-bold md:block md:">
-              Learnaz Hub
-            </div>
-          </Link>
-          {/* course category */}
-          <div className="relative ml-20 flex flex-col">
-            <input
-              type="text"
-              className="md:w-80 bg-blue-100 border border-gray-300 rounded-full px-4 py-2 pl-10 focus:outline-none focus:border-blue-500"
-              placeholder="Search courses"
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-            />
-            <FiSearch className="w-5 h-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
-            {searchValue && (
-              <div className="absolute translate-y-12 min-w-[15rem] rounded-b-sm pb-2 px-2 bg-white max-w-[10rem] md:min-w-[20rem]">
-                {searchedCourses.map((course, index) => (
-                  <div
-                    onClick={() => {
-                      navigate(`/course/course-content/${course.id}`);
-                      setSearchValue("");
-                    }}
-                    key={index}
-                    className="border-t-2 min-h-[3rem] py-2 cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap"
-                  >
-                    {course.title}
-                  </div>
-                ))}
-              </div>
-            )}
+        <Link to="/" onClick={() => props.setActivePage("home")}>
+          <img
+            src={Logo}
+            alt="Learnaz-Hub Logo"
+            className="block h-5 rounded-full sm:h-8 md:hidden"
+          />
+          <div className="hidden text-xl font-bold md:block md:">
+            LearnazHub
           </div>
+        </Link>
+        <div className="relative text-sm flex flex-col sm:text-lg">
+          <input
+            type="text"
+            className=" bg-blue-100 border border-gray-300 rounded-full pl-10 py-1 focus:outline-none focus:border-blue-500 sm:py-2 sm:w-72 md:py-2 md:w-80"
+            placeholder="Search courses"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+          />
+          <FiSearch className="w-5 h-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
+          {searchValue && (
+            <div className="absolute translate-y-8 min-w-[13rem] rounded-b-sm pb-2 px-2 bg-gray-100 max-w-[10rem] shadow-md sm:min-w-[18rem] sm:translate-y-12 md:min-w-[20rem]">
+              {searchedCourses.map((course, index) => (
+                <div
+                  onClick={() => {
+                    navigate(`/course/course-content/${course.id}`);
+                    setSearchValue("");
+                  }}
+                  key={index}
+                  className="border-t-2 min-h-[3rem] py-2 cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap"
+                >
+                  {course.title}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-
         <div className="md:w-[50%]">
           <div onClick={toggleMenuHandler} className="md:hidden text-gray-900">
             {props.menuVisible ? <MenuOpen /> : <MenuIcon />}
@@ -140,13 +136,13 @@ function Header(props) {
           {/* <nav> */}
           <nav className={`${!props.menuVisible && "hidden"} md:flex`}>
             <ul
-              className="rounded-l-sm text-sm bg-gray-200 px-2 py-3 absolute
-            translate-y-[1.7rem] translate-x-[-5rem] w-36 h-[13rem] flex flex-col
-            justify-between items-start md:relative md:px-0 md:py-0 md:translate-x-0
-            md:translate-y-0 md:flex-row md:items-center md:bg-inherit
-            md:text-base md:w-full md:h-full"
+              className="absolute rounded-l-sm text-sm bg-gray-200 px-1 py-2
+            translate-y-[0.8rem] translate-x-[-6rem] w-32 h-auto flex flex-col
+            justify-between items-start sm:translate-x-[-5rem] sm:translate-y-[1.7rem]
+            md: md: md:translate-x-[-2rem] md:translate-y-[-3rem] md:flex-row md:items-center
+            md:justify-between md:bg-inherit md:text-base md:w-[50%] md:h-full"
             >
-              <li className="text-gray-600 hover:text-gray-900">
+              <li className="mt-2 text-gray-600 hover:text-gray-900">
                 <div className="flex cursor-pointer" onClick={toggleDrpdwn}>
                   <div ref={dropdownRef} className="">
                     <div
@@ -181,7 +177,7 @@ function Header(props) {
               </li>
               {props.authUser && (
                 <li
-                  className="text-gray-900 hover:text-gray-900"
+                  className="mt-3 text-gray-600 hover:text-gray-900"
                   onClick={() => props.setActivePage("dashboard")}
                 >
                   <Link
@@ -198,21 +194,21 @@ function Header(props) {
                 <li
                   className={`${
                     props.activePage === "creator"
-                  } text-gray-600 hover:text-gray-900`}
+                  } mt-3 text-gray-600 hover:text-gray-900`}
                   onClick={() => props.setActivePage("creator")}
                 >
                   <Link to="/course-creator">Become a Creator</Link>
                 </li>
               )}
               {props.authUser && props.authUser.role === "instructor" && (
-                <li>
+                <li className="mt-3 text-gray-600 hover:text-gray-900">
                   <Link to="/home/created-courses">Created Courses</Link>
                 </li>
               )}
 
               {props.authUser && (
                 <li
-                  className="text-gray-900 hover:text-gray-900"
+                  className="mt-3 text-gray-900 hover:text-gray-900"
                   onClick={() => props.setActivePage("profile")}
                 >
                   <Link
@@ -234,7 +230,7 @@ function Header(props) {
                 </li>
               )}
               <li
-                className="border rounded-md text-sm p-2 transition
+                className="mt-3 border rounded-md text-sm p-2 transition
               ease-in-out delay-150 bg-gray-800 text-white hover:-translate-y-1
               hover:scale-110 duration-300"
               >
@@ -248,7 +244,7 @@ function Header(props) {
               </li>
 
               {!props.authUser && (
-                <li className="border rounded-md text-sm p-2 transition ease-in-out delay-150 bg-gray-800 text-white hover:-translate-y-1 hover:scale-110 duration-300">
+                <li className="mt-3 border rounded-md text-sm p-2 transition ease-in-out delay-150 bg-gray-800 text-white hover:-translate-y-1 hover:scale-110 duration-300">
                   <Link to="/signup">Sign Up</Link>
                 </li>
               )}

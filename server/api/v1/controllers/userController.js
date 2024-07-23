@@ -20,7 +20,12 @@ export const getUsers = async (req, res) => {
 export const getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.userId)
-      .populate("coursesEnrolled")
+      .populate({
+        path: "coursesEnrolled",
+        populate: {
+          path: "lessons",
+        },
+      })
       .populate("coursesCreated");
     if (!user) {
       return res
