@@ -47,7 +47,7 @@ function CoursePreviewPage(props) {
         `/courses/enroll/${courseId}`,
         enrollmentData
       );
-      if (!props.authData) {
+      if (!props.userData._id) {
         throw new Error("Please login to enroll in a course");
       }
 
