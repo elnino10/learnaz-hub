@@ -92,34 +92,35 @@ function Header(props) {
 
   return (
     <>
-      <header className="px-2 py-3 bg-white shadow-md top-0 z-20 fixed w-full h-16 flex justify-between items-center sm:px-4 sm:w-[52rem] sm:h-20 md:w-full md:h-24">
+      <header className="px-2 py-3 bg-white shadow-md top-0 z-20 fixed w-full h-[6rem] flex justify-between items-center sm:px-4 sm:w-[52rem] sm:h-20 md:w-full md:h-24">
         {/* Logo */}
         <Link to="/" onClick={() => props.setActivePage("home")}>
           <img
             src={Logo}
             alt="Learnaz-Hub Logo"
-            className="block h-5 rounded-full sm:h-8 md:hidden"
+            className="block h-10 ml-2 rounded-full sm:h-8 md:hidden"
           />
           <div className="hidden text-xl font-bold md:block md:">
             LearnazHub
           </div>
         </Link>
-        <div className="relative text-sm flex flex-col sm:text-lg">
+        <div className="relative text-lg flex flex-col sm:text-xl">
           <input
             type="text"
-            className=" bg-blue-100 border border-gray-300 rounded-full pl-10 py-1 focus:outline-none focus:border-blue-500 sm:py-2 sm:w-72 md:py-2 md:w-80"
+            className=" bg-blue-100 border border-gray-300 rounded-full pl-10 pr-6 py-2 focus:outline-none focus:border-blue-500 sm:py-2 sm:w-72 md:py-2 md:w-80"
             placeholder="Search courses"
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
           />
           <FiSearch className="w-5 h-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
           {searchValue && (
-            <div className="absolute translate-y-8 min-w-[13rem] rounded-b-sm pb-2 px-2 bg-gray-100 max-w-[10rem] shadow-md sm:min-w-[18rem] sm:translate-y-12 md:min-w-[20rem]">
+            <div className="absolute text-lg translate-y-12 min-w-[17rem] rounded-b-sm pb-2 px-2 bg-gray-100 max-w-[10rem] shadow-md sm:min-w-[20rem] sm:translate-y-12 md:min-w-[20rem]">
               {searchedCourses.map((course, index) => (
                 <div
                   onClick={() => {
                     // props.authUser
-                    props.auth && course?.studentsEnrolled?.includes(props.userData._id)
+                    props.auth &&
+                    course?.studentsEnrolled?.includes(props.userData._id)
                       ? navigate(`/course/course-content/${course._id}`)
                       : navigate(`/courses/preview/${course._id}`);
                     setSearchValue("");
@@ -134,19 +135,26 @@ function Header(props) {
           )}
         </div>
         <div className="md:w-[50%]">
-          <div onClick={toggleMenuHandler} className="md:hidden text-gray-900">
-            {props.menuVisible ? <MenuOpen /> : <MenuIcon />}
+          <div
+            onClick={toggleMenuHandler}
+            className="md:hidden text-gray-900 mr-3"
+          >
+            {props.menuVisible ? (
+              <MenuOpen sx={{ height: "2.5rem", width: "3rem" }} />
+            ) : (
+              <MenuIcon sx={{ height: "2.5rem", width: "3rem" }} />
+            )}
           </div>
           {/* <nav> */}
           <nav className={`${!props.menuVisible && "hidden"} md:flex`}>
             <ul
-              className="absolute rounded-l-sm text-sm bg-gray-200 px-1 py-2
-            translate-y-[0.8rem] translate-x-[-6rem] w-32 h-auto flex flex-col
+              className="absolute rounded-l-sm text-lg bg-gray-200 px-2 py-2
+            translate-y-[2rem] translate-x-[-5.5rem] w-[12rem] h-auto flex flex-col
             justify-between items-start sm:translate-x-[-5rem] sm:translate-y-[1.7rem]
             md: md: md:translate-x-[-2rem] md:translate-y-[-3rem] md:flex-row md:items-center
             md:justify-between md:bg-inherit md:text-base md:w-[50%] md:h-full"
             >
-              <li className="mt-2 text-gray-600 hover:text-gray-900">
+              <li className="mt-5 text-gray-600 hover:text-gray-900">
                 <div className="flex cursor-pointer" onClick={toggleDrpdwn}>
                   <div ref={dropdownRef} className="">
                     <div
@@ -181,7 +189,7 @@ function Header(props) {
               </li>
               {props.authUser && (
                 <li
-                  className="mt-3 text-gray-600 hover:text-gray-900"
+                  className="mt-5 text-gray-600 hover:text-gray-900"
                   onClick={() => props.setActivePage("dashboard")}
                 >
                   <Link
@@ -198,21 +206,21 @@ function Header(props) {
                 <li
                   className={`${
                     props.activePage === "creator"
-                  } mt-3 text-gray-600 hover:text-gray-900`}
+                  } mt-5 text-gray-600 hover:text-gray-900`}
                   onClick={() => props.setActivePage("creator")}
                 >
                   <Link to="/course-creator">Become a Creator</Link>
                 </li>
               )}
               {props.authUser && props.authUser.role === "instructor" && (
-                <li className="mt-3 text-gray-600 hover:text-gray-900">
+                <li className="mt-5 text-gray-600 hover:text-gray-900">
                   <Link to="/home/created-courses">Created Courses</Link>
                 </li>
               )}
 
               {props.authUser && (
                 <li
-                  className="mt-3 text-gray-900 hover:text-gray-900"
+                  className="mt-5 text-gray-900 hover:text-gray-900"
                   onClick={() => props.setActivePage("profile")}
                 >
                   <Link
@@ -234,7 +242,7 @@ function Header(props) {
                 </li>
               )}
               <li
-                className="mt-3 border rounded-md text-sm p-2 transition
+                className="mt-5 border rounded-md text-sm p-2 transition
               ease-in-out delay-150 bg-gray-800 text-white hover:-translate-y-1
               hover:scale-110 duration-300"
               >
@@ -248,7 +256,7 @@ function Header(props) {
               </li>
 
               {!props.authUser && (
-                <li className="mt-3 border rounded-md text-sm p-2 transition ease-in-out delay-150 bg-gray-800 text-white hover:-translate-y-1 hover:scale-110 duration-300">
+                <li className="mt-5 mb-2 border rounded-md text-sm p-2 transition ease-in-out delay-150 bg-gray-800 text-white hover:-translate-y-1 hover:scale-110 duration-300">
                   <Link to="/signup">Sign Up</Link>
                 </li>
               )}
