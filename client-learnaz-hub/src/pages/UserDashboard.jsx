@@ -18,7 +18,7 @@ const UserDashboard = (props) => {
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [createdCourses, setCreatedCourses] = useState([]);
 
-  const courses = []
+  const courses = [];
   // get user id from login
   const id = props.authUser?.id;
   const role = props.authUser?.role;
@@ -222,7 +222,7 @@ const UserDashboard = (props) => {
           journey today!
         </div>
       )}
-      {props.userData?.role === "instructor" && (
+      {props.userData?.role === "instructor" && enrolledCourses.length > 0 && (
         <ViewEnrolledCourses
           enrolledCourses={enrolledCourses}
           settings={settings}
