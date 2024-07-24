@@ -57,6 +57,9 @@ const CourseContentPage = () => {
   const handleLessonClick = async (url) => {
     if (lessonUrl === url) {
       setIsPlaying(!isPlaying);
+      videoRef.current?.props.onPause(() => {
+        setIsPlaying(false);
+      });
     } else {
       videoRef.current?.props.onPlay(() => {
         console.log(`playing ${url}`);
@@ -66,8 +69,6 @@ const CourseContentPage = () => {
       // setIsPlaying(true);
     }
   };
-
-  console.log(isPlaying);
 
   if (isLoading) {
     return (
@@ -115,7 +116,7 @@ const CourseContentPage = () => {
               <img
                 src={course?.thumbnailURL}
                 alt="Video Thumbnail"
-                className="absolute top-0 left-0 h-[22.5rem] object-cover cursor-pointer"
+                className="absolute top-0 left-0 h-[22.5rem] w-[53.5rem] object-cover cursor-pointer"
               />
             ) : (
               <ReactPlayer

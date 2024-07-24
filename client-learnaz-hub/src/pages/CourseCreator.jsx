@@ -43,15 +43,18 @@ const CourseCreator = (props) => {
   const navigate = useNavigate();
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
-  let apiUrl = "";
-  if (props.authUser) {
-    apiUrl = `${baseUrl}/users/${props.authUser.id}`;
-  }
+
+  const axiosInstance = axios.create({
+    baseURL: baseUrl,
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    }
+  })
 
   const applyInstructorHandler = async () => {
     try {
       if (props.authUser && props.authUser.role !== "instructor") {
-        const res = await axios.patch(apiUrl, { role: "instructor" });
+        const res = await axiosInstance.patch(`/users/${props.authUser.id}`, { role: "instructor" });
         console.log(res.data);
         alert(res.data.message);
         navigate("/home", { state: {id: props.authUser.id} });
