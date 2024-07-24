@@ -4,7 +4,7 @@ import Slider from "react-slick";
 /* eslint-disable react/prop-types */
 function ViewEnrolledCourses(props) {
 
-    const { enrolledCourses, settings, id, } = props;
+    const { enrolledCourses, settings, id, userData } = props;
 
   return (
     <>
@@ -29,7 +29,7 @@ function ViewEnrolledCourses(props) {
               <div className="flex flex-col bg-white border h-40 w-100 overflow-hidden">
                 <Link
                   to={
-                    props.userData?.coursesEnrolled?.map((course) =>
+                    userData?.coursesEnrolled?.map((course) =>
                       course.studentsEnrolled.includes(id)
                     )
                       ? `/course/course-content/${course._id}`
