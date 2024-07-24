@@ -3,11 +3,14 @@ import LoginForm from "./forms/LoginForm";
 import PasswordRecoveryForm from "./forms/PasswordRecoveryForm";
 import ForgotPassword from "./forms/ForgotPassword";
 import CreateCourse from "./forms/CreateCourse";
-import AddLessons from "./forms/AddLessons"
+import AddLessons from "./forms/AddLessons";
 import SignupInstructor from "./forms/SignupInstructor";
 import Header from "./layout/Header";
 import Footer from "./layout/Footer";
 import CourseCard from "./cards/CourseCard";
+import ViewCreatedCourses from "./ViewCreatedCourses";
+import ViewEnrolledCourses from "./ViewEnrolledCourses";
+
 export {
   AddLessons,
   CreateCourse,
@@ -18,5 +21,7 @@ export {
   Header,
   Footer,
   CourseCard,
-  SignupInstructor
+  SignupInstructor,
+  ViewCreatedCourses,
+  ViewEnrolledCourses
 };

@@ -10,12 +10,15 @@ import "slick-carousel/slick/slick-theme.css";
 
 import axios from "axios";
 import { RotatingLines } from "react-loader-spinner";
+import { ViewCreatedCourses, ViewEnrolledCourses } from "../components";
 
 const UserDashboard = (props) => {
   const [suggestedCourses, setSuggestedCourses] = useState([]);
-  const [courses, setCourses] = useState([]);
-  const [isLoading , setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [enrolledCourses, setEnrolledCourses] = useState([]);
+  const [createdCourses, setCreatedCourses] = useState([]);
 
+  const courses = []
   // get user id from login
   const id = props.authUser?.id;
   const role = props.authUser?.role;
@@ -32,9 +35,10 @@ const UserDashboard = (props) => {
   // get user data from database
   useEffect(() => {
     const fetchUserData = async () => {
+      if (!props.authUser) return;
       try {
         const res = await axiosInstance.get(`/users/${id}`);
-        props.authUser && props.setUserData(res.data.data);
+        props.setUserData(res.data.data);
       } catch (error) {
         console.log("Error fetching user data: ", error);
       }
@@ -63,25 +67,42 @@ const UserDashboard = (props) => {
     fetchSuggestedCourses();
   }, []);
 
-  // fetch courses created by user if user is an instructor
-  // or the courses enrolled by user if user is a student
-  // an instructor may also be enrolled in courses
+  // get created courses by instructor
   useEffect(() => {
-    const fetchCourses = async () => {
+    const fetchCreatedCourses = async () => {
       try {
-        const res = await axiosInstance.get(`/courses/${role}/${id}`);
-        setCourses(res.data.data);
+        if (role === "instructor") {
+          const createdResponse = await axiosInstance.get(
+            `/courses/${role}/${id}/created`
+          );
+          createdResponse && setCreatedCourses(createdResponse.data.data);
+        }
       } catch (error) {
-        console.log("Error fetching courses: ", error);
+        console.log("Error fetching created courses: ", error);
       } finally {
         setIsLoading(false);
       }
-      
     };
-    fetchCourses();
+    fetchCreatedCourses();
   }, [role, id]);
 
-  
+  // get enrolled courses by user (instructor or student)
+  useEffect(() => {
+    const fetchEnrolledCourses = async () => {
+      try {
+        const enrolledResponse = await axiosInstance.get(
+          `/courses/student/${id}/enrolled`
+        );
+        enrolledResponse && setEnrolledCourses(enrolledResponse.data.data);
+      } catch (error) {
+        console.log("Error fetching created courses: ", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchEnrolledCourses();
+  }, [role, id]);
+
   const settings = {
     speed: 500,
     slidesToShow: 4,
@@ -93,7 +114,6 @@ const UserDashboard = (props) => {
         settings: {
           slidesToShow: 3,
           slidesToScroll: 3,
-          
         },
       },
       {
@@ -179,188 +199,70 @@ const UserDashboard = (props) => {
           />
         </div>
       ) : props.userData?.role === "instructor" ? (
-        courses.length > 0 ? (
-          <>
-            <div className="flex items-center justify-between px-16 mt-5 mb-3 md:px-32">
-              <h3 className="pl-4 text-2xl text-gray-700 font-bold">
-                Created Courses
-              </h3>
-              <div>
-                <Link
-                  to="/home/created-courses"
-                  className="text-blue-950 hover:underline hover:text-blue-900"
-                  aria-label="View all created courses"
-                >
-                  View All Created Courses
-                </Link>
-              </div>
-            </div>
-            <div className="md:w-[70%] md:mx-auto">
-              {/* <Slider {...settings}>
-                {courses.map((course) => (
-                  <div key={course.id} className="max-w-48">
-                    <div className="flex flex-col bg-gray-100 border h-40 w-100 overflow-hidden">
-                      <Link to={`/course/course-content/${course.id}`}>
-                        <div>
-                          <img
-                            src={course.thumbnailURL}
-                            alt={course.title}
-                            className="object-fill w-full h-20"
-                          />
-                        </div>
-                        <div className="text-sm px-2 pt-3">
-                          <h3 className="font-semibold">{course.title}</h3>
-                          <p className="text-xs">{course.duration}</p>
-                        </div>
-                      </Link>
-                    </div>
-                  </div>
-                ))}
-              </Slider> */}
-              <Slider {...settings}>
-                {courses.map((course) => (
-                  <div key={course._id} className="max-w-52 max-h-52">
-                    <div className="flex flex-col bg-white border h-40 w-100 overflow-hidden">
-                      <Link
-                        to={
-                          props.userData?.coursesEnrolled?.map((course) =>
-                            course.studentsEnrolled.includes(id)
-                          )
-                            ? `/course/course-content/${course._id}`
-                            : `/courses/preview/${course._id}`
-                        }
-                      >
-                        <div>
-                          <img
-                            src={course.thumbnailURL}
-                            alt={course.title}
-                            className="object-fill w-full h-20"
-                          />
-                        </div>
-                        <div className="text-sm px-2 pt-3">
-                          <h3 className="font-semibold">{course.title}</h3>
-                          <p className="text-xs">{course.duration}</p>
-                        </div>
-                      </Link>
-                    </div>
-                  </div>
-                ))}
-              </Slider>
-            </div>
-          </>
+        createdCourses.length > 0 ? (
+          <ViewCreatedCourses
+            createdCourses={createdCourses}
+            settings={settings}
+          />
         ) : (
           <div className="p-6 text-center text-4xl text-gray-500 pt-10 italic">
             You haven&apos;t created any courses yet.
           </div>
         )
-      ) : courses.length > 0 ? (
-        <>
-          <div className="flex items-center justify-between px-16 mt-5 mb-3 md:px-32">
-            <div className="mb-3 text-2xl text-gray-700 font-bold">
-              <h2>Continue Learning</h2>
-            </div>
-            <div>
-              <Link
-                to="/home/my-courses/learning"
-                className="text-blue-950 hover:underline hover:text-blue-900"
-                aria-label="View all enrolled courses"
-              >
-                View All Courses
-              </Link>
-            </div>
-          </div>
-          <div className="md:w-[70%] md:mx-auto">
-            <Slider {...settings}>
-              {courses.map((course) => (
-                <div key={course._id} className="max-w-52 max-h-52">
-                  <div className="flex flex-col bg-white border h-40 w-100 overflow-hidden">
-                    <Link
-                      to={
-                        props.userData?.coursesEnrolled?.map((course) =>
-                          course.studentsEnrolled.includes(id)
-                        )
-                          ? `/course/course-content/${course._id}`
-                          : `/courses/preview/${course._id}`
-                      }
-                    >
-                      <div>
-                        <img
-                          src={course.thumbnailURL}
-                          alt={course.title}
-                          className="object-fill w-full h-20"
-                        />
-                      </div>
-                      <div className="text-sm px-2 pt-3">
-                        <h3 className="font-semibold">{course.title}</h3>
-                        <p className="text-xs">{course.duration}</p>
-                      </div>
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </Slider>
-            {/* )} */}
-          </div>
-        </>
+      ) : enrolledCourses.length > 0 ? (
+        <ViewEnrolledCourses
+          enrolledCourses={enrolledCourses}
+          settings={settings}
+          id={props.authUser.id}
+        />
       ) : (
         <div className="p-6 text-center text-4xl text-gray-500 pt-10 italic">
           You haven&apos;t enrolled in any courses yet. Start your learning
           journey today!
         </div>
       )}
-      {isLoading ? (
-        <div className="flex justify-center items-center h-64">
-          <RotatingLines
-            height="80"
-            width="80"
-            strokeWidth="5"
-            animationDuration="0.75"
-            strokeColor="#848884"
-            ariaLabel="rotating-lines-loading"
-            visible={true}
-          />
-        </div>
-      ) : (
-        props.userData &&
-        props.userData.role !== "instructor" && (
-          <div className="mt-10 mx-20">
-            <div className="mt-5 mb-3 md:px-32">
-              <div className="mb-3 text-2xl text-gray-700 font-bold">
-                <h2>Suggested Courses</h2>
-              </div>
-            </div>
-            <div className="md:w-[70%] md:mx-auto">
-              <Slider {...settings}>
-                {suggestedCourses.map((course) => (
-                  <div key={course._id} className="max-w-52 max-h-52">
-                    <div className="flex flex-col bg-white border h-40 w-100 overflow-hidden">
-                      <Link
-                        to={
-                          !props.userData.coursesEnrolled?.includes(
-                            course._id
-                          ) && `/courses/preview/${course._id}`
-                        }
-                      >
-                        <div>
-                          <img
-                            src={course.thumbnailURL}
-                            alt={course.title}
-                            className="object-fill w-full h-20"
-                          />
-                        </div>
-                        <div className="text-sm px-2 pt-3">
-                          <h3 className="font-semibold">{course.title}</h3>
-                          <p className="text-xs">{course.duration}</p>
-                        </div>
-                      </Link>
-                    </div>
-                  </div>
-                ))}
-              </Slider>
-            </div>
-          </div>
-        )
+      {props.userData?.role === "instructor" && (
+        <ViewEnrolledCourses
+          enrolledCourses={enrolledCourses}
+          settings={settings}
+          id={props.authUser.id}
+        />
       )}
+      <div className="mt-10 mx-20">
+        <div className="mt-5 mb-3 md:px-32">
+          <div className="mb-3 text-2xl text-gray-700 font-bold">
+            <h2>Suggested Courses</h2>
+          </div>
+        </div>
+        <div className="md:w-[70%] md:mx-auto">
+          <Slider {...settings}>
+            {suggestedCourses.map((course) => (
+              <div key={course._id} className="max-w-52 max-h-52">
+                <div className="flex flex-col bg-white border h-40 w-100 overflow-hidden">
+                  <Link
+                    to={
+                      !props.userData.coursesEnrolled?.includes(course._id) &&
+                      `/courses/preview/${course._id}`
+                    }
+                  >
+                    <div>
+                      <img
+                        src={course.thumbnailURL}
+                        alt={course.title}
+                        className="object-fill w-full h-20"
+                      />
+                    </div>
+                    <div className="text-sm px-2 pt-3">
+                      <h3 className="font-semibold">{course.title}</h3>
+                      <p className="text-xs">{course.duration}</p>
+                    </div>
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </Slider>
+        </div>
+      </div>
     </div>
   );
 };

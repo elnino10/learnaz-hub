@@ -22,7 +22,7 @@ function CreatedCourses(props) {
     const fetchCourses = async () => {
       try {
         const res = await axiosInstance.get(
-          `/courses/instructor/${props.userData.id}`
+          `/courses/instructor/${props.userData.id}/created`
         );
         setMyCourses(res.data.data);
       } catch (error) {

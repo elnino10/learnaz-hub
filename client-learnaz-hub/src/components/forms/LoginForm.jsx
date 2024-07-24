@@ -50,11 +50,12 @@ function LoginForm(props) {
       navigate("/home", {
         state: { id: decoded.payloadObj.id, role: decoded.payloadObj.role },
       });
+      setEmail("");
+      setPassword("");
     } catch (error) {
       setErrMsg(error.response.data.message);
     }
-    setEmail("");
-    setPassword("");
+    
   };
 
   return (
