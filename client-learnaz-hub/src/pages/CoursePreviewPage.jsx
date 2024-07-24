@@ -25,8 +25,6 @@ function CoursePreviewPage(props) {
     },
   });
 
-  console.log(props.userData);
-
   useEffect(() => {
     // fetch course data from database
     const fetchCourse = async () => {
