@@ -118,7 +118,8 @@ function Header(props) {
               {searchedCourses.map((course, index) => (
                 <div
                   onClick={() => {
-                    props.authUser
+                    // props.authUser
+                    props.auth && course?.studentsEnrolled?.includes(props.userData._id)
                       ? navigate(`/course/course-content/${course._id}`)
                       : navigate(`/courses/preview/${course._id}`);
                     setSearchValue("");
