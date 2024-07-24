@@ -1,7 +1,19 @@
 /* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
+import { RotatingLines } from "react-loader-spinner";
+import { useEffect, useState } from "react";
+
 
 function EnrolledCoursesPage(props) {
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (props.userData) {
+      setIsLoading(false);
+    }
+  }, [props]);
+
   return (
     <div className="mt-20">
       <div className="bg-gray-800 text-white flex justify-center items-center h-40">
@@ -20,7 +32,19 @@ function EnrolledCoursesPage(props) {
         </p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-5 px-28">
-        {props.userData?.coursesEnrolled ? (
+        {isLoading ? (
+          <div className="flex justify-center items-center h-64">
+            <RotatingLines
+              height="80"
+              width="80"
+              strokeWidth="5"
+              animationDuration="0.75"
+              strokeColor="#848884"
+              ariaLabel="rotating-lines-loading"
+              visible={true}
+            />
+          </div>
+        ) : props.userData?.coursesEnrolled ? (
           props.userData?.coursesEnrolled?.map((course, index) => (
             <div key={index} className="p-4 border rounded-lg">
               <Link to={`/course/course-content/${course._id}`}>
