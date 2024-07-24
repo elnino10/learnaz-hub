@@ -46,14 +46,16 @@ function CoursePreviewPage(props) {
       courseId: courseId,
       studentId: props.userData?._id,
     };
+    if (!props.userData?._id) {
+      alert("Please login to enroll in a course");
+      navigate("/login");
+      return;
+    }
     try {
       const res = await axiosInstance.post(
         `/courses/enroll/${courseId}`,
         enrollmentData
       );
-      if (!props.userData?._id) {
-        alert("Please login to enroll in a course");
-      }
 
       if (res.data.status === "success") {
         alert("Enrolled for course successfully!");
