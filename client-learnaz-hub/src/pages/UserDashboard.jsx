@@ -214,6 +214,7 @@ const UserDashboard = (props) => {
           enrolledCourses={enrolledCourses}
           settings={settings}
           id={props.authUser.id}
+          userData={props.userData}
         />
       ) : (
         <div className="p-6 text-center text-4xl text-gray-500 pt-10 italic">
