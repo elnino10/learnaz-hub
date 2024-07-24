@@ -244,7 +244,6 @@ const ProfileEdit = (props) => {
               !props.editClicked && "text-gray-400"
             } bg-primary text-primary-foreground mr-32 hover:underline font-serif text-2xl hover:bg-primary/80 ${BUTTON_CLASS}`}
           >
-            {/* {isSending ? "Updating..." : "Save"} */}
             Save
           </button>
         </div>
