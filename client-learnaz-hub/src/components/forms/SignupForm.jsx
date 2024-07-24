@@ -46,13 +46,13 @@ function SignupForm() {
       }
       alert("You signed up successfully. Please login to continue.");
       navigate("/login");
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+      setPassword("");
     } catch (error) {
       setErrMsg(error.response.data.message);
     }
-    setFirstName("");
-    setLastName("");
-    setEmail("");
-    setPassword("");
   };
 
   return (
@@ -167,7 +167,10 @@ function SignupForm() {
               <Grid container justifyContent="center">
                 <Grid item>
                   <Link to="/login" variant="body2">
-                    Already have an account? <span className="text-blue-500 hover:underline">Sign in</span>
+                    Already have an account?{" "}
+                    <span className="text-blue-500 hover:underline">
+                      Sign in
+                    </span>
                   </Link>
                 </Grid>
               </Grid>

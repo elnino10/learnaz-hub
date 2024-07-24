@@ -46,7 +46,7 @@ const ProfileEdit = (props) => {
       setCoursesCreated(props.userData.coursesCreated?.length);
       setIsLoading(false);
     }
-  }, [props]);
+  }, [props.userData]);
 
   const editProfileHandler = (e) => {
     e.stopPropagation();
@@ -71,7 +71,10 @@ const ProfileEdit = (props) => {
 
     try {
       const res = await axiosInstance.patch(endPoint, updatedData);
-      console.log(res.data);
+      if (res.data.status === "success") {
+        alert("Profile updated successfully");
+        props.setEditClicked(false);
+      }
     } catch (error) {
       console.log("Error updating user data: ", error);
     } finally {
@@ -241,6 +244,7 @@ const ProfileEdit = (props) => {
               !props.editClicked && "text-gray-400"
             } bg-primary text-primary-foreground mr-32 hover:underline font-serif text-2xl hover:bg-primary/80 ${BUTTON_CLASS}`}
           >
+            {/* {isSending ? "Updating..." : "Save"} */}
             Save
           </button>
         </div>
