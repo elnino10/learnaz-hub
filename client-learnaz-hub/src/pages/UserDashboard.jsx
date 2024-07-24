@@ -9,10 +9,12 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import axios from "axios";
+import { RotatingLines } from "react-loader-spinner";
 
 const UserDashboard = (props) => {
   const [suggestedCourses, setSuggestedCourses] = useState([]);
   const [courses, setCourses] = useState([]);
+  const [isLoading , setIsLoading] = useState(true);
 
   // get user id from login
   const id = props.authUser?.id;
@@ -71,22 +73,26 @@ const UserDashboard = (props) => {
         setCourses(res.data.data);
       } catch (error) {
         console.log("Error fetching courses: ", error);
+      } finally {
+        setIsLoading(false);
       }
+      
     };
     fetchCourses();
-  }, []);
+  }, [role, id]);
 
+  
   const settings = {
     speed: 500,
     slidesToShow: 3,
-    slidesToScroll: 1,
+    slidesToScroll: 4,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
           slidesToShow: 4,
           slidesToScroll: 4,
-          infinite: true,
+          
         },
       },
       {
@@ -159,7 +165,19 @@ const UserDashboard = (props) => {
           </div>
         )}
       </div>
-      {props.userData?.role === "instructor" ? (
+      {isLoading ? (
+        <div className="flex justify-center items-center h-64">
+          <RotatingLines
+            height="80"
+            width="80"
+            strokeWidth="5"
+            animationDuration="0.75"
+            strokeColor="#848884"
+            ariaLabel="rotating-lines-loading"
+            visible={true}
+          />
+        </div>
+      ) : props.userData?.role === "instructor" ? (
         courses.length > 0 ? (
           <>
             <div className="flex items-center justify-between px-16 mt-5 mb-3 md:px-32">
@@ -177,6 +195,27 @@ const UserDashboard = (props) => {
               </div>
             </div>
             <div className="md:w-[70%] md:mx-auto">
+              {/* <Slider {...settings}>
+                {courses.map((course) => (
+                  <div key={course.id} className="max-w-48">
+                    <div className="flex flex-col bg-gray-100 border h-40 w-100 overflow-hidden">
+                      <Link to={`/course/course-content/${course.id}`}>
+                        <div>
+                          <img
+                            src={course.thumbnailURL}
+                            alt={course.title}
+                            className="object-fill w-full h-20"
+                          />
+                        </div>
+                        <div className="text-sm px-2 pt-3">
+                          <h3 className="font-semibold">{course.title}</h3>
+                          <p className="text-xs">{course.duration}</p>
+                        </div>
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </Slider> */}
               <Slider {...settings}>
                 {courses.map((course) => (
                   <div key={course._id} className="max-w-52 max-h-52">
@@ -268,42 +307,58 @@ const UserDashboard = (props) => {
           journey today!
         </div>
       )}
-      {props.userData && props.userData.role !== "instructor" && (
-        <div className="mt-10 mx-20">
-          <div className="mt-5 mb-3 md:px-32">
-            <div className="mb-3 text-2xl text-gray-700 font-bold">
-              <h2>Suggested Courses</h2>
+      {isLoading ? (
+        <div className="flex justify-center items-center h-64">
+          <RotatingLines
+            height="80"
+            width="80"
+            strokeWidth="5"
+            animationDuration="0.75"
+            strokeColor="#848884"
+            ariaLabel="rotating-lines-loading"
+            visible={true}
+          />
+        </div>
+      ) : (
+        props.userData &&
+        props.userData.role !== "instructor" && (
+          <div className="mt-10 mx-20">
+            <div className="mt-5 mb-3 md:px-32">
+              <div className="mb-3 text-2xl text-gray-700 font-bold">
+                <h2>Suggested Courses</h2>
+              </div>
+            </div>
+            <div className="md:w-[70%] md:mx-auto">
+              <Slider {...settings}>
+                {suggestedCourses.map((course) => (
+                  <div key={course._id} className="max-w-52 max-h-52">
+                    <div className="flex flex-col bg-white border h-40 w-100 overflow-hidden">
+                      <Link
+                        to={
+                          !props.userData.coursesEnrolled?.includes(
+                            course._id
+                          ) && `/courses/preview/${course._id}`
+                        }
+                      >
+                        <div>
+                          <img
+                            src={course.thumbnailURL}
+                            alt={course.title}
+                            className="object-fill w-full h-20"
+                          />
+                        </div>
+                        <div className="text-sm px-2 pt-3">
+                          <h3 className="font-semibold">{course.title}</h3>
+                          <p className="text-xs">{course.duration}</p>
+                        </div>
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </Slider>
             </div>
           </div>
-          <div className="md:w-[70%] md:mx-auto">
-            <Slider {...settings}>
-              {suggestedCourses.map((course) => (
-                <div key={course._id} className="max-w-52 max-h-52">
-                  <div className="flex flex-col bg-white border h-40 w-100 overflow-hidden">
-                    <Link
-                      to={
-                        !props.userData.coursesEnrolled?.includes(course._id) &&
-                        `/courses/preview/${course._id}`
-                      }
-                    >
-                      <div>
-                        <img
-                          src={course.thumbnailURL}
-                          alt={course.title}
-                          className="object-fill w-full h-20"
-                        />
-                      </div>
-                      <div className="text-sm px-2 pt-3">
-                        <h3 className="font-semibold">{course.title}</h3>
-                        <p className="text-xs">{course.duration}</p>
-                      </div>
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </Slider>
-          </div>
-        </div>
+        )
       )}
     </div>
   );

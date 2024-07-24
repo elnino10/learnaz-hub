@@ -23,6 +23,8 @@ function CoursePreviewPage(props) {
     },
   });
 
+  console.log(props.userData);
+
   useEffect(() => {
     // fetch course data from database
     const fetchCourse = async () => {
@@ -40,32 +42,31 @@ function CoursePreviewPage(props) {
   const enrollmentHandler = async () => {
     const enrollmentData = {
       courseId: courseId,
-      studentId: props.userData._id,
+      studentId: props.userData?._id,
     };
     try {
       const res = await axiosInstance.post(
         `/courses/enroll/${courseId}`,
         enrollmentData
       );
-      if (!props.authData) {
+      if (!props.userData?._id) {
         throw new Error("Please login to enroll in a course");
       }
 
-      if (res.data.status === "success")
+      if (res.data.status === "success") {
         alert("Enrolled for course successfully!");
-      navigate(`/course/course-content/${courseId}`);
+        navigate(`/course/course-content/${courseId}`);
+      }
     } catch (error) {
-      console.log(error);
-      alert(error.message || "Error enrolling in course");
-      // alert("Error enrolling in course: sign in to enroll");
+      alert("Error enrolling in course");
     }
   };
 
   return (
     <>
-      <div className="min-h-screen relative max-w-7xl mx-auto bg-background text-foreground mt-20">
-        <div className="relative flex flex-col px-4 justify-between items-start bg-gray-800 text-white md:flex-row lg:items-center">
-          <div className="pt-7 md:w-[70%] lg:w-2/3">
+      <div className="w-[52rem] mt-16 min-h-screen relative max-w-7xl mx-auto bg-background text-foreground sm:mt-20 md:w-full md:mt-[6rem]">
+        <div className="relative flex flex-col px-4 items-center justify-between sm:items-start bg-gray-800 text-white md:flex-row lg:items-center">
+          <div className="flex flex-col items-start w-[80%] pt-7 sm:px-3 sm:w-[62%] lg:w-2/3">
             <h1 className="text-3xl font-bold mb-2">{course?.title}</h1>
             <p className={`${TEXT_MUTED_FOREGROUND} mb-4 px-5`}>
               {course?.summary}
@@ -107,7 +108,7 @@ function CoursePreviewPage(props) {
               <span>English</span>
             </div>
           </div>
-          <div className="absolute bg-white text-gray-800 p-4 rounded-md shadow-lg mt-8 lg:w-1/3 lg:mt-0 lg:ml-8">
+          <div className="w-[25rem] bg-white text-gray-800 pt-3 px-3 rounded-md shadow-lg mt-8 sm:w-[20rem] sm:absolute sm:translate-x-[30rem] sm:translate-y-[1rem] md:w-[25rem] md:ml-[48rem] md:translate-x-16 md:translate-y-[-1rem] lg:w-1/3 lg:mt-0">
             <img
               src={course?.thumbnailURL}
               alt="Course preview image"
@@ -123,25 +124,26 @@ function CoursePreviewPage(props) {
           </div>
         </div>
 
-        <div className="bg-card p-4 rounded-lg mt-8">
+        <div className="bg-card p-4 rounded-lg mt-8 sm:py-2 sm:px-10">
           <h2 className="text-2xl font-bold mb-4">Course Description</h2>
-          {course?.description}
-        </div>
-        <div className="mt-8 ml-4">
-          <h2 className="text-2xl font-bold mb-4">{`What you'll learn`}</h2>
-          {course?.lessons?.map((lesson) => (
-            <div key={lesson._id}>
-              <li>{lesson.title}</li>
-            </div>
-          ))}
-        </div>
-        <div className="mt-8 ml-4">
-          <h2 className="text-2xl font-bold mb-4">Requirements Students</h2>
-          <li>
-            {`Don't`} Need Prior Coding Skills to Enroll in This Course. Anyone
-            Can Take This Course.
-          </li>
-          <li>Students Require a Computer or Laptop to Write Code.</li>
+          <p>{course?.description}</p>
+
+          <div className="mt-8 ml-4">
+            <h2 className="text-2xl font-bold mb-4">{`What you'll learn`}</h2>
+            {course?.lessons?.map((lesson) => (
+              <div key={lesson._id}>
+                <li>{lesson.title}</li>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 ml-4">
+            <h2 className="text-2xl font-bold mb-4">Requirements Students</h2>
+            <li>
+              {`Don't`} Need Prior Coding Skills to Enroll in This Course.
+              Anyone Can Take This Course.
+            </li>
+            <li>Students Require a Computer or Laptop to Write Code.</li>
+          </div>
         </div>
       </div>
     </>

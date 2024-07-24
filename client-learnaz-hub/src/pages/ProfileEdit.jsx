@@ -20,7 +20,15 @@ const ProfileEdit = (props) => {
   const [coursesCreated, setCoursesCreated] = useState(0);
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
-  const apiUrl = `${baseUrl}/api/v1/users/${props.userData?._id}`;
+  const endPoint = `/users/${props.userData?._id}`;
+  const token = localStorage.getItem("token");
+
+  const axiosInstance = axios.create({
+    baseUrl: baseUrl,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   useEffect(() => {
     if (props.userData) {
@@ -44,9 +52,8 @@ const ProfileEdit = (props) => {
   };
 
   // update user data in database
-  const saveProfileHandler = async (e) => {
+  const updateProfileHandler = async (e) => {
     e.preventDefault();
-
     const updatedData = {
       firstName,
       lastName,
@@ -60,7 +67,7 @@ const ProfileEdit = (props) => {
     };
 
     try {
-      const res = await axios.patch(apiUrl, updatedData);
+      const res = await axiosInstance.patch(endPoint, updatedData);
       console.log(res.data);
     } catch (error) {
       console.log("Error updating user data: ", error);
@@ -208,7 +215,7 @@ const ProfileEdit = (props) => {
           <button
             type="submit"
             disabled={!props.editClicked}
-            onClick={saveProfileHandler}
+            onClick={updateProfileHandler}
             className={`${
               !props.editClicked && "text-gray-400"
             } bg-primary text-primary-foreground mr-32 hover:underline font-serif text-2xl hover:bg-primary/80 ${BUTTON_CLASS}`}

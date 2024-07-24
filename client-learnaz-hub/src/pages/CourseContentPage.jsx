@@ -6,22 +6,22 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPause, faPlayCircle } from "@fortawesome/free-solid-svg-icons";
 
 import ReactPlayer from "react-player";
+import { RotatingLines } from "react-loader-spinner";
 
 // Shared Tailwind CSS classes
 const buttonClasses = "px-2 py-1 rounded";
 const mutedButtonClasses = "bg-muted text-muted-foreground " + buttonClasses;
-const cardClasses = "bg-card text-card-foreground p-2 rounded-lg";
+const cardClasses =
+  "bg-card text-card-foreground p-2 rounded-lg cursor-pointer";
 
 const CourseContentPage = () => {
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [course, setCourse] = useState(null);
   const [lessonUrl, setLessonUrl] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
-  const videoRef = useRef(null);
+  const videoRef = useRef();
   const { courseId } = useParams();
-
-  // get this course content from database
-  // display it's list of lessons
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
   const axiosInstance = axios.create({
@@ -40,6 +40,8 @@ const CourseContentPage = () => {
         setCourse(courseData);
       } catch (error) {
         console.error(error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchCourse();
@@ -52,25 +54,43 @@ const CourseContentPage = () => {
     }
   }, [course?.lessons]);
 
-  const handlePlayPause = () => {
-    setIsPlaying(prev => !prev);
-  };
-
-  const handleLessonClick = (url) => {
+  const handleLessonClick = async (url) => {
     if (lessonUrl === url) {
-      setIsPlaying(prev => !prev);
+      setIsPlaying(!isPlaying);
     } else {
+      videoRef.current?.props.onPlay(() => {
+        console.log(`playing ${url}`);
+        setIsPlaying(true);
+      });
       setLessonUrl(url);
-      setIsPlaying(true);
+      // setIsPlaying(true);
     }
   };
+
+  console.log(isPlaying);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <RotatingLines
+          height="80"
+          width="80"
+          strokeWidth="5"
+          animationDuration="0.75"
+          strokeColor="#848884"
+          ariaLabel="rotating-lines-loading"
+          visible={true}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen pt-24 bg-background text-foreground">
       <div className="w-[52rem] text-lg flex items-center justify-between p-4 border-b border-border md:w-full">
         <div className="flex items-center space-x-2">
           <img
-            src="https://placehold.co/24x24?text=LU"
+            src="https://placehold.co/24x24?text=LH"
             alt="logo"
             className="h-6 w-6"
           />
@@ -87,26 +107,30 @@ const CourseContentPage = () => {
       </div>
       <div className="flex flex-col md:flex-row">
         <div className="flex-1">
-          {/* {currentLesson && ( */}
-          <div className="relative" onClick={handlePlayPause}>
-            <ReactPlayer
-              ref={videoRef}
-              url={lessonUrl}
-              playing={isPlaying}
-              controls
-              heigth="500px"
-              width="850px"
-              light={true}
-              onClick={handlePlayPause}
-            />
-            {!isPlaying && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <button className="text-black text-4xl">▶</button>
-              </div>
+          <div
+            className="relative w-full h-40"
+            onClick={() => setIsPlaying((prev) => !prev)}
+          >
+            {!isPlaying ? (
+              <img
+                src={course?.thumbnailURL}
+                alt="Video Thumbnail"
+                className="absolute top-0 left-0 h-[22.5rem] object-cover cursor-pointer"
+              />
+            ) : (
+              <ReactPlayer
+                url={lessonUrl}
+                playing={isPlaying}
+                controls
+                heigth="500px"
+                width="850px"
+                className={`${
+                  isPlaying ? "absolute" : "relative"
+                } top-0 left-0`}
+              />
             )}
           </div>
-          {/* )} */}
-          <div className="flex items-center justify-between mt-2"></div>
+          <div className="flex items-center justify-between mt-[12rem]"></div>
           <div className="pt-6 flex items-center justify-between w-[50rem] px-16 space-x-4 mt-4 border-b border-border">
             <button className="text-primary-foreground">Overview</button>
             <button className="text-muted-foreground hover:underline hover:text-blue-900">
@@ -136,7 +160,7 @@ const CourseContentPage = () => {
                   onClick={handleLessonClick.bind(this, lesson.contentUrl)}
                 >
                   <div className="flex items-center">
-                    {isPlaying ? (
+                    {isPlaying && lesson.contentUrl === lessonUrl ? (
                       <FontAwesomeIcon
                         icon={faPause}
                         className="text-muted-foreground mr-[1rem]"
