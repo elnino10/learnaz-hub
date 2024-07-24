@@ -85,7 +85,8 @@ const UserDashboard = (props) => {
   const settings = {
     speed: 500,
     slidesToShow: 3,
-    slidesToScroll: 4,
+    infinite: courses.length >= 3,
+    slidesToScroll: 1,
     responsive: [
       {
         breakpoint: 1024,
