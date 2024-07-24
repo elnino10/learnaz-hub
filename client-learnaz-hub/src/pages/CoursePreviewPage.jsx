@@ -52,7 +52,7 @@ function CoursePreviewPage(props) {
         enrollmentData
       );
       if (!props.userData?._id) {
-        throw new Error("Please login to enroll in a course");
+        alert("Please login to enroll in a course");
       }
 
       if (res.data.status === "success") {
