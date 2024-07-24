@@ -2,9 +2,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { RotatingLines } from "react-loader-spinner";
 
 function CreatedCourses(props) {
   const [myCourses, setMyCourses] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
   const token = localStorage.getItem("token");
@@ -25,6 +27,8 @@ function CreatedCourses(props) {
         setMyCourses(res.data.data);
       } catch (error) {
         console.error("Error fetching courses: ", error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchCourses();
@@ -58,7 +62,20 @@ function CreatedCourses(props) {
         </Link>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-5 px-28">
-        {myCourses &&
+        {isLoading ? (
+          <div className="flex justify-center items-center h-64">
+            <RotatingLines
+              height="80"
+              width="80"
+              strokeWidth="5"
+              animationDuration="0.75"
+              strokeColor="#848884"
+              ariaLabel="rotating-lines-loading"
+              visible={true}
+            />
+          </div>
+        ) : (
+          myCourses &&
           myCourses.map((course, index) => (
             <div key={index} className="p-4 border rounded-lg">
               <img
@@ -79,7 +96,8 @@ function CreatedCourses(props) {
                 </button>
               </div>
             </div>
-          ))}
+          ))
+        )}
       </div>
     </div>
   );

@@ -1,11 +1,14 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { RotatingLines } from "react-loader-spinner";
 
 import axios from "axios";
 
 function CategoryCourses(props) {
   const [courses, setCourses] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  
   const { category } = useParams();
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
@@ -19,6 +22,8 @@ function CategoryCourses(props) {
         setCourses(res.data.data);
       } catch (error) {
         console.error("Error fetching courses: ", error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchCourses();
@@ -30,13 +35,28 @@ function CategoryCourses(props) {
         <h1 className="font-serif font-bold text-4xl">{category} Courses</h1>
       </div>
       <div className="w-[70%] flex flex-col items-start mx-auto my-5 p-7 border shadow-sm">
-        <h3 className="font-bold mb-1.5">{category} related courses</h3>
-        <p className="text-sm font-thin">
-          Find all the courses related to {category} here
+        <h3 className="font-bold mb-1.5 uppercase">
+          {category} related courses
+        </h3>
+        <p className="text-xl font-thin">
+          Find all the courses related to <b>{category}</b> here
         </p>
       </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-5 px-28">
-        {courses?.length > 0 ? (
+        {isLoading ? (
+          <div className="flex justify-center items-center h-64">
+            <RotatingLines
+              height="80"
+              width="80"
+              strokeWidth="5"
+              animationDuration="0.75"
+              strokeColor="#848884"
+              ariaLabel="rotating-lines-loading"
+              visible={true}
+            />
+          </div>
+        ) : courses?.length > 0 ? (
           courses?.map((course, index) => (
             <div
               key={index}
