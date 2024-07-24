@@ -12,7 +12,7 @@ import {authMiddleware} from "../utils/authMiddleware.js"
 const router = express.Router();
 
 router.get("/", getUsers);
-router.get("/:userId", getUserById);
+router.get("/:userId", authMiddleware, getUserById);
 router.get("/role/:role", getUsersByRole);
 router.post("/:userId/apply-instructor", authMiddleware, applyInstructor);
 router.patch("/:userId", authMiddleware, updateUser);

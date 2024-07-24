@@ -142,6 +142,7 @@ const MainLayout = (props) => (
         element={
           <ProfileEdit
             userData={props.userData}
+            setUserData={props.setUserData}
             editClicked={props.editClicked}
             setEditClicked={props.setEditClicked}
           />
