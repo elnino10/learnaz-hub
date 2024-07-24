@@ -37,8 +37,8 @@ router.delete("/:courseId", authMiddleware, checkRole(role), deleteCourse);
 router.get("/category/:category", getCourses); // Get courses by category
 
 router.post("/enroll/:courseId", authMiddleware, enrollInCourse);  // Enroll in a course
-router.get("/instructor/:instructorId/", authMiddleware, getCreatedCourses);  // Get courses created by a particular instructor
-router.get("/student/:studentId", authMiddleware, getEnrolledCourses);  // Get courses enrolled by a student
+router.get("/instructor/:instructorId/created", authMiddleware, getCreatedCourses);  // Get courses created by a particular instructor
+router.get("/student/:studentId/enrolled", authMiddleware, getEnrolledCourses);  // Get courses enrolled by a student
 
 // Student's course interaction routes
 router.get("/dashboard", getStudentDashboard);

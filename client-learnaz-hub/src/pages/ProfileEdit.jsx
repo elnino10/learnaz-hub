@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
-
+import { RotatingLines } from "react-loader-spinner";
 import axios from "axios";
 
 const INPUT_CLASS = "w-full p-2 border border-input rounded-lg";
@@ -18,13 +18,14 @@ const ProfileEdit = (props) => {
   const [linkedInURL, setLinkedInURL] = useState("");
   const [coursesEnrolled, setCoursesEnrolled] = useState(0);
   const [coursesCreated, setCoursesCreated] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
   const endPoint = `/users/${props.userData?._id}`;
   const token = localStorage.getItem("token");
 
   const axiosInstance = axios.create({
-    baseUrl: baseUrl,
+    baseURL: baseUrl,
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -43,8 +44,9 @@ const ProfileEdit = (props) => {
       setLinkedInURL(props.userData.linkedInURL);
       setCoursesEnrolled(props.userData.coursesEnrolled?.length);
       setCoursesCreated(props.userData.coursesCreated?.length);
+      setIsLoading(false);
     }
-  }, [props]);
+  }, [props.userData]);
 
   const editProfileHandler = (e) => {
     e.stopPropagation();
@@ -54,6 +56,7 @@ const ProfileEdit = (props) => {
   // update user data in database
   const updateProfileHandler = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const updatedData = {
       firstName,
       lastName,
@@ -68,11 +71,32 @@ const ProfileEdit = (props) => {
 
     try {
       const res = await axiosInstance.patch(endPoint, updatedData);
-      console.log(res.data);
+      if (res.data.status === "success") {
+        alert("Profile updated successfully");
+        props.setEditClicked(false);
+      }
     } catch (error) {
       console.log("Error updating user data: ", error);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <RotatingLines
+          height="80"
+          width="80"
+          strokeWidth="5"
+          animationDuration="0.75"
+          strokeColor="#848884"
+          ariaLabel="rotating-lines-loading"
+          visible={true}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="w-full flex flex-col bg-card text-card-foreground p-6">

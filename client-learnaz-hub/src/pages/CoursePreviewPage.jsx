@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { RotatingLines } from "react-loader-spinner";
 
 import axios from "axios";
 
@@ -10,6 +11,7 @@ const TEXT_PRIMARY = "text-primary";
 function CoursePreviewPage(props) {
   const [course, setCourse] = useState({});
   const { courseId } = useParams();
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -23,8 +25,6 @@ function CoursePreviewPage(props) {
     },
   });
 
-  console.log(props.userData);
-
   useEffect(() => {
     // fetch course data from database
     const fetchCourse = async () => {
@@ -33,6 +33,8 @@ function CoursePreviewPage(props) {
         setCourse(response.data.data);
       } catch (error) {
         console.error(error);
+      } finally { 
+        setIsLoading(false);
       }
     };
     fetchCourse();
@@ -44,14 +46,16 @@ function CoursePreviewPage(props) {
       courseId: courseId,
       studentId: props.userData?._id,
     };
+    if (!props.userData?._id) {
+      alert("Please login to enroll in a course");
+      navigate("/login");
+      return;
+    }
     try {
       const res = await axiosInstance.post(
         `/courses/enroll/${courseId}`,
         enrollmentData
       );
-      if (!props.userData?._id) {
-        throw new Error("Please login to enroll in a course");
-      }
 
       if (res.data.status === "success") {
         alert("Enrolled for course successfully!");
@@ -65,6 +69,20 @@ function CoursePreviewPage(props) {
   return (
     <>
       <div className="w-[52rem] mt-16 min-h-screen relative max-w-7xl mx-auto bg-background text-foreground sm:mt-20 md:w-full md:mt-[6rem]">
+        {isLoading ? (
+        <div className="flex justify-center items-center h-64">
+          <RotatingLines
+            height="80"
+            width="80"
+            strokeWidth="5"
+            animationDuration="0.75"
+            strokeColor="#848884"
+            ariaLabel="rotating-lines-loading"
+            visible={true}
+          />
+        </div>
+      ) : (
+        <>
         <div className="relative flex flex-col px-4 items-center justify-between sm:items-start bg-gray-800 text-white md:flex-row lg:items-center">
           <div className="flex flex-col items-start w-[80%] pt-7 sm:px-3 sm:w-[62%] lg:w-2/3">
             <h1 className="text-3xl font-bold mb-2">{course?.title}</h1>
@@ -145,6 +163,8 @@ function CoursePreviewPage(props) {
             <li>Students Require a Computer or Laptop to Write Code.</li>
           </div>
         </div>
+        </>
+      )}
       </div>
     </>
   );
