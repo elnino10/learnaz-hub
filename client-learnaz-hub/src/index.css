@@ -33,6 +33,7 @@
 .slick-next {
   right: 10px;
 }
+.slick-list { flex: 1; }
 
 /* Custom styles for arrow icons (Font Awesome icons used here) */
 .slick-prev:before,
