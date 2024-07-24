@@ -24,7 +24,7 @@ const ProfileEdit = (props) => {
   const token = localStorage.getItem("token");
 
   const axiosInstance = axios.create({
-    baseUrl: baseUrl,
+    baseURL: baseUrl,
     headers: {
       Authorization: `Bearer ${token}`,
     },
