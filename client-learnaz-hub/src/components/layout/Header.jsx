@@ -174,7 +174,7 @@ function Header(props) {
                             <li
                               onClick={handleCategoryClick}
                               key={index}
-                              className="block text-gray-900 p-2 hover:bg-gray-100"
+                              className="block capitalize text-gray-900 p-2 hover:bg-gray-100"
                             >
                               <Link to={`/category/${category}`}>
                                 {category}
