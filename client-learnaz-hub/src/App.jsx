@@ -66,7 +66,7 @@ const App = () => {
       />
       <div
         onClick={clickAwayHandler}
-        className="mt-28 w-[53rem] md:w-full"
+        className="mt-18 w-[53rem] md:w-full"
       >
         <Routes>
           {/* Admin Route */}
