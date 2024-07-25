@@ -59,7 +59,7 @@ The backend is built with Node.js and Express, using MongoDB as the database, wh
 
 ## Authors :black_nib:
 
-- **Chidebere Egboka** - [elnino10](https://github.com/elnino10)
+- **Chidiebere Joe Egboka** - [elnino10](https://github.com/elnino10)
 - **Lamber Joe Kpukuyou** - [Lamber22](https://github.com/Lamber22)
 - **Lerato Mgwangqa** - [Ivyratermgwangqa](https://github.com/Ivyratermgwangqa)
 - **Chiamaka Ogbodo** - [chimaskyy](https://github.com/chimaskyy)
