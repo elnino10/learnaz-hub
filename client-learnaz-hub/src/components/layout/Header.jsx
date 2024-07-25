@@ -92,7 +92,10 @@ function Header(props) {
 
   return (
     <>
-      <header className="px-2 py-3 bg-white shadow-md top-0 z-20 fixed w-full h-[6rem] flex justify-between items-center sm:px-4 sm:w-[52rem] sm:h-20 md:w-full md:h-24">
+      <header
+        className="px-2 py-3 bg-white shadow-md top-0 z-20 fixed w-full h-[8rem]
+      flex justify-between items-center sm:px-4 sm:w-[52rem] md:w-full md:h-[5rem]"
+      >
         {/* Logo */}
         <Link to="/" onClick={() => props.setActivePage("home")}>
           <img
@@ -104,17 +107,17 @@ function Header(props) {
             LearnazHub
           </div>
         </Link>
-        <div className="relative text-lg flex flex-col sm:text-xl">
+        <div className="relative text-lg flex flex-col">
           <input
             type="text"
-            className=" bg-blue-100 border border-gray-300 rounded-full pl-10 pr-6 py-2 focus:outline-none focus:border-blue-500 sm:py-2 sm:w-72 md:py-2 md:w-80"
+            className=" bg-blue-100 border border-gray-300 rounded-full pl-10 pr-6 py-2 focus:outline-none focus:border-blue-500 sm:py-2 sm:w-72 md:py-1 md:w-80"
             placeholder="Search courses"
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
           />
           <FiSearch className="w-5 h-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
           {searchValue && (
-            <div className="absolute text-lg translate-y-12 min-w-[17rem] rounded-b-sm pb-2 px-2 bg-gray-100 max-w-[10rem] shadow-md sm:min-w-[20rem] sm:translate-y-12 md:min-w-[20rem]">
+            <div className="absolute text-lg translate-y-12 min-w-[17rem] rounded-b-sm pb-2 px-2 bg-gray-100 max-w-[10rem] shadow-md sm:min-w-[20rem] sm:translate-y-12 md:min-w-[20rem] md:translate-y-10">
               {searchedCourses.map((course, index) => (
                 <div
                   onClick={() => {
@@ -148,9 +151,9 @@ function Header(props) {
           {/* <nav> */}
           <nav className={`${!props.menuVisible && "hidden"} md:flex`}>
             <ul
-              className="absolute rounded-l-sm text-lg bg-gray-200 px-2 py-2
-            translate-y-[2rem] translate-x-[-5.5rem] w-[12rem] h-auto flex flex-col
-            justify-between items-start sm:translate-x-[-5rem] sm:translate-y-[1.7rem]
+              className="absolute rounded-l-sm text-xl bg-gray-200 px-3 py-2
+            translate-y-[2.5rem] translate-x-[-10.5rem] w-[15rem] h-auto flex flex-col
+            justify-between items-start sm:translate-x-[-10rem] sm:translate-y-[2.5rem]
             md: md: md:translate-x-[-2rem] md:translate-y-[-3rem] md:flex-row md:items-center
             md:justify-between md:bg-inherit md:text-base md:w-[50%] md:h-full"
             >
@@ -190,7 +193,10 @@ function Header(props) {
               {props.authUser && (
                 <li
                   className="mt-5 text-gray-600 hover:text-gray-900"
-                  onClick={() => props.setActivePage("dashboard")}
+                  onClick={() => {
+                    props.setActivePage("dashboard");
+                    props.setMenuVisible(false);
+                  }}
                 >
                   <Link
                     to="/home"
@@ -207,13 +213,19 @@ function Header(props) {
                   className={`${
                     props.activePage === "creator"
                   } mt-5 text-gray-600 hover:text-gray-900`}
-                  onClick={() => props.setActivePage("creator")}
+                  onClick={() => {
+                    props.setActivePage("creator");
+                    props.setMenuVisible(false);
+                  }}
                 >
                   <Link to="/course-creator">Become a Creator</Link>
                 </li>
               )}
               {props.authUser && props.authUser.role === "instructor" && (
-                <li className="mt-5 text-gray-600 hover:text-gray-900">
+                <li
+                  className="mt-5 text-gray-600 hover:text-gray-900"
+                  onClick={() => props.setMenuVisible(false)}
+                >
                   <Link to="/home/created-courses">Created Courses</Link>
                 </li>
               )}
@@ -221,7 +233,10 @@ function Header(props) {
               {props.authUser && (
                 <li
                   className="mt-5 text-gray-900 hover:text-gray-900"
-                  onClick={() => props.setActivePage("profile")}
+                  onClick={() => {
+                    props.setActivePage("profile");
+                    props.setMenuVisible(false);
+                  }}
                 >
                   <Link
                     to="/user/profile"
@@ -242,9 +257,10 @@ function Header(props) {
                 </li>
               )}
               <li
-                className="mt-5 border rounded-md text-sm p-2 transition
+                className="mt-5 border rounded-md p-2 transition
               ease-in-out delay-150 bg-gray-800 text-white hover:-translate-y-1
-              hover:scale-110 duration-300"
+              hover:scale-110 duration-300 md:text-sm"
+                onClick={() => props.setMenuVisible(false)}
               >
                 {props.authUser ? (
                   <Link to="/" onClick={logOutHandler}>
@@ -256,7 +272,12 @@ function Header(props) {
               </li>
 
               {!props.authUser && (
-                <li className="mt-5 mb-2 border rounded-md text-sm p-2 transition ease-in-out delay-150 bg-gray-800 text-white hover:-translate-y-1 hover:scale-110 duration-300">
+                <li
+                  className="mt-5 mb-2 border rounded-md p-2 transition ease-in-out delay-150
+                bg-gray-800 text-white hover:-translate-y-1 hover:scale-110 duration-300
+                md:text-sm md:mb-0"
+                  onClick={() => props.setMenuVisible(false)}
+                >
                   <Link to="/signup">Sign Up</Link>
                 </li>
               )}

@@ -52,32 +52,49 @@ const App = () => {
   };
 
   return (
-    <div onClick={clickAwayHandler}>
-      <Routes>
-        {/* Admin Route */}
-        <Route path="/admin/*" element={<AdminLayout />} />
-        {/* Main routes */}
-        <Route
-          path="/*"
-          element={
-            <MainLayout
-              setActivePage={setActivePage}
-              activePage={activePage}
-              showImageMenu={showImageMenu}
-              setShowImageMenu={setShowImageMenu}
-              menuVisible={menuVisible}
-              setMenuVisible={setMenuVisible}
-              authUser={authUser}
-              setAuthUser={setAuthUser}
-              setUserData={setUserData}
-              userData={userData}
-              editClicked={editClicked}
-              setEditClicked={setEditClicked}
-            />
-          }
-        />
-      </Routes>
-    </div>
+    <>
+      <Header
+        setMenuVisible={setMenuVisible}
+        menuVisible={menuVisible}
+        showImageMenu={showImageMenu}
+        setShowImageMenu={setShowImageMenu}
+        activePage={activePage}
+        setActivePage={setActivePage}
+        setAuthUser={setAuthUser}
+        authUser={authUser}
+        setUserData={setUserData}
+      />
+      <div
+        onClick={clickAwayHandler}
+        className="mt-28 w-[53rem] md:w-full"
+      >
+        <Routes>
+          {/* Admin Route */}
+          <Route path="/admin/*" element={<AdminLayout />} />
+          {/* Main routes */}
+          <Route
+            path="/*"
+            element={
+              <MainLayout
+                setActivePage={setActivePage}
+                activePage={activePage}
+                showImageMenu={showImageMenu}
+                setShowImageMenu={setShowImageMenu}
+                menuVisible={menuVisible}
+                setMenuVisible={setMenuVisible}
+                authUser={authUser}
+                setAuthUser={setAuthUser}
+                setUserData={setUserData}
+                userData={userData}
+                editClicked={editClicked}
+                setEditClicked={setEditClicked}
+              />
+            }
+          />
+        </Routes>
+      </div>
+      <Footer />
+    </>
   );
 };
 
@@ -99,17 +116,6 @@ const AdminLayout = () => (
 // users page layout
 const MainLayout = (props) => (
   <>
-    <Header
-      setMenuVisible={props.setMenuVisible}
-      menuVisible={props.menuVisible}
-      showImageMenu={props.showImageMenu}
-      setShowImageMenu={props.setShowImageMenu}
-      activePage={props.activePage}
-      setActivePage={props.setActivePage}
-      setAuthUser={props.setAuthUser}
-      authUser={props.authUser}
-      setUserData={props.setUserData}
-    />
     <Routes>
       <Route path="/" element={<LandingPage authUser={props.authUser} />} />
       <Route path="/signup" element={<SignupForm />} />
@@ -176,11 +182,15 @@ const MainLayout = (props) => (
       <Route path="/add-lessons" element={<AddLessons />} />
       <Route
         path="/courses/preview/:courseId"
-        element={<CoursePreviewPage userData={props.userData} authData={props.authData} />}
+        element={
+          <CoursePreviewPage
+            userData={props.userData}
+            authData={props.authData}
+          />
+        }
       />
       <Route path="*" element={<h1>Not Found</h1>} />
     </Routes>
-    <Footer />
   </>
 );
 
