@@ -32,7 +32,7 @@ function CategoryCourses(props) {
   return (
     <div className="mt-20">
       <div className="bg-gray-800 text-white flex justify-center items-center h-40">
-        <h1 className="font-serif font-bold text-4xl">{category} Courses</h1>
+        <h1 className="font-serif font-bold text-4xl capitalize">{category} Courses</h1>
       </div>
       <div className="w-[70%] flex flex-col items-start mx-auto my-5 p-7 border shadow-sm">
         <h3 className="font-bold mb-1.5 uppercase">

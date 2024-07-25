@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+
 import { SocialIcon } from "react-social-icons";
 function Footer() {
   const currentYear = new Date().getFullYear();
@@ -37,10 +38,10 @@ function Footer() {
           />
         </div>
       </div>
-      <div className="mt-5 pb-5 flex items-center justify-center">
-        <div className="text-bold text-sm mr-5">Learnaz-Hub</div>
+      <div className="mt-5 pb-5 flex items-center justify-between">
+        <div className="text-bold text-xl mr-5">LearnazHub</div>
         <div className="">
-          <p>© {currentYear} Learnaz-Hub</p>
+          <p className="pr-12">© {currentYear} Learnaz-Hub</p>
         </div>
       </div>
     </footer>
