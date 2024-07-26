@@ -10,7 +10,7 @@ import Footer from "./layout/Footer";
 import CourseCard from "./cards/CourseCard";
 import ViewCreatedCourses from "./ViewCreatedCourses";
 import ViewEnrolledCourses from "./ViewEnrolledCourses";
-import Player from "./Player";
+// import Player from "./Player";
 import MobileSearch from "./MobileSearch";
 import DesktopSearch from "./DesktopSearch";
 
@@ -27,7 +27,7 @@ export {
   SignupInstructor,
   ViewCreatedCourses,
   ViewEnrolledCourses,
-  Player,
+  // Player,
   MobileSearch,
   DesktopSearch
 };
