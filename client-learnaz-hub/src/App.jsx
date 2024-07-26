@@ -36,9 +36,10 @@ const App = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [showImageMenu, setShowImageMenu] = useState(false);
   const [editClicked, setEditClicked] = useState(false);
-  const [activePage, setActivePage] = useState("");
+  const [activePage, setActivePage] = useState("home");
   const [authUser, setAuthUser] = useState(null);
   const [userData, setUserData] = useState({});
+  const [showMobileSearch, setShowMobileSearch] = useState(false);
 
   const { pathname } = useLocation();
 
@@ -49,10 +50,11 @@ const App = () => {
   const clickAwayHandler = () => {
     setMenuVisible(false);
     setShowImageMenu(false);
+    setShowMobileSearch(false);
   };
 
   return (
-    <>
+    <div onClick={clickAwayHandler} className="w-[53rem] md:w-full">
       <Header
         setMenuVisible={setMenuVisible}
         menuVisible={menuVisible}
@@ -63,11 +65,10 @@ const App = () => {
         setAuthUser={setAuthUser}
         authUser={authUser}
         setUserData={setUserData}
+        showMobileSearch={showMobileSearch}
+        setShowMobileSearch={setShowMobileSearch}
       />
-      <div
-        onClick={clickAwayHandler}
-        className="mt-18 w-[53rem] md:w-full"
-      >
+      <div className="mt-[8rem] md:mt-20">
         <Routes>
           {/* Admin Route */}
           <Route path="/admin/*" element={<AdminLayout />} />
@@ -94,7 +95,7 @@ const App = () => {
         </Routes>
       </div>
       <Footer />
-    </>
+    </div>
   );
 };
 

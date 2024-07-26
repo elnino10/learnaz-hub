@@ -11,6 +11,8 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 import axios from "axios";
+import MobileSearch from "../MobileSearch";
+import DesktopSearch from "../DesktopSearch";
 // import { icon } from "@fortawesome/fontawesome-svg-core";
 
 function Header(props) {
@@ -19,6 +21,7 @@ function Header(props) {
   const [courseCategories, setCourseCategories] = useState([]);
   const [searchedCourses, setSearchedCourses] = useState([]);
   const [searchValue, setSearchValue] = useState("");
+
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
@@ -31,12 +34,13 @@ function Header(props) {
       try {
         const res = await axios.get(apiUrl);
         setCourses(res.data.data);
+        props.setActivePage("dashboard");
       } catch (error) {
         error && console.log("Error fetching course categories: ", error);
       }
     };
     fetchCourseData();
-  }, []);
+  }, [apiUrl, props]);
 
   // get categories of courses in database
   useEffect(() => {
@@ -70,7 +74,7 @@ function Header(props) {
   const toggleDrpdwn = (e) => {
     e.stopPropagation();
     setDrpdwn(!drpdwn);
-    props.setActivePage((prev) => (prev === "category" ? "" : "category"));
+    props.setActivePage("category");
   };
 
   const handleCategoryClick = () => {
@@ -90,202 +94,220 @@ function Header(props) {
     navigate("/");
   };
 
+  const mobileSearchHandler = (e) => {
+    e.stopPropagation();
+    props.setShowMobileSearch(!props.showMobileSearch);
+  };
+
   return (
-    <>
-      <header
-        className="px-2 py-3 bg-white shadow-md top-0 z-20 fixed w-full h-[8rem]
+    <header
+      className="px-2 py-3 bg-white shadow-md top-0 z-20 fixed w-full h-[8rem]
       flex justify-between items-center sm:px-4 sm:w-[52rem] md:w-full md:h-[5rem]"
-      >
-        {/* Logo */}
-        <Link to="/" onClick={() => props.setActivePage("home")}>
-          <img
-            src={Logo}
-            alt="Learnaz-Hub Logo"
-            className="block h-10 ml-2 rounded-full sm:h-8 md:hidden"
-          />
-          <div className="hidden text-xl font-bold md:block md:">
-            LearnazHub
+    >
+      {/* Logo */}
+      <Link to="/" onClick={() => props.setActivePage("home")}>
+        <img
+          src={Logo}
+          alt="Learnaz-Hub Logo"
+          className="block h-12 ml-2 rounded-full md:hidden"
+        />
+        <div className="hidden text-xl font-bold md:block md:">LearnazHub</div>
+      </Link>
+      <DesktopSearch auth={props.auth} userData={props.userData} searchValue={searchValue} setSearchValue={setSearchValue} searchedCourses={searchedCourses} />
+      {/* <div className="hidden relative text-lg md:flex flex-col">
+        <input
+          type="text"
+          className=" bg-blue-100 border border-gray-300 rounded-full pl-10 pr-6 py-2 focus:outline-none focus:border-blue-500 sm:py-2 sm:w-72 md:py-1 md:w-80"
+          placeholder="Search courses"
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value || "")}
+        />
+        <FiSearch className="w-5 h-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
+        {searchValue && (
+          <div className="absolute text-lg translate-y-12 min-w-[17rem] rounded-b-sm pb-2 px-2 bg-gray-100 max-w-[10rem] shadow-md sm:min-w-[20rem] sm:translate-y-12 md:min-w-[20rem] md:translate-y-10">
+            {searchedCourses.map((course, index) => (
+              <div
+                onClick={() => {
+                  // props.authUser
+                  props.auth &&
+                  course?.studentsEnrolled?.includes(props.userData._id)
+                    ? navigate(`/course/course-content/${course._id}`)
+                    : navigate(`/courses/preview/${course._id}`);
+                  setSearchValue("");
+                }}
+                key={index}
+                className="border-t-2 min-h-[3rem] py-2 cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap"
+              >
+                {course.title}
+              </div>
+            ))}
           </div>
-        </Link>
-        <div className="relative text-lg flex flex-col">
-          <input
-            type="text"
-            className=" bg-blue-100 border border-gray-300 rounded-full pl-10 pr-6 py-2 focus:outline-none focus:border-blue-500 sm:py-2 sm:w-72 md:py-1 md:w-80"
-            placeholder="Search courses"
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-          />
-          <FiSearch className="w-5 h-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
-          {searchValue && (
-            <div className="absolute text-lg translate-y-12 min-w-[17rem] rounded-b-sm pb-2 px-2 bg-gray-100 max-w-[10rem] shadow-md sm:min-w-[20rem] sm:translate-y-12 md:min-w-[20rem] md:translate-y-10">
-              {searchedCourses.map((course, index) => (
-                <div
-                  onClick={() => {
-                    // props.authUser
-                    props.auth &&
-                    course?.studentsEnrolled?.includes(props.userData._id)
-                      ? navigate(`/course/course-content/${course._id}`)
-                      : navigate(`/courses/preview/${course._id}`);
-                    setSearchValue("");
-                  }}
-                  key={index}
-                  className="border-t-2 min-h-[3rem] py-2 cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap"
-                >
-                  {course.title}
-                </div>
-              ))}
-            </div>
+        )}
+      </div> */}
+      <div className="absolute flex md:hidden">
+        <FiSearch
+          className="w-9 h-9 mt-1 text-gray-700 translate-x-[42rem]"
+          onClick={mobileSearchHandler}
+        />
+      </div>
+      <MobileSearch
+        auth={props.auth}
+        userData={props.userData}
+        showMobileSearch={props.showMobileSearch}
+        setShowMobileSearch={props.setShowMobileSearch}
+        searchValue={searchValue}
+        setSearchValue={setSearchValue}
+        searchedCourses={searchedCourses}
+      />
+      <div className="md:w-[50%]">
+        <div
+          onClick={toggleMenuHandler}
+          className="md:hidden text-gray-900 mr-3"
+        >
+          {props.menuVisible ? (
+            <MenuOpen sx={{ height: "2.5rem", width: "3rem" }} />
+          ) : (
+            <MenuIcon sx={{ height: "2.5rem", width: "3rem" }} />
           )}
         </div>
-        <div className="md:w-[50%]">
-          <div
-            onClick={toggleMenuHandler}
-            className="md:hidden text-gray-900 mr-3"
-          >
-            {props.menuVisible ? (
-              <MenuOpen sx={{ height: "2.5rem", width: "3rem" }} />
-            ) : (
-              <MenuIcon sx={{ height: "2.5rem", width: "3rem" }} />
-            )}
-          </div>
-          {/* <nav> */}
-          <nav className={`${!props.menuVisible && "hidden"} md:flex`}>
-            <ul
-              className="absolute rounded-l-sm text-xl bg-gray-200 px-3 py-2
+        {/* <nav> */}
+        <nav className={`${!props.menuVisible && "hidden"} md:flex`}>
+          <ul
+            className="absolute rounded-l-sm text-xl bg-gray-200 px-3 py-2
             translate-y-[2.5rem] translate-x-[-10.5rem] w-[15rem] h-auto flex flex-col
             justify-between items-start sm:translate-x-[-10rem] sm:translate-y-[2.5rem]
             md: md: md:translate-x-[-2rem] md:translate-y-[-3rem] md:flex-row md:items-center
             md:justify-between md:bg-inherit md:text-base md:w-[50%] md:h-full"
-            >
-              <li className="mt-5 text-gray-600 hover:text-gray-900">
-                <div className="flex cursor-pointer" onClick={toggleDrpdwn}>
-                  <div ref={dropdownRef} className="">
-                    <div
-                      className={`${
-                        props.activePage === "category" ? "text-gray-900" : ""
-                      } text-gray-600 hover:text-gray-900 focus:outline-none md:ml-8`}
-                    >
-                      Category
+          >
+            <li className="mt-5 text-gray-600 hover:text-gray-900">
+              <div className="flex cursor-pointer" onClick={toggleDrpdwn}>
+                <div ref={dropdownRef} className="">
+                  <div
+                    className={`${
+                      props.activePage === "category" && "text-gray-900"
+                    }
+                        text-gray-600 hover:text-gray-900 focus:outline-none md:ml-8`}
+                  >
+                    Category
+                  </div>
+                  {drpdwn && (
+                    <div className="absolute bg-white shadow-md md:absolute md:w-80% md:mt-6">
+                      <ul>
+                        {courseCategories.map((category, index) => (
+                          <li
+                            onClick={handleCategoryClick}
+                            key={index}
+                            className="block capitalize text-gray-900 p-2 hover:bg-gray-100"
+                          >
+                            <Link to={`/category/${category}`}>{category}</Link>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-                    {drpdwn && (
-                      <div className="absolute bg-white shadow-md md:absolute md:w-80% md:mt-6">
-                        <ul>
-                          {courseCategories.map((category, index) => (
-                            <li
-                              onClick={handleCategoryClick}
-                              key={index}
-                              className="block capitalize text-gray-900 p-2 hover:bg-gray-100"
-                            >
-                              <Link to={`/category/${category}`}>
-                                {category}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                  <div>
-                    {drpdwn ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />}
-                  </div>
+                  )}
                 </div>
-              </li>
-              {props.authUser && (
-                <li
-                  className="mt-5 text-gray-600 hover:text-gray-900"
-                  onClick={() => {
-                    props.setActivePage("dashboard");
-                    props.setMenuVisible(false);
-                  }}
-                >
-                  <Link
-                    to="/home"
-                    className={`${
-                      props.activePage === "dashboard" ? "text-gray-900" : ""
-                    }`}
-                  >
-                    Dashboard
-                  </Link>
-                </li>
-              )}
-              {(!props.authUser || props.authUser.role !== "instructor") && (
-                <li
-                  className={`${
-                    props.activePage === "creator"
-                  } mt-5 text-gray-600 hover:text-gray-900`}
-                  onClick={() => {
-                    props.setActivePage("creator");
-                    props.setMenuVisible(false);
-                  }}
-                >
-                  <Link to="/course-creator">Become a Creator</Link>
-                </li>
-              )}
-              {props.authUser && props.authUser.role === "instructor" && (
-                <li
-                  className="mt-5 text-gray-600 hover:text-gray-900"
-                  onClick={() => props.setMenuVisible(false)}
-                >
-                  <Link to="/home/created-courses">Created Courses</Link>
-                </li>
-              )}
-
-              {props.authUser && (
-                <li
-                  className="mt-5 text-gray-900 hover:text-gray-900"
-                  onClick={() => {
-                    props.setActivePage("profile");
-                    props.setMenuVisible(false);
-                  }}
-                >
-                  <Link
-                    to="/user/profile"
-                    className={`${
-                      props.activePage === "profile" ? "text-gray-900" : ""
-                    } flex items-center md:hidden`}
-                  >
-                    Profile
-                  </Link>
-                  <Link
-                    to={`/user/profile`}
-                    className={`${
-                      props.activePage === "profile" ? "text-gray-900" : ""
-                    } hidden md:flex`}
-                  >
-                    <AccountCircleIcon fontSize="large" />
-                  </Link>
-                </li>
-              )}
+                <div>
+                  {drpdwn ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />}
+                </div>
+              </div>
+            </li>
+            {props.authUser && (
               <li
-                className="mt-5 border rounded-md p-2 transition
+                className={`${
+                  props.activePage === "dashboard" && "text-gray-900"
+                } mt-5 text-gray-600 hover:text-gray-900`}
+                onClick={() => {
+                  props.setActivePage("dashboard");
+                  props.setMenuVisible(false);
+                }}
+              >
+                <Link
+                  to="/home"
+                  className={`${
+                    props.activePage === "dashboard" ? "text-gray-900" : ""
+                  }`}
+                >
+                  Dashboard
+                </Link>
+              </li>
+            )}
+            {(!props.authUser || props.authUser.role !== "instructor") && (
+              <li
+                className={`${
+                  props.activePage === "creator" && "text-gray-900"
+                } mt-5 text-gray-600 hover:text-gray-900`}
+                onClick={() => {
+                  props.setActivePage("creator");
+                  props.setMenuVisible(false);
+                }}
+              >
+                <Link to="/course-creator">Become a Creator</Link>
+              </li>
+            )}
+            {props.authUser && props.authUser.role === "instructor" && (
+              <li
+                className={`${
+                  props.activePage === "created-courses" && "text-gray-900"
+                } mt-5 text-gray-600 hover:text-gray-900`}
+                onClick={() => {
+                  props.setMenuVisible(false);
+                  props.setActivePage("created-courses");
+                }}
+              >
+                <Link to="/home/created-courses">Created Courses</Link>
+              </li>
+            )}
+
+            {props.authUser && (
+              <li
+                className={`${
+                  props.activePage === "profile" && "text-gray-900"
+                } mt-5 text-gray-600 items-center hover:text-gray-900`}
+                onClick={() => {
+                  props.setActivePage("profile");
+                  props.setMenuVisible(false);
+                }}
+              >
+                <Link
+                  to={`/user/profile`}
+                  className={props.activePage === "profile" && "text-gray-900"}
+                >
+                  <span className="md:hidden">Profile</span>
+                  <span className="hidden md:flex">
+                    <AccountCircleIcon fontSize="large" />
+                  </span>
+                </Link>
+              </li>
+            )}
+            <li
+              className="mt-5 border rounded-md p-2 transition
               ease-in-out delay-150 bg-gray-800 text-white hover:-translate-y-1
               hover:scale-110 duration-300 md:text-sm"
-                onClick={() => props.setMenuVisible(false)}
-              >
-                {props.authUser ? (
-                  <Link to="/" onClick={logOutHandler}>
-                    Log out
-                  </Link>
-                ) : (
-                  <Link to="/login">Log in</Link>
-                )}
-              </li>
+              onClick={() => props.setMenuVisible(false)}
+            >
+              {props.authUser ? (
+                <Link to="/" onClick={logOutHandler}>
+                  Log out
+                </Link>
+              ) : (
+                <Link to="/login">Log in</Link>
+              )}
+            </li>
 
-              {!props.authUser && (
-                <li
-                  className="mt-5 mb-2 border rounded-md p-2 transition ease-in-out delay-150
+            {!props.authUser && (
+              <li
+                className="mt-5 mb-2 border rounded-md p-2 transition ease-in-out delay-150
                 bg-gray-800 text-white hover:-translate-y-1 hover:scale-110 duration-300
                 md:text-sm md:mb-0"
-                  onClick={() => props.setMenuVisible(false)}
-                >
-                  <Link to="/signup">Sign Up</Link>
-                </li>
-              )}
-            </ul>
-          </nav>
-        </div>
-      </header>
-    </>
+                onClick={() => props.setMenuVisible(false)}
+              >
+                <Link to="/signup">Sign Up</Link>
+              </li>
+            )}
+          </ul>
+        </nav>
+      </div>
+    </header>
   );
 }
 
