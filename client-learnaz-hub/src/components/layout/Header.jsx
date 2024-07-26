@@ -34,7 +34,6 @@ function Header(props) {
       try {
         const res = await axios.get(apiUrl);
         setCourses(res.data.data);
-        props.setActivePage("dashboard");
       } catch (error) {
         error && console.log("Error fetching course categories: ", error);
       }
@@ -113,37 +112,13 @@ function Header(props) {
         />
         <div className="hidden text-xl font-bold md:block md:">LearnazHub</div>
       </Link>
-      <DesktopSearch auth={props.auth} userData={props.userData} searchValue={searchValue} setSearchValue={setSearchValue} searchedCourses={searchedCourses} />
-      {/* <div className="hidden relative text-lg md:flex flex-col">
-        <input
-          type="text"
-          className=" bg-blue-100 border border-gray-300 rounded-full pl-10 pr-6 py-2 focus:outline-none focus:border-blue-500 sm:py-2 sm:w-72 md:py-1 md:w-80"
-          placeholder="Search courses"
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value || "")}
-        />
-        <FiSearch className="w-5 h-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
-        {searchValue && (
-          <div className="absolute text-lg translate-y-12 min-w-[17rem] rounded-b-sm pb-2 px-2 bg-gray-100 max-w-[10rem] shadow-md sm:min-w-[20rem] sm:translate-y-12 md:min-w-[20rem] md:translate-y-10">
-            {searchedCourses.map((course, index) => (
-              <div
-                onClick={() => {
-                  // props.authUser
-                  props.auth &&
-                  course?.studentsEnrolled?.includes(props.userData._id)
-                    ? navigate(`/course/course-content/${course._id}`)
-                    : navigate(`/courses/preview/${course._id}`);
-                  setSearchValue("");
-                }}
-                key={index}
-                className="border-t-2 min-h-[3rem] py-2 cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap"
-              >
-                {course.title}
-              </div>
-            ))}
-          </div>
-        )}
-      </div> */}
+      <DesktopSearch
+        auth={props.auth}
+        userData={props.userData}
+        searchValue={searchValue}
+        setSearchValue={setSearchValue}
+        searchedCourses={searchedCourses}
+      />
       <div className="absolute flex md:hidden">
         <FiSearch
           className="w-9 h-9 mt-1 text-gray-700 translate-x-[42rem]"
@@ -173,20 +148,24 @@ function Header(props) {
         {/* <nav> */}
         <nav className={`${!props.menuVisible && "hidden"} md:flex`}>
           <ul
-            className="absolute rounded-l-sm text-xl bg-gray-200 px-3 py-2
-            translate-y-[2.5rem] translate-x-[-10.5rem] w-[15rem] h-auto flex flex-col
-            justify-between items-start sm:translate-x-[-10rem] sm:translate-y-[2.5rem]
+            className="absolute rounded-l-sm text-3xl bg-gray-200 px-5 py-3
+            translate-y-[3rem] translate-x-[-13rem] w-[18rem] h-auto flex flex-col
+            justify-between items-start sm:translate-x-[-14rem] sm:translate-y-[3rem]
             md: md: md:translate-x-[-2rem] md:translate-y-[-3rem] md:flex-row md:items-center
             md:justify-between md:bg-inherit md:text-base md:w-[50%] md:h-full"
           >
             <li className="mt-5 text-gray-600 hover:text-gray-900">
-              <div className="flex cursor-pointer" onClick={toggleDrpdwn}>
+              <div
+                className="flex items-center cursor-pointer"
+                onClick={toggleDrpdwn}
+              >
                 <div ref={dropdownRef} className="">
                   <div
                     className={`${
-                      props.activePage === "category" && "text-gray-900"
-                    }
-                        text-gray-600 hover:text-gray-900 focus:outline-none md:ml-8`}
+                      props.activePage === "category"
+                        ? "text-gray-900"
+                        : "text-gray-600"
+                    } hover:text-gray-900 focus:outline-none md:ml-8`}
                   >
                     Category
                   </div>
@@ -214,28 +193,25 @@ function Header(props) {
             {props.authUser && (
               <li
                 className={`${
-                  props.activePage === "dashboard" && "text-gray-900"
-                } mt-5 text-gray-600 hover:text-gray-900`}
+                  props.activePage === "dashboard"
+                    ? "text-gray-900"
+                    : "text-gray-600"
+                } mt-7  hover:text-gray-900 md:mt-5`}
                 onClick={() => {
                   props.setActivePage("dashboard");
                   props.setMenuVisible(false);
                 }}
               >
-                <Link
-                  to="/home"
-                  className={`${
-                    props.activePage === "dashboard" ? "text-gray-900" : ""
-                  }`}
-                >
-                  Dashboard
-                </Link>
+                <Link to="/home">Dashboard</Link>
               </li>
             )}
             {(!props.authUser || props.authUser.role !== "instructor") && (
               <li
                 className={`${
-                  props.activePage === "creator" && "text-gray-900"
-                } mt-5 text-gray-600 hover:text-gray-900`}
+                  props.activePage === "creator"
+                    ? "text-gray-900"
+                    : "text-gray-600"
+                } mt-7 hover:text-gray-900 md:mt-5`}
                 onClick={() => {
                   props.setActivePage("creator");
                   props.setMenuVisible(false);
@@ -247,8 +223,10 @@ function Header(props) {
             {props.authUser && props.authUser.role === "instructor" && (
               <li
                 className={`${
-                  props.activePage === "created-courses" && "text-gray-900"
-                } mt-5 text-gray-600 hover:text-gray-900`}
+                  props.activePage === "created-courses"
+                    ? "text-gray-900"
+                    : "text-gray-600"
+                } mt-7 hover:text-gray-900 md:mt-5`}
                 onClick={() => {
                   props.setMenuVisible(false);
                   props.setActivePage("created-courses");
@@ -261,8 +239,10 @@ function Header(props) {
             {props.authUser && (
               <li
                 className={`${
-                  props.activePage === "profile" && "text-gray-900"
-                } mt-5 text-gray-600 items-center hover:text-gray-900`}
+                  props.activePage === "profile"
+                    ? "text-gray-900"
+                    : "text-gray-600"
+                } mt-7 items-center hover:text-gray-900 md:mt-5`}
                 onClick={() => {
                   props.setActivePage("profile");
                   props.setMenuVisible(false);
@@ -270,7 +250,11 @@ function Header(props) {
               >
                 <Link
                   to={`/user/profile`}
-                  className={props.activePage === "profile" && "text-gray-900"}
+                  className={
+                    props.activePage === "profile"
+                      ? "text-gray-900"
+                      : "text-gray-600"
+                  }
                 >
                   <span className="md:hidden">Profile</span>
                   <span className="hidden md:flex">
@@ -280,10 +264,13 @@ function Header(props) {
               </li>
             )}
             <li
-              className="mt-5 border rounded-md p-2 transition
+              className="mt-7 border rounded-md p-2 transition
               ease-in-out delay-150 bg-gray-800 text-white hover:-translate-y-1
-              hover:scale-110 duration-300 md:text-sm"
-              onClick={() => props.setMenuVisible(false)}
+              hover:scale-110 duration-300 md:mt-5 md:text-sm"
+              onClick={() => {
+                props.setMenuVisible(false);
+                props.setActivePage("log");
+              }}
             >
               {props.authUser ? (
                 <Link to="/" onClick={logOutHandler}>
@@ -296,10 +283,13 @@ function Header(props) {
 
             {!props.authUser && (
               <li
-                className="mt-5 mb-2 border rounded-md p-2 transition ease-in-out delay-150
+                className="mt-7 mb-2 border rounded-md p-2 transition ease-in-out delay-150
                 bg-gray-800 text-white hover:-translate-y-1 hover:scale-110 duration-300
-                md:text-sm md:mb-0"
-                onClick={() => props.setMenuVisible(false)}
+                md:text-sm md:mt-5 md:mb-0"
+                onClick={() => {
+                  props.setMenuVisible(false);
+                  props.setActivePage("log");
+                }}
               >
                 <Link to="/signup">Sign Up</Link>
               </li>
