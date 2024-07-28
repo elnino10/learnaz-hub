@@ -263,36 +263,39 @@ function Header(props) {
                 </Link>
               </li>
             )}
-            <li
-              className="mt-7 border rounded-md p-2 transition
+            {props.authUser ? (
+              <Link
+                to="/"
+                className="mt-7 border rounded-md p-2 transition
               ease-in-out delay-150 bg-gray-800 text-white hover:-translate-y-1
               hover:scale-110 duration-300 md:mt-5 md:text-sm"
-              onClick={() => {
-                props.setMenuVisible(false);
-                props.setActivePage("log");
-              }}
-            >
-              {props.authUser ? (
-                <Link to="/" onClick={logOutHandler}>
-                  Log out
-                </Link>
-              ) : (
-                <Link to="/login">Log in</Link>
-              )}
-            </li>
-
+                onClick={logOutHandler}
+              >
+                Log out
+              </Link>
+            ) : (
+              <Link
+                to="/login"
+                className="mt-7 border rounded-md p-2 transition
+              ease-in-out delay-150 bg-gray-800 text-white hover:-translate-y-1
+              hover:scale-110 duration-300 md:mt-5 md:text-sm"
+              >
+                Log in
+              </Link>
+            )}
             {!props.authUser && (
-              <li
+              <Link
+                to="/signup"
                 className="mt-7 mb-2 border rounded-md p-2 transition ease-in-out delay-150
-                bg-gray-800 text-white hover:-translate-y-1 hover:scale-110 duration-300
-                md:text-sm md:mt-5 md:mb-0"
+                    bg-gray-800 text-white hover:-translate-y-1 hover:scale-110 duration-300
+                    md:text-sm md:mt-5 md:mb-0"
                 onClick={() => {
                   props.setMenuVisible(false);
                   props.setActivePage("log");
                 }}
               >
-                <Link to="/signup">Sign Up</Link>
-              </li>
+                Sign Up
+              </Link>
             )}
           </ul>
         </nav>

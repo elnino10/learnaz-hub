@@ -56,7 +56,7 @@ function SignupForm() {
   };
 
   return (
-    <section className="mt-28 mb-10">
+    <section className="mt-[10rem]">
       <ThemeProvider theme={defaultTheme}>
         <Container component="main" maxWidth="xs">
           <CssBaseline />
