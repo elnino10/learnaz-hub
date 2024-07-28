@@ -10,6 +10,7 @@ function MobileSearch(props) {
         <div className="relative bg-white py-5 w-[30rem] translate-y-[7rem] shadow-md transition duration-500 ease-in-out">
           <div className="flex flex-col items-center">
             <input
+              autoFocus
               type="text"
               className="border border-gray-400 text-2xl text-center px-2 h-[3rem] w-[20rem] rounded-md focus:outline-none focus:border-blue-400"
               placeholder="Search courses"
@@ -44,5 +45,7 @@ function MobileSearch(props) {
     </div>
   );
 }
+
+MobileSearch.displayName = "MobileSearch";
 
 export default MobileSearch;

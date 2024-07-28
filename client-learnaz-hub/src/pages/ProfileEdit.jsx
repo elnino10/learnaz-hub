@@ -229,11 +229,15 @@ const ProfileEdit = (props) => {
               {coursesEnrolled === 0 ? "NIL" : coursesEnrolled}
             </span>
           </p>
-          <p className="mt-1 mx-4">•</p>
-          <p>
-            Courses created:{" "}
-            <span className="font-bold text-xl ml-1">{coursesCreated}</span>
-          </p>
+          {props.userData.role === "instructor" && (
+            <p className="mt-1 mx-4">•</p>
+          )}
+          {props.userData?.role === "instructor" && (
+            <p>
+              Courses created:{" "}
+              <span className="font-bold text-xl ml-1">{coursesCreated}</span>
+            </p>
+          )}
         </div>
         <div className="flex justify-end">
           <button
