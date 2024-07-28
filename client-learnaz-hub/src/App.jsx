@@ -68,7 +68,7 @@ const App = () => {
         showMobileSearch={showMobileSearch}
         setShowMobileSearch={setShowMobileSearch}
       />
-      <div className="mt-[8rem] md:mt-20">
+      <div className="mt-[8rem] md:mt-20 min-h-screen">
         <Routes>
           {/* Admin Route */}
           <Route path="/admin/*" element={<AdminLayout />} />
