@@ -5,7 +5,7 @@ function Footer() {
   const currentYear = new Date().getFullYear();
   return (
     <footer
-      className="text-white w-[53rem] bg-gray-900 mt-10 pl-10 md:w-full"
+      className="text-white w-[53rem] bg-gray-900 mt-10 pl-10 sm:w-auto md:w-full"
     >
       {/* correct routing */}
       <div className="grid grid-cols-2 pt-7 mb-5 sm:w-[52rem] md:grid-cols-2 lg:grid-cols-3 gap-6">

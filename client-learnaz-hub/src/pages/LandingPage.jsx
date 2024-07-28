@@ -38,7 +38,7 @@ function LandingPage(props) {
       }
     };
     fetchAllCourses();
-  }, []);
+  }, [apiUrl]);
 
   // create an array of all the categories in dataset
   useEffect(() => {
