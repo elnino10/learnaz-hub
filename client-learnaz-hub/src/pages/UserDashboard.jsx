@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Card from "react-bootstrap/Card";
 
 import student from "../assets/images/student5ani.gif";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -229,41 +230,44 @@ const UserDashboard = (props) => {
           id={props.authUser.id}
         />
       )}
-      <div className="mt-10 mx-20">
-        <div className="mt-5 mb-3 md:px-32">
+      <section className="mt-1 mx-2 lg:mt-0 mx-0">
+        <div className="flex items-center justify-between px-16 mt-5 mb-3 md:px-32">
           <div className="mb-3 text-2xl text-gray-700 font-bold">
             <h2>Suggested Courses</h2>
           </div>
         </div>
-        <div className="md:w-[70%] md:mx-auto">
+        <div className="md:w-[95%] md:mx-auto md:p-2">
           <Slider {...settings}>
             {suggestedCourses.map((course) => (
-              <div key={course._id} className="max-w-52 max-h-52">
-                <div className="flex flex-col bg-white border h-40 w-100 overflow-hidden">
+              <div key={course._id} className="p-2">
+                <div className="flex flex-col bg-white w-full">
                   <Link
                     to={
                       !props.userData.coursesEnrolled?.includes(course._id) &&
                       `/courses/preview/${course._id}`
                     }
                   >
-                    <div>
-                      <img
+                    <Card className="h-full">
+                      <Card.Img
+                        variant="top"
                         src={course.thumbnailURL}
-                        alt={course.title}
-                        className="object-fill w-full h-20"
+                        className="object-fill w-full h-32"
                       />
-                    </div>
-                    <div className="text-sm px-2 pt-3">
-                      <h3 className="font-semibold">{course.title}</h3>
-                      <p className="text-xs">{course.duration}</p>
-                    </div>
+                      <Card.Body className="text-sm mt-3 mb-3 flex-grow">
+                        <Card.Text className="font-semibold text-lg truncate text-gray-800">
+                          {course.title}
+
+                          {course.duration}
+                        </Card.Text>
+                      </Card.Body>
+                    </Card>
                   </Link>
                 </div>
               </div>
             ))}
           </Slider>
         </div>
-      </div>
+      </section>
     </div>
   );
 };

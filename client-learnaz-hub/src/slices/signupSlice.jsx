@@ -5,15 +5,19 @@ const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 //async to handle signup
 export const signupUser = createAsyncThunk(
-    'signup/signupUser',
-    async(userData, {rejectWithValue}) => {
-        try {
-            const response = await axios.post(`${baseUrl}/auth/signup-user`, userData);
-            return response.data;
-        }catch(error) {
-            return rejectWithValue(error.response.data);
-        }
+  "signup/signupUser",
+  //rejectWithValue allows return of custom error payload
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${baseUrl}/auth/signup-user`,
+        userData
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
     }
+  }
 );
   const initialState = {
     user: null,
@@ -45,3 +49,5 @@ export const signupUser = createAsyncThunk(
   });
 
 export default signupSlice.reducer;
+
+
