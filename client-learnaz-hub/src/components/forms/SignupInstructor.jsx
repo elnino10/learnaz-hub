@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import { signupInstructor } from "../../slices/signupInstructorSlice";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -25,13 +27,17 @@ function SignupInstructor() {
   const [errMsg, setErrMsg] = useState("");
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const baseUrl = import.meta.env.VITE_API_BASE_URL;
-  const apiUrl = `${baseUrl}/auth/signup-user`;
+  const signupStatus = useSelector((state) => state.signupInstructor.status);
+  const signupError = useSelector((state) => state.signupInstructor.error);
+  
+
+  // const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  // const apiUrl = `${baseUrl}/auth/signup-user`;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    try {
       const data = new FormData(event.currentTarget);
       const userData = {
         firstName: data.get("firstName"),
@@ -40,21 +46,21 @@ function SignupInstructor() {
         password: data.get("password"),
         role: "instructor",
       };
-
-      const res = await axios.post(apiUrl, userData);
-      if (res.data.status !== "success") {
-        setErrMsg(res.data.message);
-      }
-      alert("You signed up successfully. Please login to continue.");
-      navigate("/login");
-    } catch (error) {
-      setErrMsg(error.response.data.message);
-    }
-    setFirstName("");
-    setLastName("");
-    setEmail("");
-    setPassword("");
+      dispatch(signupInstructor(userData));
   };
+
+      useEffect(() => {
+        if (signupStatus === "succeeded") {
+          alert("You signed up successfully. Please login to continue.");
+          navigate("/login");
+          setFirstName("");
+          setLastName("");
+          setEmail("");
+          setPassword("");
+        } else if (signupStatus === "failed") {
+          setErrMsg(signupError || "Signup failed. Please try again.");
+        }
+      }, [signupStatus, signupError, navigate]);
 
   return (
     <section className="mt-28 mb-10">

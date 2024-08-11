@@ -1,5 +1,5 @@
 import image from "../assets/images/teacher.png";
-import Tailwind from "../assets/thumbnail/tailwind.png";
+// import Tailwind from "../assets/thumbnail/tailwind.png";
 import photo from "../assets/thumbnail/photo.jpg";
 import Webdev from "../assets/thumbnail/webdev.png";
 import Design from "../assets/thumbnail/design.png";
@@ -123,7 +123,7 @@ export const courses = [
     id: 8,
     videoUrl: "http://example.com/web-development.mp4",
     title: "Tailwind CSS Mastry",
-    image: Tailwind,
+    // image: Tailwind,
     author: "Emily White",
     numberEnrolled: 40,
     price: "$60",
