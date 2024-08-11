@@ -256,8 +256,24 @@ const UserDashboard = (props) => {
                       <Card.Body className="text-sm mt-3 mb-3 flex-grow">
                         <Card.Text className="font-semibold text-lg truncate text-gray-800">
                           {course.title}
-
-                          {course.duration}
+                          <p className="mb-4 text-sm">
+                            Created by{" "}
+                            <a href="#" className="hover:underline">
+                              {course?.author}
+                            </a>
+                          </p>
+                          <div className="">
+                            <span className="text-yellow-500 mr-2">★★★★★</span>
+                            <a href="#">
+                              (25 ratings)
+                            </a>
+                          </div>
+                          <span className="ml-2 text-muted-foreground">
+                            {course?.studentsEnrolled?.length || 0}{" "}
+                            {course?.studentsEnrolled?.length === 1
+                              ? "student"
+                              : "students"}
+                          </span>
                         </Card.Text>
                       </Card.Body>
                     </Card>
