@@ -8,8 +8,14 @@ export const loginUser = createAsyncThunk(
     'auth/loginUser',
     async ({ email, password }, { rejectWithValue }) => {
       try {
-        const response = await axios.post(`${baseUrl}/auth/login-user`, { email, password });
-        return response.data; // e.g., { token, user }
+        const response = await axios.post(`${baseUrl}/auth/login-user`, {
+          email,
+          password,
+        });
+        const { user, token } = response.data; 
+        // console.log("User:", user); 
+        // console.log("Token:", token); 
+        return { user, token }; 
       } catch (error) {
         return rejectWithValue(error.response.data);
       }
@@ -38,12 +44,13 @@ export const loginUser = createAsyncThunk(
      .addCase(loginUser.pending, (state) => {
         state.status = 'Pending';
     })
-    .addCase(loginUser.fulfilled, (state) => {
+    .addCase(loginUser.fulfilled, (state, action) => {
         state.status = 'Succeeded'
-        state.user = action.paylaod.user;
-        state.token = action.paylaod.token;
+        state.user = action.payload.user;
+        // console.log("user:", action.payload.user);
+        state.token = action.payload.token;
     })
-    .addCase(loginUser.rejected, (state) => {
+    .addCase(loginUser.rejected, (state, action) => {
         state.status = 'Failed',
         state.error = action.payload?.message || 'Failed to login'
     });

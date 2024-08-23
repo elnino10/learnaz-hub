@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
+import { loginUser } from "../../slices/loginSlice";
+import { useDispatch, useSelector } from "react-redux";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -14,7 +15,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-import axios from "axios";
+// import axios from "axios";
 import { KJUR } from "jsrsasign";
 
 const defaultTheme = createTheme();
@@ -25,35 +26,41 @@ function LoginForm(props) {
   const [errMsg, setErrMsg] = useState("");
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { token,  user, status, error } = useSelector(
+    (state) => state.login
+  );
 
-  const baseUrl = import.meta.env.VITE_API_BASE_URL;
-  const apiUrl = `${baseUrl}/auth/login-user`;
+  // const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  // const apiUrl = `${baseUrl}/auth/login-user`;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    try {
+
       const data = new FormData(event.currentTarget);
       const userData = {
         email: data.get("email"),
         password: data.get("password"),
       };
 
-      const res = await axios.post(apiUrl, userData);
-      if (res.data.status !== "success") {
-        setErrMsg(res.data.message);
-      }
-      const token = res.data.token;
+      const resultAction = await dispatch(loginUser(userData));
+      console.log("result:", resultAction);
+       if (loginUser.fulfilled.match(resultAction)) {
+      const token = resultAction.payload.token;
+      console.log("token:", token);
       localStorage.setItem("token", token);
 
       const decoded = KJUR.jws.JWS.parse(token);
-      decoded && props.setAuthUser(decoded.payloadObj);
+      console.log("decoded tokenL:", decoded.payloadObj);
+      // decoded && props.setAuthUser(decoded.payloadObj);
+      console.log("id:", decoded.payloadObj.id);
       navigate("/home", {
         state: { id: decoded.payloadObj.id, role: decoded.payloadObj.role },
       });
       setEmail("");
       setPassword("");
-    } catch (error) {
-      setErrMsg(error.response.data.message);
+    }  else {
+      setErrMsg(resultAction.payload?.message || 'Failed to login');
     }
     
   };

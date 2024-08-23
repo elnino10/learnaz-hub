@@ -11,7 +11,7 @@ export const fetchUserData = createAsyncThunk(
             const response = await axios.get(`${apiUrl}/${id}`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
               });
-              return response.data.data;
+              return response.data;
             } catch (error) {
                 return rejectWithValue(error.response.data)
             }
@@ -19,7 +19,6 @@ export const fetchUserData = createAsyncThunk(
 );
 
 const initialState = {
-    authUser: null,
     userData: null,
     status: 'idle',
     error: null,
@@ -28,13 +27,8 @@ const initialState = {
 const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {
-        setUser: (state, action) => {
-            state.authUser = action.payload
-        },
-    },
     extraReducers: (builder) => {
-        builder.addCase(fetchUserData.pending, (state, action) => {
+        builder.addCase(fetchUserData.pending, (state) => {
             state.status = 'loading';
         });
         builder.addCase(fetchUserData.fulfilled, (state, action) => {
