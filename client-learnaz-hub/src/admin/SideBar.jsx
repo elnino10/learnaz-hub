@@ -16,7 +16,7 @@ const Sidebar = () => {
       </h1>
       <ul className="flex flex-col mt-5 text-xl">
         <Link
-          to="admin/dashboard"
+          to="dashboard"
           className="flex items-center py-3 px-2 space-x-4 hover:rounded hover:cursor-pointer 
         hover:bg-blue-600 hover:text-white"
         >
@@ -24,7 +24,7 @@ const Sidebar = () => {
           <span className="hidden md:inline">Dashboard</span>
         </Link>
         <Link
-          to="admin/manage-users"
+          to="manage-users"
           className="flex items-center py-3 px-2 space-x-4 hover:rounded hover:cursor-pointer 
         hover:text-white hover:bg-blue-600"
         >
@@ -32,7 +32,7 @@ const Sidebar = () => {
           <span className="hidden md:inline ">Manage Users</span>
         </Link>
         <Link
-          to="admin/manage-courses"
+          to="manage-courses"
           className="flex items-center py-3 px-2 space-x-4 hover:rounded hover:cursor-pointer 
         hover:text-white hover:bg-blue-600"
         >

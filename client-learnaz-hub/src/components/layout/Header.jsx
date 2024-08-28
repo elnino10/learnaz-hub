@@ -13,6 +13,8 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import axios from "axios";
 import MobileSearch from "../MobileSearch";
 import DesktopSearch from "../DesktopSearch";
+import { useSelector, useDispatch} from "react-redux";
+import {logout} from "../../slices/loginSlice";
 // import { icon } from "@fortawesome/fontawesome-svg-core";
 
 function Header(props) {
@@ -24,6 +26,10 @@ function Header(props) {
 
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.login.user);
+  // console.log("user:", user);
+
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
   const apiUrl = `${baseUrl}/courses`;
@@ -87,9 +93,8 @@ function Header(props) {
   };
 
   const logOutHandler = () => {
+    dispatch(logout());
     localStorage.removeItem("token");
-    props.setAuthUser(null);
-    props.setUserData({});
     navigate("/");
   };
 
@@ -114,7 +119,7 @@ function Header(props) {
       </Link>
       <DesktopSearch
         auth={props.auth}
-        userData={props.userData}
+        userData={user}
         searchValue={searchValue}
         setSearchValue={setSearchValue}
         searchedCourses={searchedCourses}
@@ -127,7 +132,7 @@ function Header(props) {
       </div>
       <MobileSearch
         auth={props.auth}
-        userData={props.userData}
+        userData={user}
         showMobileSearch={props.showMobileSearch}
         setShowMobileSearch={props.setShowMobileSearch}
         searchValue={searchValue}
@@ -190,7 +195,7 @@ function Header(props) {
                 </div>
               </div>
             </li>
-            {props.authUser && (
+            {user && (
               <li
                 className={`${
                   props.activePage === "dashboard"
@@ -205,7 +210,7 @@ function Header(props) {
                 <Link to="/home">Dashboard</Link>
               </li>
             )}
-            {(!props.authUser || props.authUser.role !== "instructor") && (
+            {(!user || user.role !== "instructor") && (
               <li
                 className={`${
                   props.activePage === "creator"
@@ -220,7 +225,7 @@ function Header(props) {
                 <Link to="/course-creator">Become a Creator</Link>
               </li>
             )}
-            {props.authUser && props.authUser.role === "instructor" && (
+            {user && user.role === "instructor" && (
               <li
                 className={`${
                   props.activePage === "created-courses"
@@ -236,7 +241,7 @@ function Header(props) {
               </li>
             )}
 
-            {props.authUser && (
+            {user && (
               <li
                 className={`${
                   props.activePage === "profile"
@@ -263,7 +268,7 @@ function Header(props) {
                 </Link>
               </li>
             )}
-            {props.authUser ? (
+            {user ? (
               <Link
                 to="/"
                 className="mt-7 border rounded-md p-2 transition
@@ -283,7 +288,7 @@ function Header(props) {
                 Log in
               </Link>
             )}
-            {!props.authUser && (
+            {!user && (
               <Link
                 to="/signup"
                 className="mt-7 mb-2 border rounded-md p-2 transition ease-in-out delay-150
