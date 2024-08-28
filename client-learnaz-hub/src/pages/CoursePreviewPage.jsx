@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { RotatingLines } from "react-loader-spinner";
 
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const TEXT_MUTED_FOREGROUND = "text-muted-foreground";
 const TEXT_PRIMARY = "text-primary";
@@ -14,6 +15,7 @@ function CoursePreviewPage(props) {
   const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
+  const userData = useSelector((state) => state.user.userData);
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
   const apiUrl = `${baseUrl}/courses/${courseId}`;
@@ -44,9 +46,9 @@ function CoursePreviewPage(props) {
   const enrollmentHandler = async () => {
     const enrollmentData = {
       courseId: courseId,
-      studentId: props.userData?._id,
+      studentId: userData?._id,
     };
-    if (!props.userData?._id) {
+    if (!userData?._id) {
       alert("Please login to enroll in a course");
       navigate("/login");
       return;
