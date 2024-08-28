@@ -24,12 +24,10 @@ const UserDashboard = () => {
   const courses = [];
   const dispatch = useDispatch();
   const user = useSelector((state) => state.login.user);
-  const userData = useSelector((state) => state.user.userData);
-  const token = useSelector((state) => state.login.token);
+  // const userData = useSelector((state) => state.user.userData);
+  // const token = useSelector((state) => state.login.token);
 
-  const { id, role, firstName } = user || {}; // Destructure user info or default to an empty object
-  console.log("user:", user);
-  console.log("userData:", userData);
+  const { id, role, firstName } = user || {}; // Destructure user info 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
   const axiosInstance = axios.create({
@@ -44,7 +42,7 @@ const UserDashboard = () => {
     if (id) {
       dispatch(fetchUserData(id));
     }
-  }, []);
+  }, [id, dispatch]);
 
   // get all courses as suggested courses from database (for now)
   useEffect(() => {

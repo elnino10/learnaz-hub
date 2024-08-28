@@ -28,7 +28,7 @@ function Header(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.login.user);
-  console.log("user:", user);
+  // console.log("user:", user);
 
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
