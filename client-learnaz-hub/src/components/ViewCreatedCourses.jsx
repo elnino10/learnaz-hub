@@ -21,11 +21,11 @@ function ViewCreatedCourses(props) {
           </Link>
         </div>
       </div>
-      <div className="md:w-[70%] md:mx-auto">
+      <div className="md:w-[95%] md:mx-auto md:p-2">
         <Slider {...settings}>
           {createdCourses?.map((course) => (
-            <div key={course._id} className="max-w-52 max-h-52">
-              <div className="flex flex-col bg-white border h-40 w-100 overflow-hidden">
+            <div key={course._id} className="p-2">
+              <div className="flex flex-col bg-white w-full">
                 <Link
                   to={
                     `/course/course-content/${course._id}`
@@ -36,17 +36,20 @@ function ViewCreatedCourses(props) {
                     //   : `/courses/preview/${course._id}`
                   }
                 >
-                  <div>
-                    <img
+                  <Card className="h-full">
+                    <Card.Img
+                      variant="top"
                       src={course.thumbnailURL}
-                      alt={course.title}
-                      className="object-fill w-full h-20"
+                      className="object-fill w-full h-32"
                     />
-                  </div>
-                  <div className="text-sm px-2 pt-3">
-                    <h3 className="font-semibold">{course.title}</h3>
-                    <p className="text-xs">{course.duration}</p>
-                  </div>
+                    <Card.Body className="text-sm mt-3 mb-3 flex-grow">
+                      <Card.Text className="font-semibold text-lg truncate text-gray-800">
+                        {course.title}
+
+                        {course.duration}
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
                 </Link>
               </div>
             </div>

@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { RotatingLines } from "react-loader-spinner";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const INPUT_CLASS = "w-full p-2 border border-input rounded-lg";
 const BUTTON_CLASS = "rounded-lg";
@@ -22,7 +23,9 @@ const ProfileEdit = (props) => {
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
   const endPoint = `/users/${props.userData?._id}`;
-  const token = localStorage.getItem("token");
+  // const token = localStorage.getItem("token");
+  const token = useSelector((state) => state.login.token);
+  const userData = useSelector((state) => state.user.userData);
 
   const axiosInstance = axios.create({
     baseURL: baseUrl,
@@ -33,20 +36,20 @@ const ProfileEdit = (props) => {
 
   useEffect(() => {
     if (props.userData) {
-      setFirstName(props.userData.firstName);
-      setLastName(props.userData.lastName);
-      setTwitterUsername(props.userData.twitterUsername);
-      setTwitterURL(props.userData.twitterURL);
-      setFacebookUsername(props.userData.facebookUsername);
-      setFacebookURL(props.userData.facebookURL);
-      setBiography(props.userData.biography);
-      setLinkedInResourceId(props.userData.linkedInResourceId);
-      setLinkedInURL(props.userData.linkedInURL);
-      setCoursesEnrolled(props.userData.coursesEnrolled?.length);
-      setCoursesCreated(props.userData.coursesCreated?.length);
+      setFirstName(userData.firstName);
+      setLastName(userData.lastName);
+      setTwitterUsername(userData.twitterUsername);
+      setTwitterURL(userData.twitterURL);
+      setFacebookUsername(userData.facebookUsername);
+      setFacebookURL(userData.facebookURL);
+      setBiography(userData.biography);
+      setLinkedInResourceId(userData.linkedInResourceId);
+      setLinkedInURL(userData.linkedInURL);
+      setCoursesEnrolled(userData.coursesEnrolled?.length);
+      setCoursesCreated(userData.coursesCreated?.length);
       setIsLoading(false);
     }
-  }, [props.userData]);
+  }, [userData]);
 
   const editProfileHandler = (e) => {
     e.stopPropagation();
@@ -229,10 +232,10 @@ const ProfileEdit = (props) => {
               {coursesEnrolled === 0 ? "NIL" : coursesEnrolled}
             </span>
           </p>
-          {props.userData.role === "instructor" && (
+          {userData.role === "instructor" && (
             <p className="mt-1 mx-4">•</p>
           )}
-          {props.userData?.role === "instructor" && (
+          {userData?.role === "instructor" && (
             <p>
               Courses created:{" "}
               <span className="font-bold text-xl ml-1">{coursesCreated}</span>

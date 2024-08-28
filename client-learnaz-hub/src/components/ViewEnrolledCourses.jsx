@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
+import Card from "react-bootstrap/Card";
 
 /* eslint-disable react/prop-types */
 function ViewEnrolledCourses(props) {
@@ -8,51 +9,56 @@ function ViewEnrolledCourses(props) {
 
   return (
     <>
-      <div className="flex items-center justify-between px-16 mt-5 mb-3 md:px-32">
-        <div className="mb-3 text-2xl text-gray-700 font-bold">
-          <h2>Enrolled Courses</h2>
+      <section className="mt-1 mx-2 lg:mt-0 mx-0">
+        <div className="flex items-center justify-between px-16 mt-5 mb-3 md:px-32">
+          <div className="mb-3 text-2xl text-gray-700 font-bold">
+            <h2>Enrolled Courses</h2>
+          </div>
+          <div>
+            <Link
+              to="/home/my-courses/learning"
+              className="text-blue-950 hover:underline hover:text-blue-900"
+              aria-label="View all enrolled courses"
+            >
+              View All Enrolled Courses
+            </Link>
+          </div>
         </div>
-        <div>
-          <Link
-            to="/home/my-courses/learning"
-            className="text-blue-950 hover:underline hover:text-blue-900"
-            aria-label="View all enrolled courses"
-          >
-            View All Enrolled Courses
-          </Link>
-        </div>
-      </div>
-      <div className="md:w-[70%] md:mx-auto">
-        <Slider {...settings}>
-          {enrolledCourses.map((course) => (
-            <div key={course._id} className="max-w-52 max-h-52">
-              <div className="flex flex-col bg-white border h-40 w-100 overflow-hidden">
-                <Link
-                  to={
-                    userData?.coursesEnrolled?.map((course) =>
-                      course.studentsEnrolled.includes(id)
-                    )
-                      ? `/course/course-content/${course._id}`
-                      : `/courses/preview/${course._id}`
-                  }
-                >
-                  <div>
-                    <img
-                      src={course.thumbnailURL}
-                      alt={course.title}
-                      className="object-fill w-full h-20"
-                    />
-                  </div>
-                  <div className="text-sm px-2 pt-3">
-                    <h3 className="font-semibold">{course.title}</h3>
-                    <p className="text-xs">{course.duration}</p>
-                  </div>
-                </Link>
+        <div className="md:w-[95%] md:mx-auto md:p-2">
+          <Slider {...settings}>
+            {enrolledCourses.map((course) => (
+              <div key={course._id} className="p-2">
+                <div className="flex flex-col bg-white w-full">
+                  <Link
+                    to={
+                      userData?.coursesEnrolled?.map((course) =>
+                        course.studentsEnrolled.includes(id)
+                      )
+                        ? `/course/course-content/${course._id}`
+                        : `/courses/preview/${course._id}`
+                    }
+                  >
+                    <Card className="h-full">
+                      <Card.Img
+                        variant="top"
+                        src={course.thumbnailURL}
+                        className="object-fill w-full h-32"
+                      />
+                      <Card.Body className="text-sm mt-3 mb-3 flex-grow">
+                        <Card.Text className="font-semibold text-lg truncate text-gray-800">
+                          {course.title}
+
+                          {course.duration}
+                        </Card.Text>
+                      </Card.Body>
+                    </Card>
+                  </Link>
+                </div>
               </div>
-            </div>
-          ))}
-        </Slider>
-      </div>
+            ))}
+          </Slider>
+        </div>
+      </section>
     </>
   );
 }

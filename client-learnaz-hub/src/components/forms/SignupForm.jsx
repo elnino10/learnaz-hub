@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import {signupUser} from "../../slices/signupSlice";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -13,7 +15,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import axios from "axios";
+// import axios from "axios";
 
 const defaultTheme = createTheme();
 
@@ -25,35 +27,64 @@ function SignupForm() {
   const [errMsg, setErrMsg] = useState("");
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const signupStatus = useSelector((state) => state.signup.status);
+  const signupError = useSelector((state) => state.signup.error);
 
-  const baseUrl = import.meta.env.VITE_API_BASE_URL;
-  const apiUrl = `${baseUrl}/auth/signup-user`;
+  // const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  // const apiUrl = `${baseUrl}/auth/signup-user`;
 
-  const handleSubmit = async (event) => {
+  const handleSubmit =  (event) => {
     event.preventDefault();
-    try {
-      const data = new FormData(event.currentTarget);
-      const userData = {
-        firstName: data.get("firstName"),
-        lastName: data.get("lastName"),
-        email: data.get("email"),
-        password: data.get("password"),
-      };
 
-      const res = await axios.post(apiUrl, userData);
-      if (res.data.status !== "success") {
-        setErrMsg(res.data.message);
-      }
+    const data = new FormData(event.currentTarget);
+    const userData = {
+      firstName: data.get("firstName"),
+      lastName: data.get("lastName"),
+      email: data.get("email"),
+      password: data.get("password"),
+    };
+    console.log("Dispatching signupUser with:", userData);
+    dispatch(signupUser(userData));
+  };
+
+  // Handle navigation and error messages based on the signup status
+  useEffect(() => {
+    if (signupStatus === 'succeeded') {
       alert("You signed up successfully. Please login to continue.");
       navigate("/login");
       setFirstName("");
       setLastName("");
       setEmail("");
       setPassword("");
-    } catch (error) {
-      setErrMsg(error.response.data.message);
+    } else if (signupStatus === 'failed') {
+      setErrMsg(signupError || "Signup failed. Please try again.");
     }
-  };
+
+    // event.preventDefault();
+    // try {
+    //   const data = new FormData(event.currentTarget);
+    //   const userData = {
+    //     firstName: data.get("firstName"),
+    //     lastName: data.get("lastName"),
+    //     email: data.get("email"),
+    //     password: data.get("password"),
+    //   };
+
+    //   const res = await axios.post(apiUrl, userData);
+    //   if (res.data.status !== "success") {
+    //     setErrMsg(res.data.message);
+    //   }
+    //   alert("You signed up successfully. Please login to continue.");
+    //   navigate("/login");
+    //   setFirstName("");
+    //   setLastName("");
+    //   setEmail("");
+    //   setPassword("");
+    // } catch (error) {
+    //   setErrMsg(error.response.data.message);
+    // }
+  } ,[signupStatus, signupError, navigate]);
 
   return (
     <section className="mt-[10rem]">
