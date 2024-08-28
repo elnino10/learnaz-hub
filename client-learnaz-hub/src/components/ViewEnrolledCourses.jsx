@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import Card from "react-bootstrap/Card";
+import { useSelector } from "react-redux";
 
 /* eslint-disable react/prop-types */
 function ViewEnrolledCourses(props) {
-
-    const { enrolledCourses, settings, id, userData } = props;
+  const userData = useSelector((state) => state.user.userData);
+ console.log(userData)
+  const { settings } = props;
 
   return (
     <>
@@ -26,14 +28,12 @@ function ViewEnrolledCourses(props) {
         </div>
         <div className="md:w-[95%] md:mx-auto md:p-2">
           <Slider {...settings}>
-            {enrolledCourses.map((course) => (
+            {userData?.coursesEnrolled.map((course) => (
               <div key={course._id} className="p-2">
                 <div className="flex flex-col bg-white w-full">
                   <Link
                     to={
-                      userData?.coursesEnrolled?.map((course) =>
-                        course.studentsEnrolled.includes(id)
-                      )
+                      course.studentsEnrolled.includes(userData._id)
                         ? `/course/course-content/${course._id}`
                         : `/courses/preview/${course._id}`
                     }
