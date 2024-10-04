@@ -1,8 +1,6 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { loginUser } from "../../slices/loginSlice";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -14,55 +12,54 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
-// import axios from "axios";
+import { loginUser } from "../../slices/loginSlice";
+import { ToastContainer, toast } from "react-toastify"; // Import react-toastify
+import "react-toastify/dist/ReactToastify.css";
 import { KJUR } from "jsrsasign";
 
 const defaultTheme = createTheme();
 
-function LoginForm(props) {
+function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { token,  user, status, error } = useSelector(
-    (state) => state.login
-  );
-
-  // const baseUrl = import.meta.env.VITE_API_BASE_URL;
-  // const apiUrl = `${baseUrl}/auth/login-user`;
+  const { token, user, status, error } = useSelector((state) => state.login);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-      const data = new FormData(event.currentTarget);
-      const userData = {
-        email: data.get("email"),
-        password: data.get("password"),
-      };
+    const data = new FormData(event.currentTarget);
+    const userData = {
+      email: data.get("email"),
+      password: data.get("password"),
+    };
 
-      const resultAction = await dispatch(loginUser(userData));
-      console.log("result:", resultAction);
-       if (loginUser.fulfilled.match(resultAction)) {
+    const resultAction = await dispatch(loginUser(userData));
+    console.log("result:", resultAction);
+
+    if (loginUser.fulfilled.match(resultAction)) {
       const token = resultAction.payload.token;
       console.log("token:", token);
       localStorage.setItem("token", token);
 
       const decoded = KJUR.jws.JWS.parse(token);
-      console.log("decoded tokenL:", decoded.payloadObj);
-      // decoded && props.setAuthUser(decoded.payloadObj);
-      console.log("id:", decoded.payloadObj.id);
+      console.log("decoded token:", decoded.payloadObj);
+
+      // Show success toast notification
+      toast.success("Login successful!");
+
       navigate("/home", {
         state: { id: decoded.payloadObj.id, role: decoded.payloadObj.role },
       });
       setEmail("");
       setPassword("");
-    }  else {
-      setErrMsg(resultAction.payload?.message || 'Failed to login');
+    } else {
+      setErrMsg(resultAction.payload?.message || "Failed to login");
+      toast.error("Login failed. Please try again.");
     }
-    
   };
 
   return (
@@ -152,6 +149,7 @@ function LoginForm(props) {
             </Box>
           </Box>
         </Container>
+        <ToastContainer /> {/* Toast container for notifications */}
       </ThemeProvider>
     </section>
   );
