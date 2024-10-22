@@ -54,7 +54,7 @@ const App = () => {
   };
 
   return (
-    <div onClick={clickAwayHandler} className="w-[53rem] md:w-full">
+    <div onClick={clickAwayHandler} className="">
       <Header
         setMenuVisible={setMenuVisible}
         menuVisible={menuVisible}

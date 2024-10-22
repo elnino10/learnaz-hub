@@ -137,22 +137,27 @@ export const courses = [
 // course review data
 export const reviews = [
   {
+    rating: 5,
     username: "Jane Doe",
     review: "Learnerz Hub shaped my career greatly",
   },
   {
+    rating: 4,
     username: "John Smith",
     review: "Fantastic platform with excellent courses",
   },
   {
+    rating: 5,
     username: "Alice Johnson",
     review: "I learned so much in such a short time!",
   },
   {
+    rating: 4,
     username: "Michael Brown",
     review: "Great content and very well structured.",
   },
   {
+    rating: 4,
     username: "Emily Davis",
     review: "The instructors are very knowledgeable.",
   },

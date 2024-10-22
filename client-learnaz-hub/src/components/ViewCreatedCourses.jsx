@@ -1,6 +1,8 @@
 /* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
+import Card from "react-bootstrap/Card";
+
 
 function ViewCreatedCourses(props) {
   const { createdCourses, settings } = props;
