@@ -6,19 +6,17 @@ import { FiSearch } from "react-icons/fi";
 import Logo from "../../assets/images/logomain.png";
 import MenuIcon from "@mui/icons-material/Menu";
 import MenuOpen from "@mui/icons-material/MenuOpen";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 import axios from "axios";
 import MobileSearch from "../MobileSearch";
 import DesktopSearch from "../DesktopSearch";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../../slices/loginSlice";
 import Sidemenu from "./Sidemenu"; // Import the side menu component
 import Navbar from "./Navbar";
 function Header(props) {
   const [courses, setCourses] = useState([]);
   const [drpdwn, setDrpdwn] = useState(false);
-  const [courseCategories, setCourseCategories] = useState([]);
+  
   const [searchedCourses, setSearchedCourses] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [menuOpen, setMenuOpen] = useState(false); // State to control side menu
@@ -81,7 +79,7 @@ function Header(props) {
   };
 
   return (
-    <header className="px-2 py-3 bg-white shadow-md top-0 z-20 fixed w-full h-[8rem] flex justify-between items-center sm:px-4 sm:w-[52rem] md:w-full md:h-[5rem]">
+    <header className="px-2 py-3 max-w-9xl bg-white shadow-md top-0 z-20 fixed w-full h-[8rem] flex justify-between items-center sm:px-4 sm:w-[52rem] md:w-full md:h-[5rem]">
       {/* Logo */}
       <Link to="/" onClick={() => props.setActivePage("home")}>
         <img
@@ -130,7 +128,7 @@ function Header(props) {
             <MenuIcon sx={{ height: "2.5rem", width: "3rem" }} />
           )}
         </div>
-          <Navbar/>
+        <Navbar />
 
         {/* Side Menu */}
         <Sidemenu
