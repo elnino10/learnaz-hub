@@ -74,15 +74,15 @@ function LandingPage(props) {
                     className="object-cover"
                   />
                 </div>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90%] h-[90%] border-2 border-orange-300 rounded-full z-20" />
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[95%] h-[95%] border-2 border-orange-300 rounded-full z-20" />
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90%] h-[90%] border-2 border-orange-300 rounded-full z-10" />
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[95%] h-[95%] border-2 border-orange-300 rounded-full z-10" />
               </div>
 
-              <div className="w-full lg:w-1/2 text-center lg:text-left">
+              <div className="w-full  text-center lg:text-left lg:w-1/2 mt-8">
                 <h1 className="text-4xl sm:text-4xl font-bold text-gray-800 mb-4 md:text-5xl lg:text-7xl">
                   Master New Skills Anytime, Anywhere
                 </h1>
-                <p className="text-lg sm:text-xl text-gray-600 mb-6">
+                <p className="text-lg sm:text-xl text-gray-600 mb-6 xl:text-lg">
                   Join thousands of learners around the world in advancing your
                   career and personal growth. Our diverse range of courses
                   offers something for everyone.
@@ -144,11 +144,13 @@ function LandingPage(props) {
         </section>
 
         {/* Reviews Section */}
-        <section className="w-full py-12">
-          <h2 className="text-gray-900 text-2xl px-10 mb-5 md:text-3xl font-bold">
-            Hear From Our Learners
-          </h2>
-          <ReviewCard />
+        <section className="w-full py-12 text-center lg:text-center flex justify-center items-center">
+          <div className="w-full max-w-2xl">
+            <h2 className="text-gray-900 text-2xl px-10 mb-5 md:text-3xl font-bold">
+              Hear From Our Learners
+            </h2>
+            <ReviewCard />
+          </div>
         </section>
 
         <section className="pt-12 px-4 sm:px-6 lg:px-8">
