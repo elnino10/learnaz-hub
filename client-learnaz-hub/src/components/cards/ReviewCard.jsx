@@ -21,8 +21,8 @@ function ReviewCard() {
     setCurrentReview((prev) => (prev === reviews.length - 1 ? 0 : prev + 1));
   };
   return (
-    <div>
-      <div className="max-w-3xl mx-4  text-center m-2 lg:mx-auto ">
+    <div className="">
+      <div className="max-w-3xl mx-4 text-center m-2 lg:mx-auto ">
         <ul>
           {reviews.map((item, idx) =>
             currentReview === idx ? (
